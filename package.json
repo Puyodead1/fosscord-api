@@ -2,6 +2,7 @@
   "name": "@puyodead1/fosscord-api",
   "version": "0.0.1",
   "main": "dist/index.js",
+  "module": "esm/index.js",
   "author": "Puyodead1",
   "license": "MIT",
   "dependencies": {
@@ -18,6 +19,6 @@
   "scripts": {
     "postinstall": "patch-package",
     "prepublish": "yarn build",
-    "build": "oapilib && tsc"
+    "build": "oapilib && tsc && tsc -p tsconfig.esm.json"
   }
 }
