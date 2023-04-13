@@ -18,7 +18,7 @@
     },
     "scripts": {
         "postinstall": "patch-package",
-        "prepublish": "yarn build",
+        "prepublish": "npm build",
         "build": "oapilib && tsc && tsc -p tsconfig.esm.json"
     }
 }
