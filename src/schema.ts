@@ -3,4716 +3,4814 @@
  * Do not make direct changes to the file.
  */
 
-
 /** OneOf type helpers */
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
-type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
-type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
+type XOR<T, U> = T | U extends object
+    ? (Without<T, U> & U) | (Without<U, T> & T)
+    : T | U;
+type OneOf<T extends any[]> = T extends [infer Only]
+    ? Only
+    : T extends [infer A, infer B, ...infer Rest]
+    ? OneOf<[XOR<A, B>, ...Rest]>
+    : never;
 
 export interface paths {
-  "/voice/regions/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildVoiceRegionsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/settings/": {
-    patch: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["UserSettingsSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UserSettings"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/relationships/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["RelationshipPostSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/relationships/{id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/notes/{id}": {
-    put: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["UserNoteUpdateSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/mfa/webauthn/credentials/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["WebAuthnPostSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["WebAuthnCreateResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/mfa/webauthn/credentials/{key_id}/": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description key_id */
-          key_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-      };
-    };
-  };
-  "/users/@me/mfa/totp/enable/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["TotpEnableSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenWithBackupCodesResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/mfa/totp/disable/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["TotpDisableSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenOnlyResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/mfa/codes/": {
-    /**
-     * @deprecated 
-     * @description This route is replaced with users/@me/mfa/codes-verification in newer clients
-     */
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["MfaCodesSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UserBackupCodesResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/mfa/codes-verification/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["CodesVerificationSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UserBackupCodesResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/library/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/": {
-    patch: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["UserModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UserUpdateResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/guilds/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UserGuildsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/guilds/{guild_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/guilds/premium/subscription-slots/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/guilds/{guild_id}/settings/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["UserGuildSettingsSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        200: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/entitlements/gifts": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/email-settings/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/disable/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/devices/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/delete/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        204: never;
-        401: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/connections/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/channels/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["DmChannelCreateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["DmChannelDTO"];
-          };
-        };
-      };
-    };
-  };
-  "/users/@me/billing/subscriptions/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/billing/payment-sources/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/billing/country-code/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/applications/{app_id}/entitlements/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description app_id */
-          app_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/affinities/users/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/affinities/guilds/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/@me/activities/statistics/applications/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/{id}/relationships/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UserRelationsResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/{id}/profile/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["UserProfileModifySchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/users/{id}/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["PublicUserResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/users/{id}/delete/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/updates/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["UpdatesResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/track/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/teams/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/store/published-listings/skus/{id}": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/store/published-listings/skus/{sku_id}/subscription-plans/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description sku_id */
-          sku_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/store/published-listings/applications/{id}": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/store/published-listings/applications/{id}/subscription-plans/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/stop/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        200: never;
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/stickers/{sticker_id}/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description sticker_id */
-          sticker_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Sticker"];
-          };
-        };
-      };
-    };
-  };
-  "/sticker-packs/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["StickerPacksResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/stage-instances/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/science/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        204: never;
-      };
-    };
-  };
-  "/scheduled-maintenances/upcoming_json/scheduled-maintenances/upcoming.json": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/read-states/ack-bulk/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["AckBulkSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/policies/stats/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["InstanceStatsResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/policies/instance/limits/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["LimitsConfigurationResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/policies/instance/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GeneralConfigurationResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/policies/instance/domains/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["InstanceDomainsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/ping/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["InstancePingResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/partners/{guild_id}/requirements/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/outbound-promotions/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/oauth2/tokens/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/oauth2/authorize/": {
-    post: {
-      parameters: {
-        query: {
-          client_id?: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ApplicationAuthorizeSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["OAuthAuthorizeResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/invites/{code}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description code */
-          code: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Invite"];
-          };
-        };
-        401: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/templates/{code}": {
-    post: {
-      parameters: {
-        path: {
-          /** @description code */
-          code: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["GuildTemplateCreateSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/guilds/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["GuildCreateSchema"];
-        };
-      };
-      responses: {
-        201: {
-          content: {
-            "application/json": components["schemas"]["GuildCreateResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/widget.png/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        200: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/widget.json/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildWidgetJsonResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/widget/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["WidgetModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["WidgetModifySchema"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/welcome-screen/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["GuildUpdateWelcomeScreenSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/webhooks/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/guilds/{guild_id}/voice-states/{user_id}/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description user_id */
-          user_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["VoiceStateUpdateSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/vanity-url/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["VanityUrlSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildVanityUrlCreateResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/templates/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["TemplateCreateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Template"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/templates/{code}": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description code */
-          code: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["TemplateModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Template"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/stickers/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ModifyGuildStickerSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Sticker"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/stickers/{sticker_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description sticker_id */
-          sticker_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/roles/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["RolePositionUpdateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildRolesResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/roles/{role_id}/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description role_id */
-          role_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["RoleModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Role"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/regions/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildVoiceRegionsResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/prune/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildPurgeResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/profile/{member_id}": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description member_id */
-          member_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["MemberChangeProfileSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Member"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/premium/subscriptions": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/guilds/{guild_id}/messages/search/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildMessagesSearchResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        422: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/members/": {
-    get: {
-      parameters: {
-        query: {
-          /** @description max number of members to return (1-1000). default 1 */
-          limit?: number;
-          after?: string;
-        };
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildMembersResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/members/{member_id}/roles/{role_id}/": {
-    put: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description member_id */
-          member_id: string;
-          /** @description role_id */
-          role_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        /** @description No description available */
-        403: never;
-      };
-    };
-  };
-  "/guilds/{guild_id}/members/{member_id}/nick/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description member_id */
-          member_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["MemberNickChangeSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        200: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/members/{member_id}/": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description member_id */
-          member_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/member-verification/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/invites/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildInvitesResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/integrations/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/guilds/{guild_id}/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["GuildUpdateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildUpdateSchema"];
-          };
-        };
-        401: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/emojis/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["EmojiCreateSchema"];
-        };
-      };
-      responses: {
-        201: {
-          content: {
-            "application/json": components["schemas"]["Emoji"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/emojis/{emoji_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description emoji_id */
-          emoji_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/discovery-requirements/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildDiscoveryRequirementsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/delete/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        401: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/channels/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ChannelReorderSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/bans/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildBansResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/bans/{user}": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description user */
-          user: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["BanModeratorSchema"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/bans/{user_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-          /** @description user_id */
-          user_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/bans/@me": {
-    put: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["BanCreateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Ban"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        403: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/guilds/{guild_id}/audit-logs/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description guild_id */
-          guild_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/guild-recommendations/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GuildRecommendationsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/gifs/trending/": {
-    get: {
-      parameters: {
-        query: {
-          /** @description Locale */
-          locale?: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TenorTrendingResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/gifs/trending-gifs/": {
-    get: {
-      parameters: {
-        query: {
-          /** @description Media format */
-          media_format?: string;
-          /** @description Locale */
-          locale?: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TenorGifsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/gifs/search/": {
-    get: {
-      parameters: {
-        query: {
-          /** @description Search query */
-          q: string;
-          /** @description Media format */
-          media_format?: string;
-          /** @description Locale */
-          locale?: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TenorGifsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/gateway/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GatewayResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/gateway/bot/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GatewayBotResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/experiments/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/download/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        302: never;
-        404: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/discovery/categories": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["DiscoveryCategoriesResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/discoverable-guilds/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["DiscoverableGuildsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/channels/{channel_id}/webhooks/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["WebhookCreateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["WebhookCreateResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/typing/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/recipients/{user_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description user_id */
-          user_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/purge/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/pins/{message_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/pins/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["ChannelPinsResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/channels/{channel_id}/permissions/{overwrite_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description overwrite_id */
-          overwrite_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/bulk-delete/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["BulkDeleteSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/{message_id}/reactions/": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/{message_id}/reactions/{emoji}": {
-    get: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-          /** @description emoji */
-          emoji: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["PublicUser"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/{user_id}": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-          /** @description emoji */
-          emoji: string;
-          /** @description user_id */
-          user_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        403: never;
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/{message_id}/": {
-    delete: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/{message_id}/crosspost/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Message"];
-          };
-        };
-      };
-    };
-  };
-  "/channels/{channel_id}/messages/{message_id}/ack/": {
-    post: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-          /** @description message_id */
-          message_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["MessageAcknowledgeSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        200: never;
-        /** @description No description available */
-        403: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/invites/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["ChannelInvitesResponse"];
-          };
-        };
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/channels/{channel_id}/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description channel_id */
-          channel_id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ChannelModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Channel"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        /** @description No description available */
-        404: never;
-      };
-    };
-  };
-  "/auth/verify/view-backup-codes-challenge/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["BackupCodesChallengeSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["BackupCodesChallengeResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/verify/resend/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        204: never;
-        /** @description No description available */
-        400: never;
-        /** @description No description available */
-        500: never;
-      };
-    };
-  };
-  "/auth/verify/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["VerifyEmailSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/reset/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["PasswordResetSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenOnlyResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/register/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["RegisterSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenOnlyResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/mfa/webauthn/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["WebAuthnTotpSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/mfa/totp/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["TotpSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/logout/": {
-    post: {
-      responses: {
-        /** @description No description available */
-        204: never;
-      };
-    };
-  };
-  "/auth/login/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["LoginSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["LoginResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/location-metadata/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["LocationMetadataResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/generate-registration-tokens/": {
-    get: {
-      parameters: {
-        query: {
-          /** @description The number of registration tokens to generate. Defaults to 1. */
-          count?: number;
-          /** @description The length of each registration token. Defaults to 255. */
-          length?: number;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["GenerateRegistrationTokensResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/auth/forgot/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ForgotPasswordSchema"];
-        };
-      };
-      responses: {
-        /** @description No description available */
-        204: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-        500: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/": {
-    post: {
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ApplicationCreateSchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Application"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/detectable/": {
-    get: {
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["ApplicationDetectableResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/{id}/skus/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["ApplicationSkusResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/{id}/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ApplicationModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Application"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/{id}/delete": {
-    post: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        /** @description No description available */
-        200: never;
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/{id}/entitlements/": {
-    get: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["ApplicationEntitlementsResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/{id}/bot/": {
-    patch: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["BotModifySchema"];
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["Application"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/applications/{id}/bot/reset": {
-    post: {
-      parameters: {
-        path: {
-          /** @description id */
-          id: string;
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": components["schemas"]["TokenResponse"];
-          };
-        };
-        400: {
-          content: {
-            "application/json": components["schemas"]["APIErrorResponse"];
-          };
-        };
-      };
-    };
-  };
-  "/-/readyz/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
-  "/-/healthz/": {
-    get: {
-      responses: {
-        /** @description No description available */
-        default: never;
-      };
-    };
-  };
+    "/voice/regions/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildVoiceRegionsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/settings/": {
+        patch: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserSettingsSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UserSettings"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/relationships/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RelationshipPostSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/relationships/{id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/notes/{id}": {
+        put: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserNoteUpdateSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/mfa/webauthn/credentials/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WebAuthnPostSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["WebAuthnCreateResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/mfa/webauthn/credentials/{key_id}/": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description key_id */
+                    key_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+            };
+        };
+    };
+    "/users/@me/mfa/totp/enable/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["TotpEnableSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenWithBackupCodesResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/mfa/totp/disable/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["TotpDisableSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenOnlyResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/mfa/codes/": {
+        /**
+         * @deprecated
+         * @description This route is replaced with users/@me/mfa/codes-verification in newer clients
+         */
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MfaCodesSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UserBackupCodesResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/mfa/codes-verification/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CodesVerificationSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UserBackupCodesResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/library/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/": {
+        patch: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UserUpdateResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/guilds/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UserGuildsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/guilds/{guild_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/guilds/premium/subscription-slots/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/guilds/{guild_id}/settings/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserGuildSettingsSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                200: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/entitlements/gifts": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/email-settings/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/disable/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/devices/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/delete/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                204: never;
+                401: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/connections/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/channels/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DmChannelCreateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["DmChannelDTO"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/@me/billing/subscriptions/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/billing/payment-sources/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/billing/country-code/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/applications/{app_id}/entitlements/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description app_id */
+                    app_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/affinities/users/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/affinities/guilds/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/@me/activities/statistics/applications/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/{id}/relationships/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UserRelationsResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/{id}/profile/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserProfileModifySchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/users/{id}/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["PublicUserResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/users/{id}/delete/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/updates/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["UpdatesResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/track/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/teams/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/store/published-listings/skus/{id}": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/store/published-listings/skus/{sku_id}/subscription-plans/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description sku_id */
+                    sku_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/store/published-listings/applications/{id}": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/store/published-listings/applications/{id}/subscription-plans/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/stop/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                200: never;
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/stickers/{sticker_id}/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description sticker_id */
+                    sticker_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Sticker"];
+                    };
+                };
+            };
+        };
+    };
+    "/sticker-packs/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["StickerPacksResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/stage-instances/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/science/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                204: never;
+            };
+        };
+    };
+    "/scheduled-maintenances/upcoming_json/scheduled-maintenances/upcoming.json": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/read-states/ack-bulk/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AckBulkSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/policies/stats/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["InstanceStatsResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/policies/instance/limits/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["LimitsConfigurationResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/policies/instance/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GeneralConfigurationResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/policies/instance/domains/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["InstanceDomainsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/ping/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["InstancePingResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/partners/{guild_id}/requirements/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/outbound-promotions/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/oauth2/tokens/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/oauth2/authorize/": {
+        post: {
+            parameters: {
+                query: {
+                    client_id?: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ApplicationAuthorizeSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["OAuthAuthorizeResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/invites/{code}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description code */
+                    code: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Invite"];
+                    };
+                };
+                401: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/templates/{code}": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description code */
+                    code: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GuildTemplateCreateSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/guilds/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GuildCreateSchema"];
+                };
+            };
+            responses: {
+                201: {
+                    content: {
+                        "application/json": components["schemas"]["GuildCreateResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/widget.png/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                200: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/widget.json/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildWidgetJsonResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/widget/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WidgetModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["WidgetModifySchema"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/welcome-screen/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GuildUpdateWelcomeScreenSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/webhooks/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/guilds/{guild_id}/voice-states/{user_id}/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description user_id */
+                    user_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["VoiceStateUpdateSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/vanity-url/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["VanityUrlSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildVanityUrlCreateResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/templates/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["TemplateCreateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Template"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/templates/{code}": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description code */
+                    code: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["TemplateModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Template"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/stickers/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ModifyGuildStickerSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Sticker"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/stickers/{sticker_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description sticker_id */
+                    sticker_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/roles/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RolePositionUpdateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildRolesResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/roles/{role_id}/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description role_id */
+                    role_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RoleModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Role"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/regions/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildVoiceRegionsResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/prune/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildPurgeResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/profile/{member_id}": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description member_id */
+                    member_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MemberChangeProfileSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Member"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/premium/subscriptions": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/guilds/{guild_id}/messages/search/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildMessagesSearchResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                422: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/members/": {
+        get: {
+            parameters: {
+                query: {
+                    /** @description max number of members to return (1-1000). default 1 */
+                    limit?: number;
+                    after?: string;
+                };
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildMembersResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/members/{member_id}/roles/{role_id}/": {
+        put: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description member_id */
+                    member_id: string;
+                    /** @description role_id */
+                    role_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                /** @description No description available */
+                403: never;
+            };
+        };
+    };
+    "/guilds/{guild_id}/members/{member_id}/nick/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description member_id */
+                    member_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MemberNickChangeSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                200: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/members/{member_id}/": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description member_id */
+                    member_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/member-verification/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/invites/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildInvitesResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/integrations/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/guilds/{guild_id}/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GuildUpdateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildUpdateSchema"];
+                    };
+                };
+                401: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/emojis/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["EmojiCreateSchema"];
+                };
+            };
+            responses: {
+                201: {
+                    content: {
+                        "application/json": components["schemas"]["Emoji"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/emojis/{emoji_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description emoji_id */
+                    emoji_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/discovery-requirements/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildDiscoveryRequirementsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/delete/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                401: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/channels/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ChannelReorderSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/bans/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildBansResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/bans/{user}": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description user */
+                    user: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["BanModeratorSchema"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/bans/{user_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                    /** @description user_id */
+                    user_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/bans/@me": {
+        put: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BanCreateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Ban"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                403: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/guilds/{guild_id}/audit-logs/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description guild_id */
+                    guild_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/guild-recommendations/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GuildRecommendationsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/gifs/trending/": {
+        get: {
+            parameters: {
+                query: {
+                    /** @description Locale */
+                    locale?: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TenorTrendingResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/gifs/trending-gifs/": {
+        get: {
+            parameters: {
+                query: {
+                    /** @description Media format */
+                    media_format?: string;
+                    /** @description Locale */
+                    locale?: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TenorGifsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/gifs/search/": {
+        get: {
+            parameters: {
+                query: {
+                    /** @description Search query */
+                    q: string;
+                    /** @description Media format */
+                    media_format?: string;
+                    /** @description Locale */
+                    locale?: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TenorGifsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/gateway/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GatewayResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/gateway/bot/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GatewayBotResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/experiments/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/download/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                302: never;
+                404: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/discovery/categories": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["DiscoveryCategoriesResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/discoverable-guilds/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["DiscoverableGuildsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/channels/{channel_id}/webhooks/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WebhookCreateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["WebhookCreateResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/typing/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/recipients/{user_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description user_id */
+                    user_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/purge/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/pins/{message_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/pins/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["ChannelPinsResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/channels/{channel_id}/permissions/{overwrite_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description overwrite_id */
+                    overwrite_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/bulk-delete/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BulkDeleteSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/{message_id}/reactions/": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/{message_id}/reactions/{emoji}": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                    /** @description emoji */
+                    emoji: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["PublicUser"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/{user_id}": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                    /** @description emoji */
+                    emoji: string;
+                    /** @description user_id */
+                    user_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                403: never;
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/{message_id}/": {
+        delete: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/{message_id}/crosspost/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Message"];
+                    };
+                };
+            };
+        };
+    };
+    "/channels/{channel_id}/messages/{message_id}/ack/": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                    /** @description message_id */
+                    message_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["MessageAcknowledgeSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                200: never;
+                /** @description No description available */
+                403: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/invites/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["ChannelInvitesResponse"];
+                    };
+                };
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/channels/{channel_id}/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description channel_id */
+                    channel_id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ChannelModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Channel"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                /** @description No description available */
+                404: never;
+            };
+        };
+    };
+    "/auth/verify/view-backup-codes-challenge/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BackupCodesChallengeSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["BackupCodesChallengeResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/verify/resend/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                204: never;
+                /** @description No description available */
+                400: never;
+                /** @description No description available */
+                500: never;
+            };
+        };
+    };
+    "/auth/verify/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["VerifyEmailSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/reset/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PasswordResetSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenOnlyResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/register/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RegisterSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenOnlyResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/mfa/webauthn/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WebAuthnTotpSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/mfa/totp/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["TotpSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/logout/": {
+        post: {
+            responses: {
+                /** @description No description available */
+                204: never;
+            };
+        };
+    };
+    "/auth/login/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["LoginSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["LoginResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/location-metadata/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["LocationMetadataResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/generate-registration-tokens/": {
+        get: {
+            parameters: {
+                query: {
+                    /** @description The number of registration tokens to generate. Defaults to 1. */
+                    count?: number;
+                    /** @description The length of each registration token. Defaults to 255. */
+                    length?: number;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["GenerateRegistrationTokensResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/auth/forgot/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ForgotPasswordSchema"];
+                };
+            };
+            responses: {
+                /** @description No description available */
+                204: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+                500: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/": {
+        post: {
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ApplicationCreateSchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Application"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/detectable/": {
+        get: {
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["ApplicationDetectableResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/{id}/skus/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["ApplicationSkusResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/{id}/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ApplicationModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Application"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/{id}/delete": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                /** @description No description available */
+                200: never;
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/{id}/entitlements/": {
+        get: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["ApplicationEntitlementsResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/{id}/bot/": {
+        patch: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BotModifySchema"];
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["Application"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/applications/{id}/bot/reset": {
+        post: {
+            parameters: {
+                path: {
+                    /** @description id */
+                    id: string;
+                };
+            };
+            responses: {
+                200: {
+                    content: {
+                        "application/json": components["schemas"]["TokenResponse"];
+                    };
+                };
+                400: {
+                    content: {
+                        "application/json": components["schemas"]["APIErrorResponse"];
+                    };
+                };
+            };
+        };
+    };
+    "/-/readyz/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
+    "/-/healthz/": {
+        get: {
+            responses: {
+                /** @description No description available */
+                default: never;
+            };
+        };
+    };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
-  schemas: {
-    AckBulkSchema: {
-      read_states: ({
-          channel_id: string;
-          message_id: string;
-          read_state_type: number;
-        })[];
-    };
-    ApplicationAuthorizeSchema: {
-      authorize: boolean;
-      guild_id: string;
-      permissions: string;
-      captcha_key?: string;
-      code?: string;
-    };
-    ApplicationCreateSchema: {
-      name: string;
-      team_id?: OneOf<[string, number]>;
-    };
-    ApplicationModifySchema: {
-      description?: string;
-      icon?: string;
-      interactions_endpoint_url?: string;
-      max_participants?: number | null;
-      name?: string;
-      privacy_policy_url?: string;
-      role_connections_verification_url?: string;
-      tags?: (string)[];
-      terms_of_service_url?: string;
-      bot_public?: boolean;
-      bot_require_code_grant?: boolean;
-      flags?: number;
-    };
-    BackupCodesChallengeSchema: {
-      password: string;
-    };
-    BanCreateSchema: {
-      delete_message_seconds?: string;
-      delete_message_days?: string;
-      reason?: string;
-    };
-    BanModeratorSchema: {
-      id: string;
-      user_id: string;
-      guild_id: string;
-      executor_id: string;
-      reason?: string;
-    };
-    BanRegistrySchema: {
-      id: string;
-      user_id: string;
-      guild_id: string;
-      executor_id: string;
-      ip?: string;
-      reason?: string;
-    };
-    BotModifySchema: {
-      avatar?: string;
-      username?: string;
-    };
-    /** @enum {number} */
-    ChannelPermissionOverwriteType: 0 | 1 | 2;
-    ChannelModifySchema: {
-      name?: string;
-      /** @enum {number} */
-      type?: 0 | 1 | 10 | 11 | 12 | 13 | 14 | 15 | 2 | 255 | 3 | 33 | 34 | 35 | 4 | 5 | 6 | 64 | 7 | 8 | 9;
-      topic?: string;
-      icon?: string | null;
-      bitrate?: number;
-      user_limit?: number;
-      rate_limit_per_user?: number;
-      position?: number;
-      permission_overwrites?: ({
-          id: string;
-          type: components["schemas"]["ChannelPermissionOverwriteType"];
-          allow: string;
-          deny: string;
-        })[];
-      parent_id?: string;
-      id?: string;
-      nsfw?: boolean;
-      rtc_region?: string;
-      default_auto_archive_duration?: number;
-      default_reaction_emoji?: string | null;
-      flags?: number;
-      default_thread_rate_limit_per_user?: number;
-      video_quality_mode?: number;
-    };
-    ActivitySchema: {
-      afk?: boolean;
-      status: components["schemas"]["Status"];
-      activities?: (components["schemas"]["Activity"])[];
-      since?: number;
-    };
-    /** @enum {string} */
-    Status: "dnd" | "idle" | "invisible" | "offline" | "online";
-    Activity: {
-      name: string;
-      type: components["schemas"]["ActivityType"];
-      url?: string;
-      created_at?: number;
-      timestamps?: {
-        start: number;
-        end: number;
-      };
-      application_id?: string;
-      details?: string;
-      state?: string;
-      emoji?: {
-        name: string;
-        id?: string;
-        animated: boolean;
-      };
-      party?: {
-        id?: string;
-        size?: (number)[];
-      };
-      assets?: {
-        large_image?: string;
-        large_text?: string;
-        small_image?: string;
-        small_text?: string;
-      };
-      secrets?: {
-        join?: string;
-        spectate?: string;
-        match?: string;
-      };
-      instance?: boolean;
-      flags: string;
-      id?: string;
-      sync_id?: string;
-      metadata?: {
-        context_uri?: string;
-        album_id: string;
-        artist_ids: (string)[];
-      };
-      session_id: string;
-    };
-    /** @enum {number} */
-    ActivityType: 0 | 1 | 2 | 4 | 5;
-    Embed: {
-      title?: string;
-      /** @enum {string} */
-      type?: "article" | "gifv" | "image" | "link" | "rich" | "video";
-      description?: string;
-      url?: string;
-      /** Format: date-time */
-      timestamp?: string;
-      color?: number;
-      footer?: {
-        text: string;
-        icon_url?: string;
-        proxy_icon_url?: string;
-      };
-      image?: components["schemas"]["EmbedImage"];
-      thumbnail?: components["schemas"]["EmbedImage"];
-      video?: components["schemas"]["EmbedImage"];
-      provider?: {
-        name?: string;
-        url?: string;
-      };
-      author?: {
-        name?: string;
-        url?: string;
-        icon_url?: string;
-        proxy_icon_url?: string;
-      };
-      fields?: ({
-          name: string;
-          value: string;
-          inline?: boolean;
-        })[];
-    };
-    EmbedImage: {
-      url?: string;
-      proxy_url?: string;
-      height?: number;
-      width?: number;
-    };
-    APIErrorResponse: {
-      code: number;
-      message: string;
-      errors: {
-        [key: string]: {
-          _errors: ({
-              message: string;
-              code: string;
-            })[];
-        } | undefined;
-      };
-    };
-    CaptchaRequiredResponse: {
-      captcha_key: string;
-      captcha_sitekey: string;
-      captcha_service: string;
-    };
-    Application: {
-      name: string;
-      icon?: string;
-      description: string;
-      /** @default */
-      summary: string;
-      type?: {
-        [key: string]: unknown | undefined;
-      };
-      /** @default true */
-      hook: boolean;
-      /** @default true */
-      bot_public?: boolean;
-      /** @default false */
-      bot_require_code_grant?: boolean;
-      verify_key: string;
-      owner: components["schemas"]["User"];
-      /** @default 0 */
-      flags: number;
-      /** @default [] */
-      redirect_uris: (string)[];
-      /** @default 0 */
-      rpc_application_state: number;
-      /** @default 1 */
-      store_application_state: number;
-      /** @default 1 */
-      verification_state: number;
-      interactions_endpoint_url?: string;
-      /** @default true */
-      integration_public: boolean;
-      /** @default false */
-      integration_require_code_grant: boolean;
-      /** @default 1 */
-      discoverability_state: number;
-      /** @default 2240 */
-      discovery_eligibility_flags: number;
-      bot?: components["schemas"]["User"];
-      tags?: (string)[];
-      cover_image?: string;
-      install_params?: {
-        scopes: (string)[];
-        permissions: string;
-      };
-      terms_of_service_url?: string;
-      privacy_policy_url?: string;
-      team?: components["schemas"]["Team"];
-      id: string;
-    };
-    User: {
-      username: string;
-      discriminator: string;
-      avatar?: string;
-      accent_color?: number;
-      banner?: string;
-      theme_colors?: (number)[];
-      pronouns?: string;
-      phone?: string;
-      /** @default false */
-      desktop: boolean;
-      /** @default false */
-      mobile: boolean;
-      premium: boolean;
-      premium_type: number;
-      /** @default false */
-      bot: boolean;
-      /** @default */
-      bio: string;
-      /** @default false */
-      system: boolean;
-      /** @default true */
-      nsfw_allowed: boolean;
-      /** @default false */
-      mfa_enabled: boolean;
-      /** @default false */
-      webauthn_enabled: boolean;
-      /** @default */
-      totp_secret?: string;
-      /** @default */
-      totp_last_ticket?: string;
-      /** Format: date-time */
-      created_at: string;
-      /** Format: date-time */
-      premium_since: string;
-      verified: boolean;
-      /** @default false */
-      disabled: boolean;
-      /** @default false */
-      deleted: boolean;
-      email?: string;
-      /** @default 0 */
-      flags: string;
-      /** @default 0 */
-      public_flags: number;
-      /** @default 0 */
-      purchased_flags: number;
-      /** @default 0 */
-      premium_usage_flags: number;
-      rights: string;
-      sessions: (components["schemas"]["Session"])[];
-      relationships: (components["schemas"]["Relationship"])[];
-      connected_accounts: (components["schemas"]["ConnectedAccount"])[];
-      data: {
-        /** Format: date-time */
-        valid_tokens_since: string;
-        hash?: string;
-      };
-      /** @default [] */
-      fingerprints: (string)[];
-      settings: components["schemas"]["UserSettings"];
-      /** @default {} */
-      extended_settings: string;
-      security_keys: (components["schemas"]["SecurityKey"])[];
-      id: string;
-    };
-    Session: {
-      user_id: string;
-      user: components["schemas"]["User"];
-      session_id: string;
-      activities: (components["schemas"]["Activity"])[];
-      client_info: {
-        client: string;
-        os: string;
-        version: number;
-      };
-      status: components["schemas"]["Status"];
-      id: string;
-    };
-    Relationship: {
-      from_id: string;
-      from: components["schemas"]["User"];
-      to_id: string;
-      to: components["schemas"]["User"];
-      nickname?: string;
-      type: components["schemas"]["RelationshipType"];
-      id: string;
-    };
-    /** @enum {number} */
-    RelationshipType: 1 | 2 | 3 | 4;
-    ConnectedAccount: {
-      user_id: string;
-      user: components["schemas"]["User"];
-      access_token: string;
-      friend_sync: boolean;
-      name: string;
-      revoked: boolean;
-      show_activity: boolean;
-      type: string;
-      verified: boolean;
-      visibility: number;
-      id: string;
-    };
-    UserSettings: {
-      index: string;
-      /** @default 3600 */
-      afk_timeout: number;
-      /** @default true */
-      allow_accessibility_detection: boolean;
-      /** @default true */
-      animate_emoji: boolean;
-      /** @default 0 */
-      animate_stickers: number;
-      /** @default false */
-      contact_sync_enabled: boolean;
-      /** @default false */
-      convert_emoticons: boolean;
-      /** @default null */
-      custom_status: components["schemas"]["CustomStatus"] | null;
-      /** @default false */
-      default_guilds_restricted: boolean;
-      /** @default false */
-      detect_platform_accounts: boolean;
-      /** @default true */
-      developer_mode: boolean;
-      /** @default true */
-      disable_games_tab: boolean;
-      /** @default false */
-      enable_tts_command: boolean;
-      /** @default 0 */
-      explicit_content_filter: number;
-      friend_source_flags: components["schemas"]["FriendSourceFlags"];
-      /** @default false */
-      gateway_connected: boolean;
-      /** @default false */
-      gif_auto_play: boolean;
-      /** @default [] */
-      guild_folders: (components["schemas"]["GuildFolder"])[];
-      /** @default [] */
-      guild_positions: (string)[];
-      /** @default true */
-      inline_attachment_media: boolean;
-      /** @default true */
-      inline_embed_media: boolean;
-      /** @default en-US */
-      locale: string;
-      /** @default false */
-      message_display_compact: boolean;
-      /** @default true */
-      native_phone_integration_enabled: boolean;
-      /** @default true */
-      render_embeds: boolean;
-      /** @default true */
-      render_reactions: boolean;
-      /** @default [] */
-      restricted_guilds: (string)[];
-      /** @default true */
-      show_current_game: boolean;
-      /**
-       * @default online 
-       * @enum {string}
-       */
-      status: "dnd" | "idle" | "invisible" | "offline" | "online";
-      /** @default false */
-      stream_notifications_enabled: boolean;
-      /**
-       * @default dark 
-       * @enum {string}
-       */
-      theme: "dark" | "light";
-      /** @default 0 */
-      timezone_offset: number;
-    };
-    CustomStatus: {
-      emoji_id?: string;
-      emoji_name?: string;
-      expires_at?: number;
-      text?: string;
-    };
-    FriendSourceFlags: {
-      all: boolean;
-    };
-    GuildFolder: {
-      color: number;
-      guild_ids: (string)[];
-      id: number;
-      name: string;
-    };
-    SecurityKey: {
-      user_id: string;
-      user: components["schemas"]["User"];
-      key_id: string;
-      public_key: string;
-      counter: number;
-      name: string;
-      id: string;
-    };
-    Team: {
-      icon?: string;
-      members: (components["schemas"]["TeamMember"])[];
-      name: string;
-      owner_user_id: string;
-      owner_user: components["schemas"]["User"];
-      id: string;
-    };
-    TeamMember: {
-      membership_state: components["schemas"]["TeamMemberState"];
-      permissions: (string)[];
-      team_id: string;
-      team: components["schemas"]["Team"];
-      user_id: string;
-      user: components["schemas"]["User"];
-      id: string;
-    };
-    /** @enum {number} */
-    TeamMemberState: 1 | 2;
-    Invite: {
-      code: string;
-      temporary: boolean;
-      uses: number;
-      max_uses: number;
-      max_age: number;
-      /** Format: date-time */
-      created_at: string;
-      /** Format: date-time */
-      expires_at: string;
-      guild_id: string;
-      guild: components["schemas"]["Guild"];
-      channel_id: string;
-      channel: components["schemas"]["Channel"];
-      inviter_id?: string;
-      inviter: components["schemas"]["User"];
-      target_user_id: string;
-      target_user?: string;
-      target_user_type?: number;
-      vanity_url?: boolean;
-    };
-    Guild: {
-      afk_channel_id?: string;
-      afk_channel?: components["schemas"]["Channel"];
-      afk_timeout?: number;
-      bans: (components["schemas"]["Ban"])[];
-      banner?: string;
-      default_message_notifications?: number;
-      description?: string;
-      discovery_splash?: string;
-      explicit_content_filter?: number;
-      features: (string)[];
-      primary_category_id?: string;
-      icon?: string;
-      /** @default false */
-      large?: boolean;
-      max_members?: number;
-      max_presences?: number;
-      max_video_channel_users?: number;
-      member_count?: number;
-      presence_count?: number;
-      members: (components["schemas"]["Member"])[];
-      roles: (components["schemas"]["Role"])[];
-      channels: (components["schemas"]["Channel"])[];
-      template_id?: string;
-      template: components["schemas"]["Template"];
-      emojis: (components["schemas"]["Emoji"])[];
-      stickers: (components["schemas"]["Sticker"])[];
-      invites: (components["schemas"]["Invite"])[];
-      voice_states: (components["schemas"]["VoiceState"])[];
-      webhooks: (components["schemas"]["Webhook"])[];
-      mfa_level?: number;
-      name: string;
-      owner_id?: string;
-      owner?: components["schemas"]["User"];
-      preferred_locale?: string;
-      premium_subscription_count?: number;
-      premium_tier?: number;
-      public_updates_channel_id: string;
-      public_updates_channel?: components["schemas"]["Channel"];
-      rules_channel_id?: string;
-      rules_channel?: string;
-      region?: string;
-      splash?: string;
-      system_channel_id?: string;
-      system_channel?: components["schemas"]["Channel"];
-      system_channel_flags?: number;
-      /** @default false */
-      unavailable: boolean;
-      verification_level?: number;
-      welcome_screen: components["schemas"]["GuildWelcomeScreen"];
-      widget_channel_id?: string;
-      widget_channel?: components["schemas"]["Channel"];
-      /** @default true */
-      widget_enabled: boolean;
-      nsfw_level?: number;
-      /** @default false */
-      nsfw: boolean;
-      parent?: string;
-      permissions?: number;
-      /** @default false */
-      premium_progress_bar_enabled: boolean;
-      id: string;
-    };
-    Channel: {
-      /** Format: date-time */
-      created_at: string;
-      name?: string;
-      icon?: string | null;
-      type: components["schemas"]["ChannelType"];
-      recipients?: (components["schemas"]["Recipient"])[];
-      last_message_id?: string;
-      guild_id?: string;
-      guild: components["schemas"]["Guild"];
-      parent_id: string;
-      parent?: components["schemas"]["Channel"];
-      owner_id?: string;
-      owner: components["schemas"]["User"];
-      last_pin_timestamp?: number;
-      default_auto_archive_duration?: number;
-      position?: number;
-      permission_overwrites?: (components["schemas"]["ChannelPermissionOverwrite"])[];
-      video_quality_mode?: number;
-      bitrate?: number;
-      user_limit?: number;
-      /** @default false */
-      nsfw: boolean;
-      rate_limit_per_user?: number;
-      topic?: string;
-      invites?: (components["schemas"]["Invite"])[];
-      retention_policy_id?: string;
-      messages?: (components["schemas"]["Message"])[];
-      voice_states?: (components["schemas"]["VoiceState"])[];
-      read_states?: (components["schemas"]["ReadState"])[];
-      webhooks?: (components["schemas"]["Webhook"])[];
-      /** @default 0 */
-      flags: number;
-      /** @default 0 */
-      default_thread_rate_limit_per_user: number;
-      id: string;
-    };
-    /** @enum {number} */
-    ChannelType: 0 | 1 | 10 | 11 | 12 | 13 | 14 | 15 | 2 | 255 | 3 | 33 | 34 | 35 | 4 | 5 | 6 | 64 | 7 | 8 | 9;
-    Recipient: {
-      channel_id: string;
-      channel: components["schemas"]["Channel"];
-      user_id: string;
-      user: components["schemas"]["User"];
-      closed: boolean;
-      id: string;
-    };
-    ChannelPermissionOverwrite: {
-      allow: string;
-      deny: string;
-      id: string;
-      type: components["schemas"]["ChannelPermissionOverwriteType"];
-    };
-    Message: {
-      channel_id?: string;
-      channel: components["schemas"]["Channel"];
-      guild_id?: string;
-      guild?: components["schemas"]["Guild"];
-      author_id?: string;
-      author?: components["schemas"]["User"];
-      member_id?: string;
-      member?: components["schemas"]["Member"];
-      webhook_id?: string;
-      webhook?: components["schemas"]["Webhook"];
-      application_id?: string;
-      application?: components["schemas"]["Application"];
-      content?: string;
-      /** Format: date-time */
-      timestamp: string;
-      /** Format: date-time */
-      edited_timestamp?: string;
-      tts?: boolean;
-      mention_everyone?: boolean;
-      mentions: (components["schemas"]["User"])[];
-      mention_roles: (components["schemas"]["Role"])[];
-      mention_channels: (components["schemas"]["Channel"])[];
-      sticker_items?: (components["schemas"]["Sticker"])[];
-      attachments?: (components["schemas"]["Attachment_1"])[];
-      embeds: (components["schemas"]["Embed"])[];
-      reactions: (components["schemas"]["Reaction"])[];
-      nonce?: string;
-      pinned?: boolean;
-      type: components["schemas"]["MessageType"];
-      activity?: {
-        type: number;
-        party_id: string;
-      };
-      flags?: string;
-      message_reference?: {
-        message_id: string;
-        channel_id?: string;
-        guild_id?: string;
-      };
-      referenced_message?: components["schemas"]["Message"];
-      interaction?: {
-        id: string;
-        type: components["schemas"]["InteractionType"];
-        name: string;
-        user_id: string;
-      };
-      components?: (components["schemas"]["MessageComponent"])[];
-      id: string;
-    };
-    Member: {
-      index: string;
-      id: string;
-      user: components["schemas"]["User"];
-      guild_id: string;
-      guild: components["schemas"]["Guild"];
-      nick?: string;
-      roles: (components["schemas"]["Role"])[];
-      /** Format: date-time */
-      joined_at: string;
-      premium_since?: number;
-      deaf: boolean;
-      mute: boolean;
-      pending: boolean;
-      settings: components["schemas"]["UserGuildSettings"];
-      last_message_id?: string;
-      joined_by: string;
-      avatar: string;
-      banner: string;
-      bio: string;
-      theme_colors?: (number)[];
-      pronouns?: string;
-      /** Format: date-time */
-      communication_disabled_until: string;
-    };
-    Role: {
-      guild_id: string;
-      guild: components["schemas"]["Guild"];
-      color: number;
-      hoist: boolean;
-      managed: boolean;
-      mentionable: boolean;
-      name: string;
-      permissions: string;
-      position: number;
-      icon?: string;
-      unicode_emoji?: string;
-      tags?: {
-        bot_id?: string;
-        integration_id?: string;
-        premium_subscriber?: boolean;
-      };
-      id: string;
-    };
-    UserGuildSettings: {
-      channel_overrides: OneOf<[{
-        [key: string]: components["schemas"]["ChannelOverride"] | undefined;
-      }, null]>;
-      message_notifications: number;
-      mobile_push: boolean;
-      mute_config: components["schemas"]["MuteConfig"] | null;
-      muted: boolean;
-      suppress_everyone: boolean;
-      suppress_roles: boolean;
-      version: number;
-      guild_id: string | null;
-      flags: number;
-      mute_scheduled_events: boolean;
-      hide_muted_channels: boolean;
-      /** @enum {number} */
-      notify_highlights: 0;
-    };
-    ChannelOverride: {
-      message_notifications: number;
-      mute_config: components["schemas"]["MuteConfig"];
-      muted: boolean;
-      channel_id: string | null;
-    };
-    MuteConfig: {
-      end_time: number;
-      selected_time_window: number;
-    };
-    Webhook: {
-      type: components["schemas"]["WebhookType"];
-      name?: string;
-      avatar?: string;
-      token?: string;
-      guild_id: string;
-      guild: components["schemas"]["Guild"];
-      channel_id: string;
-      channel: components["schemas"]["Channel"];
-      application_id: string;
-      application: components["schemas"]["Application"];
-      user_id: string;
-      user: components["schemas"]["User"];
-      source_guild_id: string;
-      source_guild: components["schemas"]["Guild"];
-      id: string;
-    };
-    /** @enum {number} */
-    WebhookType: 1 | 2 | 3;
-    Sticker: {
-      name: string;
-      description?: string;
-      available?: boolean;
-      tags?: string;
-      pack_id?: string;
-      pack: components["schemas"]["StickerPack"];
-      guild_id?: string;
-      guild?: components["schemas"]["Guild"];
-      user_id?: string;
-      user?: components["schemas"]["User"];
-      type: components["schemas"]["StickerType"];
-      format_type: components["schemas"]["StickerFormatType"];
-      id: string;
-    };
-    StickerPack: {
-      name: string;
-      description?: string;
-      banner_asset_id?: string;
-      stickers: (components["schemas"]["Sticker"])[];
-      cover_sticker_id?: string;
-      cover_sticker?: components["schemas"]["Sticker"];
-      id: string;
-    };
-    /** @enum {number} */
-    StickerType: 1 | 2;
-    /** @enum {number} */
-    StickerFormatType: 0 | 1 | 2 | 3;
-    Attachment_1: {
-      filename: string;
-      size: number;
-      url: string;
-      proxy_url: string;
-      height?: number;
-      width?: number;
-      content_type?: string;
-      message_id: string;
-      message: components["schemas"]["Message"];
-      id: string;
-    };
-    Reaction: {
-      count: number;
-      emoji: components["schemas"]["PartialEmoji"];
-      user_ids: (string)[];
-    };
-    PartialEmoji: {
-      id?: string;
-      name: string;
-      animated?: boolean;
-    };
-    /** @enum {number} */
-    MessageType: 0 | 1 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 19 | 2 | 20 | 255 | 3 | 4 | 41 | 42 | 43 | 5 | 50 | 6 | 63 | 7 | 8 | 9;
-    /** @enum {number} */
-    InteractionType: 0 | 1 | 2;
-    MessageComponent: {
-      type: number;
-      style?: number;
-      label?: string;
-      emoji?: components["schemas"]["PartialEmoji"];
-      custom_id?: string;
-      url?: string;
-      disabled?: boolean;
-      components: (components["schemas"]["MessageComponent"])[];
-    };
-    VoiceState: {
-      guild_id: string;
-      guild?: components["schemas"]["Guild"];
-      channel_id: string;
-      channel: components["schemas"]["Channel"];
-      user_id: string;
-      user: components["schemas"]["User"];
-      member: components["schemas"]["Member"];
-      session_id: string;
-      token: string;
-      deaf: boolean;
-      mute: boolean;
-      self_deaf: boolean;
-      self_mute: boolean;
-      self_stream?: boolean;
-      self_video: boolean;
-      suppress: boolean;
-      /** Format: date-time */
-      request_to_speak_timestamp?: string;
-      id: string;
-    };
-    ReadState: {
-      channel_id: string;
-      channel: components["schemas"]["Channel"];
-      user_id: string;
-      user: components["schemas"]["User"];
-      last_message_id: string;
-      public_ack: string;
-      notifications_cursor: string;
-      /** Format: date-time */
-      last_pin_timestamp?: string;
-      mention_count: number;
-      manual: boolean;
-      id: string;
-    };
-    Ban: {
-      user_id: string;
-      user: components["schemas"]["User"];
-      guild_id: string;
-      guild: components["schemas"]["Guild"];
-      executor_id: string;
-      executor: components["schemas"]["User"];
-      ip: string;
-      reason?: string;
-      id: string;
-    };
-    Template: {
-      code: string;
-      name: string;
-      description?: string;
-      usage_count?: number;
-      creator_id: string;
-      creator: components["schemas"]["User"];
-      /** Format: date-time */
-      created_at: string;
-      /** Format: date-time */
-      updated_at: string;
-      source_guild_id: string;
-      source_guild: components["schemas"]["Guild"];
-      serialized_source_guild: components["schemas"]["Guild"];
-      id: string;
-    };
-    Emoji: {
-      animated: boolean;
-      available: boolean;
-      guild_id: string;
-      guild: components["schemas"]["Guild"];
-      user_id: string;
-      user: components["schemas"]["User"];
-      managed: boolean;
-      name: string;
-      require_colons: boolean;
-      roles: (string)[];
-      groups: (string)[];
-      id: string;
-    };
-    GuildWelcomeScreen: {
-      enabled: boolean;
-      description: string;
-      welcome_channels: ({
-          description: string;
-          emoji_id?: string;
-          emoji_name?: string;
-          channel_id: string;
-        })[];
-    };
-    Categories: {
-      id: number;
-      name: string;
-      localizations: string;
-      is_primary: boolean;
-    };
-    GuildMessagesSearchMessage: {
-      id: string;
-      type: components["schemas"]["MessageType"];
-      content?: string;
-      channel_id: string;
-      author: components["schemas"]["PublicUser"];
-      attachments: (components["schemas"]["Attachment_1"])[];
-      embeds: (components["schemas"]["Embed"])[];
-      mentions: (components["schemas"]["PublicUser"])[];
-      mention_roles: (components["schemas"]["Role"])[];
-      pinned: boolean;
-      mention_everyone?: boolean;
-      tts: boolean;
-      timestamp: string;
-      edited_timestamp: string | null;
-      flags: number;
-      components: (Record<string, never>)[];
-      /** @enum {boolean} */
-      hit: true;
-    };
-    PublicUser: {
-      id: string;
-      /** Format: date-time */
-      premium_since: string;
-      username: string;
-      discriminator: string;
-      public_flags: number;
-      avatar?: string;
-      accent_color?: number;
-      banner?: string;
-      bio: string;
-      bot: boolean;
-      premium_type: number;
-      theme_colors?: (number)[];
-      pronouns?: string;
-    };
-    GuildVanityUrl: {
-      code: string;
-      uses: number;
-    };
-    GuildVanityUrlNoInvite: {
-      code: null;
-    };
-    GuildVoiceRegion: {
-      id: string;
-      name: string;
-      custom: boolean;
-      deprecated: boolean;
-      optimal: boolean;
-    };
-    ClientStatus: {
-      desktop?: string;
-      mobile?: string;
-      web?: string;
-    };
-    /** @description A container for useful snowflake-related methods. */
-    Snowflake: Record<string, never>;
-    UserLimits: {
-      /** @default 1048576 */
-      maxGuilds: number;
-      /** @default 32 */
-      maxUsername: number;
-      /** @default 5000 */
-      maxFriends: number;
-    };
-    GuildLimits: {
-      /** @default 1000 */
-      maxRoles: number;
-      /** @default 2000 */
-      maxEmojis: number;
-      /** @default 25000000 */
-      maxMembers: number;
-      /** @default 65535 */
-      maxChannels: number;
-      /** @default 65535 */
-      maxChannelsInCategory: number;
-    };
-    MessageLimits: {
-      /** @default 1048576 */
-      maxCharacters: number;
-      /** @default 160 */
-      maxTTSCharacters: number;
-      /** @default 2048 */
-      maxReactions: number;
-      /** @default 1073741824 */
-      maxAttachmentSize: number;
-      /** @default 1000 */
-      maxBulkDelete: number;
-      /** @default 5242880 */
-      maxEmbedDownloadSize: number;
-    };
-    ChannelLimits: {
-      /** @default 500 */
-      maxPins: number;
-      /** @default 1024 */
-      maxTopic: number;
-      /** @default 100 */
-      maxWebhooks: number;
-    };
-    RateLimits: {
-      /** @default false */
-      enabled: boolean;
-      ip: components["schemas"]["RateLimitOptions"];
-      global: components["schemas"]["RateLimitOptions"];
-      error: components["schemas"]["RateLimitOptions"];
-      routes: components["schemas"]["RouteRateLimit"];
-    };
-    RateLimitOptions: {
-      bot?: number;
-      count: number;
-      window: number;
-      onyIp?: boolean;
-    };
-    RouteRateLimit: {
-      guild: components["schemas"]["RateLimitOptions"];
-      webhook: components["schemas"]["RateLimitOptions"];
-      channel: components["schemas"]["RateLimitOptions"];
-      auth: Record<string, never>;
-    };
-    GlobalRateLimits: {
-      register: components["schemas"]["GlobalRateLimit"];
-      sendMessage: components["schemas"]["GlobalRateLimit"];
-    };
-    GlobalRateLimit: {
-      /** @default 100 */
-      limit: number;
-      /** @default 3600000 */
-      window: number;
-      /** @default true */
-      enabled: boolean;
-    };
-    TenorGifResponse: {
-      id: string;
-      title: string;
-      url: string;
-      src: string;
-      gif_src: string;
-      width: number;
-      height: number;
-      preview: string;
-    };
-    BackupCode: {
-      user: components["schemas"]["User"];
-      code: string;
-      consumed: boolean;
-      expired: boolean;
-      id: string;
-    };
-    PublicConnectedAccount: {
-      type: string;
-      name: string;
-      verified: boolean;
-    };
-    DmChannelDTO: {
-      icon: string | null;
-      id: string;
-      last_message_id: string | null;
-      name: string | null;
-      origin_channel_id: string | null;
-      owner_id?: string;
-      recipients: (components["schemas"]["MinimalPublicUserDTO"])[];
-      type: number;
-    };
-    MinimalPublicUserDTO: {
-      avatar?: string | null;
-      discriminator: string;
-      id: string;
-      public_flags: number;
-      username: string;
-    };
-    GenerateWebAuthnCredentialsSchema: {
-      password: string;
-    };
-    CreateWebAuthnCredentialSchema: {
-      credential: string;
-      name: string;
-      ticket: string;
-    };
-    TokenResponse: {
-      token: string;
-      settings: components["schemas"]["UserSettings"];
-    };
-    MFAResponse: {
-      ticket: string;
-      /** @enum {boolean} */
-      mfa: true;
-      /** @enum {boolean} */
-      sms: false;
-      token: null;
-    };
-    WebAuthnResponse: {
-      webauthn: string;
-      ticket: string;
-      /** @enum {boolean} */
-      mfa: true;
-      /** @enum {boolean} */
-      sms: false;
-      token: null;
-    };
-    ChannelPermissionOverwriteSchema: {
-      allow: string;
-      deny: string;
-      id: string;
-      type: components["schemas"]["ChannelPermissionOverwriteType"];
-    };
-    ChannelReorderSchema: ({
-        id: string;
-        position?: number;
-        lock_permissions?: boolean;
-        parent_id?: string;
-      })[];
-    CodesVerificationSchema: {
-      key: string;
-      nonce: string;
-      regenerate?: boolean;
-    };
-    DmChannelCreateSchema: {
-      name?: string;
-      recipients: (string)[];
-    };
-    EmojiCreateSchema: {
-      name?: string;
-      image: string;
-      require_colons?: boolean | null;
-      roles?: (string)[];
-    };
-    EmojiModifySchema: {
-      name?: string;
-      roles?: (string)[];
-    };
-    ForgotPasswordSchema: {
-      login: string;
-      captcha_key?: string;
-    };
-    GuildCreateSchema: {
-      name?: string;
-      region?: string;
-      icon?: string | null;
-      channels?: (components["schemas"]["ChannelModifySchema"])[];
-      guild_template_code?: string;
-      system_channel_id?: string;
-      rules_channel_id?: string;
-    };
-    GuildTemplateCreateSchema: {
-      name: string;
-      avatar?: string | null;
-    };
-    GuildUpdateSchema: {
-      name?: string;
-      banner?: string | null;
-      splash?: string | null;
-      description?: string;
-      features?: (string)[];
-      verification_level?: number;
-      default_message_notifications?: number;
-      system_channel_flags?: number;
-      explicit_content_filter?: number;
-      public_updates_channel_id?: string;
-      afk_timeout?: number;
-      afk_channel_id?: string;
-      preferred_locale?: string;
-      premium_progress_bar_enabled?: boolean;
-      discovery_splash?: string;
-      region?: string;
-      icon?: string | null;
-      guild_template_code?: string;
-      system_channel_id?: string;
-      rules_channel_id?: string;
-    };
-    GuildUpdateWelcomeScreenSchema: {
-      welcome_channels?: ({
-          channel_id: string;
-          description: string;
-          emoji_id?: string;
-          emoji_name?: string;
-        })[];
-      enabled?: boolean;
-      description?: string;
-    };
-    IdentifySchema: {
-      token: string;
-      properties: {
-        os?: string;
-        os_atch?: string;
-        browser?: string;
-        device?: string;
-        $os?: string;
-        $browser?: string;
-        $device?: string;
-        browser_user_agent?: string;
-        browser_version?: string;
-        os_version?: string;
-        referrer?: string;
-        referring_domain?: string;
-        referrer_current?: string;
-        referring_domain_current?: string;
-        /** @enum {string} */
-        release_channel?: "canary" | "dev" | "ptb" | "stable";
-        client_build_number?: number;
-        client_event_source?: string;
-        client_version?: string;
-        system_locale?: string;
-      };
-      intents?: number;
-      presence?: components["schemas"]["ActivitySchema"];
-      compress?: boolean;
-      large_threshold?: number;
-      largeThreshold?: number;
-      shard?: (number)[];
-      guild_subscriptions?: boolean;
-      capabilities?: number;
-      client_state?: {
-        guild_hashes?: Record<string, never>;
-        highest_last_message_id?: OneOf<[string, number]>;
-        read_state_version?: number;
-        user_guild_settings_version?: number;
-        user_settings_version?: number;
-        useruser_guild_settings_version?: number;
-        private_channels_version?: number;
-        guild_versions?: Record<string, never>;
-        api_code_version?: number;
-      };
-      clientState?: {
-        guildHashes?: Record<string, never>;
-        highestLastMessageId?: OneOf<[string, number]>;
-        readStateVersion?: number;
-        userGuildSettingsVersion?: number;
-        useruserGuildSettingsVersion?: number;
-        guildVersions?: Record<string, never>;
-        apiCodeVersion?: number;
-      };
-      v?: number;
-    };
-    InviteCreateSchema: {
-      target_user_id?: string;
-      target_type?: string;
-      validate?: string;
-      max_age?: number;
-      max_uses?: number;
-      temporary?: boolean;
-      unique?: boolean;
-      target_user?: string;
-      target_user_type?: number;
-    };
-    LazyRequestSchema: {
-      guild_id: string;
-      channels?: {
-        [key: string]: ((number)[])[] | undefined;
-      };
-      activities?: boolean;
-      threads?: boolean;
-      /** @enum {boolean} */
-      typing?: true;
-      members?: (string)[];
-      thread_member_lists?: (Record<string, never>)[];
-    };
-    LoginSchema: {
-      login: string;
-      password: string;
-      undelete?: boolean;
-      captcha_key?: string;
-      login_source?: string;
-      gift_code_sku_id?: string;
-    };
-    MemberChangeProfileSchema: {
-      banner?: string | null;
-      nick?: string;
-      bio?: string;
-      pronouns?: string;
-      theme_colors?: (number)[];
-    };
-    MemberChangeSchema: {
-      roles?: (string)[];
-      nick?: string;
-      avatar?: string | null;
-      bio?: string;
-    };
-    MessageAcknowledgeSchema: {
-      manual?: boolean;
-      mention_count?: number;
-    };
-    MessageCreateSchema: {
-      type?: number;
-      content?: string;
-      nonce?: string;
-      channel_id?: string;
-      tts?: boolean;
-      flags?: string;
-      embeds?: (components["schemas"]["Embed"])[];
-      embed?: components["schemas"]["Embed"];
-      allowed_mentions?: {
-        parse?: (string)[];
-        roles?: (string)[];
-        users?: (string)[];
-        replied_user?: boolean;
-      };
-      message_reference?: {
-        message_id: string;
-        channel_id: string;
-        guild_id?: string;
-        fail_if_not_exists?: boolean;
-      };
-      payload_json?: string;
-      file?: {
-        filename: string;
-      };
-      /**
-       * @description TODO: we should create an interface for attachments
-       * TODO: OpenWAAO<-->attachment-style metadata conversion
-       */
-      attachments?: ({
-          id: string;
-          filename: string;
-        })[];
-      sticker_ids?: (string)[];
-    };
-    MessageEditSchema: {
-      file?: {
-        filename: string;
-      };
-      embed?: components["schemas"]["Embed"];
-      flags?: string;
-      content?: string;
-      nonce?: string;
-      channel_id?: string;
-      tts?: boolean;
-      embeds?: (components["schemas"]["Embed"])[];
-      allowed_mentions?: {
-        parse?: (string)[];
-        roles?: (string)[];
-        users?: (string)[];
-        replied_user?: boolean;
-      };
-      message_reference?: {
-        message_id: string;
-        channel_id: string;
-        guild_id?: string;
-        fail_if_not_exists?: boolean;
-      };
-      payload_json?: string;
-      /**
-       * @description TODO: we should create an interface for attachments
-       * TODO: OpenWAAO<-->attachment-style metadata conversion
-       */
-      attachments?: ({
-          id: string;
-          filename: string;
-        })[];
-      sticker_ids?: (string)[];
-    };
-    MfaCodesSchema: {
-      password: string;
-      regenerate?: boolean;
-    };
-    ModifyGuildStickerSchema: {
-      name: string;
-      description?: string;
-      tags: string;
-    };
-    PasswordResetSchema: {
-      password: string;
-      token: string;
-    };
-    PurgeSchema: {
-      before: string;
-      after: string;
-    };
-    RegisterSchema: {
-      username: string;
-      password?: string;
-      consent: boolean;
-      /** Format: email */
-      email?: string;
-      fingerprint?: string;
-      invite?: string;
-      date_of_birth?: string;
-      gift_code_sku_id?: string;
-      captcha_key?: string;
-      promotional_email_opt_in?: boolean;
-    };
-    RelationshipPostSchema: {
-      discriminator: string;
-      username: string;
-    };
-    RelationshipPutSchema: {
-      /** @enum {number} */
-      type?: 1 | 2 | 3 | 4;
-    };
-    APIErrorOrCaptchaResponse: components["schemas"]["APIErrorResponse"] | components["schemas"]["CaptchaRequiredResponse"];
-    ApplicationDetectableResponse: (Record<string, never>)[];
-    ApplicationEntitlementsResponse: (Record<string, never>)[];
-    ApplicationSkusResponse: (Record<string, never>)[];
-    ApplicationsResponse: (components["schemas"]["Application"])[];
-    BackupCodesChallengeResponse: {
-      nonce: string;
-      regenerate_nonce: string;
-    };
-    ChannelInvitesResponse: (components["schemas"]["Invite"])[];
-    ChannelPinsResponse: (components["schemas"]["Message"])[];
-    ChannelWebhooksResponse: (components["schemas"]["Webhook"])[];
-    DiscoverableGuildsResponse: {
-      total: number;
-      guilds: (components["schemas"]["Guild"])[];
-      offset: number;
-      limit: number;
-    };
-    DiscoveryCategoriesResponse: (components["schemas"]["Categories"])[];
-    GatewayBotResponse: {
-      url: string;
-      shards: number;
-      session_start_limit: {
-        total: number;
-        remaining: number;
-        reset_after: number;
-        max_concurrency: number;
-      };
-    };
-    GatewayResponse: {
-      url: string;
-    };
-    GeneralConfigurationResponse: {
-      /** @default Fosscord Instance */
-      instanceName: string;
-      /** @default This is a Fosscord instance made in the pre-release days */
-      instanceDescription: string | null;
-      /** @default null */
-      frontPage: string | null;
-      /** @default null */
-      tosPage: string | null;
-      /** @default null */
-      correspondenceEmail: string | null;
-      /** @default null */
-      correspondenceUserID: string | null;
-      /** @default null */
-      image: string | null;
-      instanceId: string;
-    };
-    GenerateRegistrationTokensResponse: {
-      tokens: (string)[];
-    };
-    GuildBansResponse: {
-      reason: string;
-      user: {
-        username: string;
-        discriminator: string;
-        id: string;
-        avatar: OneOf<[null, string]>;
-        public_flags: number;
-      };
-    };
-    GuildChannelsResponse: (components["schemas"]["Channel"])[];
-    GuildCreateResponse: {
-      id: string;
-    };
-    GuildDiscoveryRequirementsResponse: {
-      uild_id: string;
-      safe_environment: boolean;
-      healthy: boolean;
-      health_score_pending: boolean;
-      size: boolean;
-      nsfw_properties: Record<string, never>;
-      protected: boolean;
-      sufficient: boolean;
-      sufficient_without_grace_period: boolean;
-      valid_rules_channel: boolean;
-      retention_healthy: boolean;
-      engagement_healthy: boolean;
-      age: boolean;
-      minimum_age: number;
-      health_score: {
-        avg_nonnew_participators: number;
-        avg_nonnew_communicators: number;
-        num_intentful_joiners: number;
-        perc_ret_w1_intentful: number;
-      };
-      minimum_size: number;
-    };
-    GuildEmojisResponse: (components["schemas"]["Emoji"])[];
-    GuildInvitesResponse: (components["schemas"]["Invite"])[];
-    GuildMembersResponse: (components["schemas"]["Member"])[];
-    GuildMessagesSearchResponse: {
-      messages: (components["schemas"]["GuildMessagesSearchMessage"])[];
-      total_results: number;
-    };
-    GuildPruneResponse: {
-      pruned: number;
-    };
-    GuildPurgeResponse: {
-      purged: number;
-    };
-    GuildRecommendationsResponse: {
-      recommended_guilds: (components["schemas"]["Guild"])[];
-      load_id: string;
-    };
-    GuildResponse: {
-      joined_at: string;
-    };
-    GuildRolesResponse: (components["schemas"]["Role"])[];
-    GuildStickersResponse: (components["schemas"]["Sticker"])[];
-    GuildTemplatesResponse: (components["schemas"]["Template"])[];
-    GuildVanityUrlResponse: components["schemas"]["GuildVanityUrl"] | components["schemas"]["GuildVanityUrlNoInvite"] | (components["schemas"]["GuildVanityUrl"])[];
-    GuildVanityUrlCreateResponse: {
-      code: string;
-    };
-    GuildVoiceRegionsResponse: (components["schemas"]["GuildVoiceRegion"])[];
-    GuildWidgetJsonResponse: {
-      id: string;
-      name: string;
-      instant_invite: string;
-      channels: ({
-          id: string;
-          name: string;
-          position: number;
-        })[];
-      members: ({
-          id: string;
-          username: string;
-          discriminator: string;
-          avatar: OneOf<[null, string]>;
-          status: components["schemas"]["ClientStatus"];
-          avatar_url: string;
-        })[];
-      presence_count: number;
-    };
-    GuildWidgetSettingsResponse: {
-      enabled: boolean;
-      channel_id: components["schemas"]["Snowflake"] | null;
-    };
-    InstanceDomainsResponse: {
-      cdn: string;
-      gateway: string;
-      defaultApiVersion: string;
-      apiEndpoint: string;
-    };
-    InstancePingResponse: {
-      /** @enum {string} */
-      ping: "pong!";
-      instance: {
-        id: string;
-        name: string;
-        description: OneOf<[null, string]>;
-        image: OneOf<[null, string]>;
-        correspondenceEmail: OneOf<[null, string]>;
-        correspondenceUserID: OneOf<[null, string]>;
-        frontPage: OneOf<[null, string]>;
-        tosPage: OneOf<[null, string]>;
-      };
-    };
-    InstanceStatsResponse: {
-      counts: {
-        user: number;
-        guild: number;
-        message: number;
-        members: number;
-      };
-    };
-    LimitsConfigurationResponse: {
-      user: components["schemas"]["UserLimits"];
-      guild: components["schemas"]["GuildLimits"];
-      message: components["schemas"]["MessageLimits"];
-      channel: components["schemas"]["ChannelLimits"];
-      rate: components["schemas"]["RateLimits"];
-      absoluteRate: components["schemas"]["GlobalRateLimits"];
-    };
-    LocationMetadataResponse: {
-      consent_required: boolean;
-      country_code: string;
-      promotional_email_opt_in: {
-        /** @enum {boolean} */
-        required: true;
-        /** @enum {boolean} */
-        pre_checked: false;
-      };
-    };
-    MemberJoinGuildResponse: {
-      guild: components["schemas"]["Guild"];
-      emojis: (components["schemas"]["Emoji"])[];
-      roles: (components["schemas"]["Role"])[];
-      stickers: (components["schemas"]["Sticker"])[];
-    };
-    OAuthAuthorizeResponse: {
-      location: string;
-    };
-    StickerPacksResponse: (components["schemas"]["StickerPack"])[];
-    TenorTrendingResponse: {
-      categories: {
-        tags: ({
-            searchterm: string;
-            path: string;
-            image: string;
+    schemas: {
+        AckBulkSchema: {
+            read_states: {
+                channel_id: string;
+                message_id: string;
+                read_state_type: number;
+            }[];
+        };
+        ApplicationAuthorizeSchema: {
+            authorize: boolean;
+            guild_id: string;
+            permissions: string;
+            captcha_key?: string;
+            code?: string;
+        };
+        ApplicationCreateSchema: {
             name: string;
-          })[];
-      };
-      gifs: (components["schemas"]["TenorGifResponse"])[];
-    };
-    TenorGifsResponse: (components["schemas"]["TenorGifResponse"])[];
-    TokenOnlyResponse: {
-      token: string;
-    };
-    TokenWithBackupCodesResponse: {
-      token: string;
-      backup_codes: (components["schemas"]["BackupCode"])[];
-    };
-    UpdatesResponse: {
-      name: string;
-      pub_date: string;
-      url: string;
-      notes: string | null;
-    };
-    UserNoteResponse: {
-      note: string;
-      note_user_id: string;
-      user_id: string;
-    };
-    UserProfileResponse: {
-      user: components["schemas"]["PublicUser"];
-      connected_accounts: components["schemas"]["PublicConnectedAccount"];
-      /** Format: date-time */
-      premium_guild_since?: string;
-      /** Format: date-time */
-      premium_since?: string;
-    };
-    UserRelationshipsResponse: {
-      id: string;
-      type: components["schemas"]["RelationshipType"];
-      nickname: null;
-      user: components["schemas"]["PublicUser"];
-    };
-    UserRelationsResponse: {
-      object: {
-        id?: string;
-        username?: string;
-        avatar?: string;
-        discriminator?: string;
-        public_flags?: number;
-      };
-    };
-    PublicUserResponse: components["schemas"]["PublicUser"];
-    PrivateUserResponse: {
-      verified: boolean;
-      id: string;
-      /** Format: date-time */
-      premium_since: string;
-      username: string;
-      discriminator: string;
-      public_flags: number;
-      avatar?: string;
-      accent_color?: number;
-      banner?: string;
-      bio: string;
-      bot: boolean;
-      premium_type: number;
-      theme_colors?: (number)[];
-      pronouns?: string;
-      flags: string;
-      mfa_enabled: boolean;
-      email?: string;
-      phone?: string;
-      nsfw_allowed: boolean;
-      premium: boolean;
-      purchased_flags: number;
-      premium_usage_flags: number;
-      disabled: boolean;
-    };
-    UserUpdateResponse: {
-      newToken?: string;
-      verified: boolean;
-      id: string;
-      /** Format: date-time */
-      premium_since: string;
-      username: string;
-      discriminator: string;
-      public_flags: number;
-      avatar?: string;
-      accent_color?: number;
-      banner?: string;
-      bio: string;
-      bot: boolean;
-      premium_type: number;
-      theme_colors?: (number)[];
-      pronouns?: string;
-      flags: string;
-      mfa_enabled: boolean;
-      email?: string;
-      phone?: string;
-      nsfw_allowed: boolean;
-      premium: boolean;
-      purchased_flags: number;
-      premium_usage_flags: number;
-      disabled: boolean;
-    };
-    UserGuildsResponse: (components["schemas"]["Guild"])[];
-    UserChannelsResponse: (components["schemas"]["DmChannelDTO"])[];
-    UserBackupCodesResponse: (components["schemas"]["BackupCode"])[];
-    WebAuthnCreateResponse: {
-      name: string;
-      id: string;
-    };
-    WebhookCreateResponse: {
-      user: components["schemas"]["User"];
-      hook: components["schemas"]["Webhook"];
-    };
-    RoleModifySchema: {
-      name?: string;
-      permissions?: string;
-      color?: number;
-      hoist?: boolean;
-      mentionable?: boolean;
-      position?: number;
-      icon?: string;
-      unicode_emoji?: string;
-    };
-    RolePositionUpdateSchema: ({
-        id: string;
-        position: number;
-      })[];
-    SelectProtocolSchema: {
-      /** @enum {string} */
-      protocol: "udp" | "webrtc";
-      data: OneOf<[{
-        address: string;
-        port: number;
-        mode: string;
-      }, string]>;
-      sdp?: string;
-      codecs?: ({
-          /** @enum {string} */
-          name: "H264" | "VP8" | "VP9" | "opus";
-          /** @enum {string} */
-          type: "audio" | "video";
-          priority: number;
-          payload_type: number;
-          rtx_payload_type?: OneOf<[null, number]>;
-        })[];
-      rtc_connection_id?: string;
-    };
-    TemplateCreateSchema: {
-      name: string;
-      description?: string;
-    };
-    TemplateModifySchema: {
-      name: string;
-      description?: string;
-    };
-    TotpDisableSchema: {
-      code: string;
-    };
-    TotpEnableSchema: {
-      password: string;
-      code?: string;
-      secret?: string;
-    };
-    TotpSchema: {
-      code: string;
-      ticket: string;
-      gift_code_sku_id?: string | null;
-      login_source?: string | null;
-    };
-    UserDeleteSchema: {
-      user_id: string;
-    };
-    UserGuildSettingsSchema: {
-      channel_overrides?: {
-        [key: string]: components["schemas"]["ChannelOverride"] | undefined;
-      };
-      version?: number;
-      guild_id?: string | null;
-      flags?: number;
-      message_notifications?: number;
-      mobile_push?: boolean;
-      mute_config?: components["schemas"]["MuteConfig"] | null;
-      muted?: boolean;
-      suppress_everyone?: boolean;
-      suppress_roles?: boolean;
-      mute_scheduled_events?: boolean;
-      hide_muted_channels?: boolean;
-      /** @enum {number} */
-      notify_highlights?: 0;
-    };
-    UserModifySchema: {
-      username?: string;
-      avatar?: string | null;
-      bio?: string;
-      accent_color?: number;
-      banner?: string | null;
-      password?: string;
-      new_password?: string;
-      code?: string;
-      email?: string;
-      discriminator?: string;
-    };
-    UserNoteUpdateSchema: {
-      note: string;
-    };
-    UserProfileModifySchema: {
-      bio?: string;
-      accent_color?: number | null;
-      banner?: string | null;
-      pronouns?: string;
-      theme_colors?: (number)[];
-    };
-    UserSettingsSchema: {
-      afk_timeout?: number;
-      allow_accessibility_detection?: boolean;
-      animate_emoji?: boolean;
-      animate_stickers?: number;
-      contact_sync_enabled?: boolean;
-      convert_emoticons?: boolean;
-      custom_status?: components["schemas"]["CustomStatus"] | null;
-      default_guilds_restricted?: boolean;
-      detect_platform_accounts?: boolean;
-      developer_mode?: boolean;
-      disable_games_tab?: boolean;
-      enable_tts_command?: boolean;
-      explicit_content_filter?: number;
-      friend_source_flags?: components["schemas"]["FriendSourceFlags"];
-      gateway_connected?: boolean;
-      gif_auto_play?: boolean;
-      guild_folders?: (components["schemas"]["GuildFolder"])[];
-      guild_positions?: (string)[];
-      inline_attachment_media?: boolean;
-      inline_embed_media?: boolean;
-      locale?: string;
-      message_display_compact?: boolean;
-      native_phone_integration_enabled?: boolean;
-      render_embeds?: boolean;
-      render_reactions?: boolean;
-      restricted_guilds?: (string)[];
-      show_current_game?: boolean;
-      /** @enum {string} */
-      status?: "dnd" | "idle" | "invisible" | "offline" | "online";
-      stream_notifications_enabled?: boolean;
-      /** @enum {string} */
-      theme?: "dark" | "light";
-      timezone_offset?: number;
-    };
-    VanityUrlSchema: {
-      code?: string;
-    };
-    VoiceIdentifySchema: {
-      server_id: string;
-      user_id: string;
-      session_id: string;
-      token: string;
-      video?: boolean;
-      streams?: ({
-          type: string;
-          rid: string;
-          quality: number;
-        })[];
-    };
-    VoiceStateUpdateSchema: {
-      guild_id?: string;
-      channel_id?: string;
-      self_mute: boolean;
-      self_deaf: boolean;
-      self_video?: boolean;
-      preferred_region?: string;
-      /** Format: date-time */
-      request_to_speak_timestamp?: string;
-      suppress?: boolean;
-    };
-    VoiceVideoSchema: {
-      audio_ssrc: number;
-      video_ssrc: number;
-      rtx_ssrc?: number;
-      user_id?: string;
-      streams?: ({
-          /** @enum {string} */
-          type: "audio" | "video";
-          rid: string;
-          ssrc: number;
-          active: boolean;
-          quality: number;
-          rtx_ssrc: number;
-          max_bitrate: number;
-          max_framerate: number;
-          max_resolution: {
+            team_id?: OneOf<[string, number]>;
+        };
+        ApplicationModifySchema: {
+            description?: string;
+            icon?: string;
+            interactions_endpoint_url?: string;
+            max_participants?: number | null;
+            name?: string;
+            privacy_policy_url?: string;
+            role_connections_verification_url?: string;
+            tags?: string[];
+            terms_of_service_url?: string;
+            bot_public?: boolean;
+            bot_require_code_grant?: boolean;
+            flags?: number;
+        };
+        BackupCodesChallengeSchema: {
+            password: string;
+        };
+        BanCreateSchema: {
+            delete_message_seconds?: string;
+            delete_message_days?: string;
+            reason?: string;
+        };
+        BanModeratorSchema: {
+            id: string;
+            user_id: string;
+            guild_id: string;
+            executor_id: string;
+            reason?: string;
+        };
+        BanRegistrySchema: {
+            id: string;
+            user_id: string;
+            guild_id: string;
+            executor_id: string;
+            ip?: string;
+            reason?: string;
+        };
+        BotModifySchema: {
+            avatar?: string;
+            username?: string;
+        };
+        /** @enum {number} */
+        ChannelPermissionOverwriteType: 0 | 1 | 2;
+        ChannelModifySchema: {
+            name?: string;
+            /** @enum {number} */
+            type?:
+                | 0
+                | 1
+                | 10
+                | 11
+                | 12
+                | 13
+                | 14
+                | 15
+                | 2
+                | 255
+                | 3
+                | 33
+                | 34
+                | 35
+                | 4
+                | 5
+                | 6
+                | 64
+                | 7
+                | 8
+                | 9;
+            topic?: string;
+            icon?: string | null;
+            bitrate?: number;
+            user_limit?: number;
+            rate_limit_per_user?: number;
+            position?: number;
+            permission_overwrites?: {
+                id: string;
+                type: components["schemas"]["ChannelPermissionOverwriteType"];
+                allow: string;
+                deny: string;
+            }[];
+            parent_id?: string;
+            id?: string;
+            nsfw?: boolean;
+            rtc_region?: string;
+            default_auto_archive_duration?: number;
+            default_reaction_emoji?: string | null;
+            flags?: number;
+            default_thread_rate_limit_per_user?: number;
+            video_quality_mode?: number;
+        };
+        ActivitySchema: {
+            afk?: boolean;
+            status: components["schemas"]["Status"];
+            activities?: components["schemas"]["Activity"][];
+            since?: number;
+        };
+        /** @enum {string} */
+        Status: "dnd" | "idle" | "invisible" | "offline" | "online";
+        Activity: {
+            name: string;
+            type: components["schemas"]["ActivityType"];
+            url?: string;
+            created_at?: number;
+            timestamps?: {
+                start: number;
+                end: number;
+            };
+            application_id?: string;
+            details?: string;
+            state?: string;
+            emoji?: {
+                name: string;
+                id?: string;
+                animated: boolean;
+            };
+            party?: {
+                id?: string;
+                size?: number[];
+            };
+            assets?: {
+                large_image?: string;
+                large_text?: string;
+                small_image?: string;
+                small_text?: string;
+            };
+            secrets?: {
+                join?: string;
+                spectate?: string;
+                match?: string;
+            };
+            instance?: boolean;
+            flags: string;
+            id?: string;
+            sync_id?: string;
+            metadata?: {
+                context_uri?: string;
+                album_id: string;
+                artist_ids: string[];
+            };
+            session_id: string;
+        };
+        /** @enum {number} */
+        ActivityType: 0 | 1 | 2 | 4 | 5;
+        Embed: {
+            title?: string;
+            /** @enum {string} */
+            type?: "article" | "gifv" | "image" | "link" | "rich" | "video";
+            description?: string;
+            url?: string;
+            /** Format: date-time */
+            timestamp?: string;
+            color?: number;
+            footer?: {
+                text: string;
+                icon_url?: string;
+                proxy_icon_url?: string;
+            };
+            image?: components["schemas"]["EmbedImage"];
+            thumbnail?: components["schemas"]["EmbedImage"];
+            video?: components["schemas"]["EmbedImage"];
+            provider?: {
+                name?: string;
+                url?: string;
+            };
+            author?: {
+                name?: string;
+                url?: string;
+                icon_url?: string;
+                proxy_icon_url?: string;
+            };
+            fields?: {
+                name: string;
+                value: string;
+                inline?: boolean;
+            }[];
+        };
+        EmbedImage: {
+            url?: string;
+            proxy_url?: string;
+            height?: number;
+            width?: number;
+        };
+        APIErrorResponse: {
+            code: number;
+            message: string;
+            errors: {
+                [key: string]:
+                    | {
+                          _errors: {
+                              message: string;
+                              code: string;
+                          }[];
+                      }
+                    | undefined;
+            };
+        };
+        CaptchaRequiredResponse: {
+            captcha_key: string;
+            captcha_sitekey: string;
+            captcha_service: string;
+        };
+        Application: {
+            name: string;
+            icon?: string;
+            description: string;
+            /** @default */
+            summary: string;
+            type?: {
+                [key: string]: unknown | undefined;
+            };
+            /** @default true */
+            hook: boolean;
+            /** @default true */
+            bot_public?: boolean;
+            /** @default false */
+            bot_require_code_grant?: boolean;
+            verify_key: string;
+            owner: components["schemas"]["User"];
+            /** @default 0 */
+            flags: number;
+            /** @default [] */
+            redirect_uris: string[];
+            /** @default 0 */
+            rpc_application_state: number;
+            /** @default 1 */
+            store_application_state: number;
+            /** @default 1 */
+            verification_state: number;
+            interactions_endpoint_url?: string;
+            /** @default true */
+            integration_public: boolean;
+            /** @default false */
+            integration_require_code_grant: boolean;
+            /** @default 1 */
+            discoverability_state: number;
+            /** @default 2240 */
+            discovery_eligibility_flags: number;
+            bot?: components["schemas"]["User"];
+            tags?: string[];
+            cover_image?: string;
+            install_params?: {
+                scopes: string[];
+                permissions: string;
+            };
+            terms_of_service_url?: string;
+            privacy_policy_url?: string;
+            team?: components["schemas"]["Team"];
+            id: string;
+        };
+        User: {
+            username: string;
+            discriminator: string;
+            avatar?: string;
+            accent_color?: number;
+            banner?: string;
+            theme_colors?: number[];
+            pronouns?: string;
+            phone?: string;
+            /** @default false */
+            desktop: boolean;
+            /** @default false */
+            mobile: boolean;
+            premium: boolean;
+            premium_type: number;
+            /** @default false */
+            bot: boolean;
+            /** @default */
+            bio: string;
+            /** @default false */
+            system: boolean;
+            /** @default true */
+            nsfw_allowed: boolean;
+            /** @default false */
+            mfa_enabled: boolean;
+            /** @default false */
+            webauthn_enabled: boolean;
+            /** @default */
+            totp_secret?: string;
+            /** @default */
+            totp_last_ticket?: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            premium_since: string;
+            verified: boolean;
+            /** @default false */
+            disabled: boolean;
+            /** @default false */
+            deleted: boolean;
+            email?: string;
+            /** @default 0 */
+            flags: string;
+            /** @default 0 */
+            public_flags: number;
+            /** @default 0 */
+            purchased_flags: number;
+            /** @default 0 */
+            premium_usage_flags: number;
+            rights: string;
+            sessions: components["schemas"]["Session"][];
+            relationships: components["schemas"]["Relationship"][];
+            connected_accounts: components["schemas"]["ConnectedAccount"][];
+            data: {
+                /** Format: date-time */
+                valid_tokens_since: string;
+                hash?: string;
+            };
+            /** @default [] */
+            fingerprints: string[];
+            settings: components["schemas"]["UserSettings"];
+            /** @default {} */
+            extended_settings: string;
+            security_keys: components["schemas"]["SecurityKey"][];
+            id: string;
+        };
+        Session: {
+            user_id: string;
+            user: components["schemas"]["User"];
+            session_id: string;
+            activities: components["schemas"]["Activity"][];
+            client_info: {
+                client: string;
+                os: string;
+                version: number;
+            };
+            status: components["schemas"]["Status"];
+            id: string;
+        };
+        Relationship: {
+            from_id: string;
+            from: components["schemas"]["User"];
+            to_id: string;
+            to: components["schemas"]["User"];
+            nickname?: string;
+            type: components["schemas"]["RelationshipType"];
+            id: string;
+        };
+        /** @enum {number} */
+        RelationshipType: 1 | 2 | 3 | 4;
+        ConnectedAccount: {
+            user_id: string;
+            user: components["schemas"]["User"];
+            access_token: string;
+            friend_sync: boolean;
+            name: string;
+            revoked: boolean;
+            show_activity: boolean;
             type: string;
+            verified: boolean;
+            visibility: number;
+            id: string;
+        };
+        UserSettings: {
+            index: string;
+            /** @default 3600 */
+            afk_timeout: number;
+            /** @default true */
+            allow_accessibility_detection: boolean;
+            /** @default true */
+            animate_emoji: boolean;
+            /** @default 0 */
+            animate_stickers: number;
+            /** @default false */
+            contact_sync_enabled: boolean;
+            /** @default false */
+            convert_emoticons: boolean;
+            /** @default null */
+            custom_status: components["schemas"]["CustomStatus"] | null;
+            /** @default false */
+            default_guilds_restricted: boolean;
+            /** @default false */
+            detect_platform_accounts: boolean;
+            /** @default true */
+            developer_mode: boolean;
+            /** @default true */
+            disable_games_tab: boolean;
+            /** @default false */
+            enable_tts_command: boolean;
+            /** @default 0 */
+            explicit_content_filter: number;
+            friend_source_flags: components["schemas"]["FriendSourceFlags"];
+            /** @default false */
+            gateway_connected: boolean;
+            /** @default false */
+            gif_auto_play: boolean;
+            /** @default [] */
+            guild_folders: components["schemas"]["GuildFolder"][];
+            /** @default [] */
+            guild_positions: string[];
+            /** @default true */
+            inline_attachment_media: boolean;
+            /** @default true */
+            inline_embed_media: boolean;
+            /** @default en-US */
+            locale: string;
+            /** @default false */
+            message_display_compact: boolean;
+            /** @default true */
+            native_phone_integration_enabled: boolean;
+            /** @default true */
+            render_embeds: boolean;
+            /** @default true */
+            render_reactions: boolean;
+            /** @default [] */
+            restricted_guilds: string[];
+            /** @default true */
+            show_current_game: boolean;
+            /**
+             * @default online
+             * @enum {string}
+             */
+            status: "dnd" | "idle" | "invisible" | "offline" | "online";
+            /** @default false */
+            stream_notifications_enabled: boolean;
+            /**
+             * @default dark
+             * @enum {string}
+             */
+            theme: "dark" | "light";
+            /** @default 0 */
+            timezone_offset: number;
+        };
+        CustomStatus: {
+            emoji_id?: string;
+            emoji_name?: string;
+            expires_at?: number;
+            text?: string;
+        };
+        FriendSourceFlags: {
+            all: boolean;
+        };
+        GuildFolder: {
+            color: number;
+            guild_ids: string[];
+            id: number;
+            name: string;
+        };
+        SecurityKey: {
+            user_id: string;
+            user: components["schemas"]["User"];
+            key_id: string;
+            public_key: string;
+            counter: number;
+            name: string;
+            id: string;
+        };
+        Team: {
+            icon?: string;
+            members: components["schemas"]["TeamMember"][];
+            name: string;
+            owner_user_id: string;
+            owner_user: components["schemas"]["User"];
+            id: string;
+        };
+        TeamMember: {
+            membership_state: components["schemas"]["TeamMemberState"];
+            permissions: string[];
+            team_id: string;
+            team: components["schemas"]["Team"];
+            user_id: string;
+            user: components["schemas"]["User"];
+            id: string;
+        };
+        /** @enum {number} */
+        TeamMemberState: 1 | 2;
+        Invite: {
+            code: string;
+            temporary: boolean;
+            uses: number;
+            max_uses: number;
+            max_age: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            expires_at: string;
+            guild_id: string;
+            guild: components["schemas"]["Guild"];
+            channel_id: string;
+            channel: components["schemas"]["Channel"];
+            inviter_id?: string;
+            inviter: components["schemas"]["User"];
+            target_user_id: string;
+            target_user?: string;
+            target_user_type?: number;
+            vanity_url?: boolean;
+        };
+        Guild: {
+            afk_channel_id?: string;
+            afk_channel?: components["schemas"]["Channel"];
+            afk_timeout?: number;
+            bans: components["schemas"]["Ban"][];
+            banner?: string;
+            default_message_notifications?: number;
+            description?: string;
+            discovery_splash?: string;
+            explicit_content_filter?: number;
+            features: string[];
+            primary_category_id?: string;
+            icon?: string;
+            /** @default false */
+            large?: boolean;
+            max_members?: number;
+            max_presences?: number;
+            max_video_channel_users?: number;
+            member_count?: number;
+            presence_count?: number;
+            members: components["schemas"]["Member"][];
+            roles: components["schemas"]["Role"][];
+            channels: components["schemas"]["Channel"][];
+            template_id?: string;
+            template: components["schemas"]["Template"];
+            emojis: components["schemas"]["Emoji"][];
+            stickers: components["schemas"]["Sticker"][];
+            invites: components["schemas"]["Invite"][];
+            voice_states: components["schemas"]["VoiceState"][];
+            webhooks: components["schemas"]["Webhook"][];
+            mfa_level?: number;
+            name: string;
+            owner_id?: string;
+            owner?: components["schemas"]["User"];
+            preferred_locale?: string;
+            premium_subscription_count?: number;
+            premium_tier?: number;
+            public_updates_channel_id: string;
+            public_updates_channel?: components["schemas"]["Channel"];
+            rules_channel_id?: string;
+            rules_channel?: string;
+            region?: string;
+            splash?: string;
+            system_channel_id?: string;
+            system_channel?: components["schemas"]["Channel"];
+            system_channel_flags?: number;
+            /** @default false */
+            unavailable: boolean;
+            verification_level?: number;
+            welcome_screen: components["schemas"]["GuildWelcomeScreen"];
+            widget_channel_id?: string;
+            widget_channel?: components["schemas"]["Channel"];
+            /** @default true */
+            widget_enabled: boolean;
+            nsfw_level?: number;
+            /** @default false */
+            nsfw: boolean;
+            parent?: string;
+            permissions?: number;
+            /** @default false */
+            premium_progress_bar_enabled: boolean;
+            id: string;
+        };
+        Channel: {
+            /** Format: date-time */
+            created_at: string;
+            name?: string;
+            icon?: string | null;
+            type: components["schemas"]["ChannelType"];
+            recipients?: components["schemas"]["Recipient"][];
+            last_message_id?: string;
+            guild_id?: string;
+            guild: components["schemas"]["Guild"];
+            parent_id: string;
+            parent?: components["schemas"]["Channel"];
+            owner_id?: string;
+            owner: components["schemas"]["User"];
+            last_pin_timestamp?: number;
+            default_auto_archive_duration?: number;
+            position?: number;
+            permission_overwrites?: components["schemas"]["ChannelPermissionOverwrite"][];
+            video_quality_mode?: number;
+            bitrate?: number;
+            user_limit?: number;
+            /** @default false */
+            nsfw: boolean;
+            rate_limit_per_user?: number;
+            topic?: string;
+            invites?: components["schemas"]["Invite"][];
+            retention_policy_id?: string;
+            messages?: components["schemas"]["Message"][];
+            voice_states?: components["schemas"]["VoiceState"][];
+            read_states?: components["schemas"]["ReadState"][];
+            webhooks?: components["schemas"]["Webhook"][];
+            /** @default 0 */
+            flags: number;
+            /** @default 0 */
+            default_thread_rate_limit_per_user: number;
+            id: string;
+        };
+        /** @enum {number} */
+        ChannelType:
+            | 0
+            | 1
+            | 10
+            | 11
+            | 12
+            | 13
+            | 14
+            | 15
+            | 2
+            | 255
+            | 3
+            | 33
+            | 34
+            | 35
+            | 4
+            | 5
+            | 6
+            | 64
+            | 7
+            | 8
+            | 9;
+        Recipient: {
+            channel_id: string;
+            channel: components["schemas"]["Channel"];
+            user_id: string;
+            user: components["schemas"]["User"];
+            closed: boolean;
+            id: string;
+        };
+        ChannelPermissionOverwrite: {
+            allow: string;
+            deny: string;
+            id: string;
+            type: components["schemas"]["ChannelPermissionOverwriteType"];
+        };
+        Message: {
+            channel_id?: string;
+            channel: components["schemas"]["Channel"];
+            guild_id?: string;
+            guild?: components["schemas"]["Guild"];
+            author_id?: string;
+            author?: components["schemas"]["User"];
+            member_id?: string;
+            member?: components["schemas"]["Member"];
+            webhook_id?: string;
+            webhook?: components["schemas"]["Webhook"];
+            application_id?: string;
+            application?: components["schemas"]["Application"];
+            content?: string;
+            /** Format: date-time */
+            timestamp: string;
+            /** Format: date-time */
+            edited_timestamp?: string;
+            tts?: boolean;
+            mention_everyone?: boolean;
+            mentions: components["schemas"]["User"][];
+            mention_roles: components["schemas"]["Role"][];
+            mention_channels: components["schemas"]["Channel"][];
+            sticker_items?: components["schemas"]["Sticker"][];
+            attachments?: components["schemas"]["Attachment_1"][];
+            embeds: components["schemas"]["Embed"][];
+            reactions: components["schemas"]["Reaction"][];
+            nonce?: string;
+            pinned?: boolean;
+            type: components["schemas"]["MessageType"];
+            activity?: {
+                type: number;
+                party_id: string;
+            };
+            flags?: string;
+            message_reference?: {
+                message_id: string;
+                channel_id?: string;
+                guild_id?: string;
+            };
+            referenced_message?: components["schemas"]["Message"];
+            interaction?: {
+                id: string;
+                type: components["schemas"]["InteractionType"];
+                name: string;
+                user_id: string;
+            };
+            components?: components["schemas"]["MessageComponent"][];
+            id: string;
+        };
+        Member: {
+            index: string;
+            id: string;
+            user: components["schemas"]["User"];
+            guild_id: string;
+            guild: components["schemas"]["Guild"];
+            nick?: string;
+            roles: components["schemas"]["Role"][];
+            /** Format: date-time */
+            joined_at: string;
+            premium_since?: number;
+            deaf: boolean;
+            mute: boolean;
+            pending: boolean;
+            settings: components["schemas"]["UserGuildSettings"];
+            last_message_id?: string;
+            joined_by: string;
+            avatar: string;
+            banner: string;
+            bio: string;
+            theme_colors?: number[];
+            pronouns?: string;
+            /** Format: date-time */
+            communication_disabled_until: string;
+        };
+        Role: {
+            guild_id: string;
+            guild: components["schemas"]["Guild"];
+            color: number;
+            hoist: boolean;
+            managed: boolean;
+            mentionable: boolean;
+            name: string;
+            permissions: string;
+            position: number;
+            icon?: string;
+            unicode_emoji?: string;
+            tags?: {
+                bot_id?: string;
+                integration_id?: string;
+                premium_subscriber?: boolean;
+            };
+            id: string;
+        };
+        UserGuildSettings: {
+            channel_overrides: OneOf<
+                [
+                    {
+                        [key: string]:
+                            | components["schemas"]["ChannelOverride"]
+                            | undefined;
+                    },
+                    null
+                ]
+            >;
+            message_notifications: number;
+            mobile_push: boolean;
+            mute_config: components["schemas"]["MuteConfig"] | null;
+            muted: boolean;
+            suppress_everyone: boolean;
+            suppress_roles: boolean;
+            version: number;
+            guild_id: string | null;
+            flags: number;
+            mute_scheduled_events: boolean;
+            hide_muted_channels: boolean;
+            /** @enum {number} */
+            notify_highlights: 0;
+        };
+        ChannelOverride: {
+            message_notifications: number;
+            mute_config: components["schemas"]["MuteConfig"];
+            muted: boolean;
+            channel_id: string | null;
+        };
+        MuteConfig: {
+            end_time: number;
+            selected_time_window: number;
+        };
+        Webhook: {
+            type: components["schemas"]["WebhookType"];
+            name?: string;
+            avatar?: string;
+            token?: string;
+            guild_id: string;
+            guild: components["schemas"]["Guild"];
+            channel_id: string;
+            channel: components["schemas"]["Channel"];
+            application_id: string;
+            application: components["schemas"]["Application"];
+            user_id: string;
+            user: components["schemas"]["User"];
+            source_guild_id: string;
+            source_guild: components["schemas"]["Guild"];
+            id: string;
+        };
+        /** @enum {number} */
+        WebhookType: 1 | 2 | 3;
+        Sticker: {
+            name: string;
+            description?: string;
+            available?: boolean;
+            tags?: string;
+            pack_id?: string;
+            pack: components["schemas"]["StickerPack"];
+            guild_id?: string;
+            guild?: components["schemas"]["Guild"];
+            user_id?: string;
+            user?: components["schemas"]["User"];
+            type: components["schemas"]["StickerType"];
+            format_type: components["schemas"]["StickerFormatType"];
+            id: string;
+        };
+        StickerPack: {
+            name: string;
+            description?: string;
+            banner_asset_id?: string;
+            stickers: components["schemas"]["Sticker"][];
+            cover_sticker_id?: string;
+            cover_sticker?: components["schemas"]["Sticker"];
+            id: string;
+        };
+        /** @enum {number} */
+        StickerType: 1 | 2;
+        /** @enum {number} */
+        StickerFormatType: 0 | 1 | 2 | 3;
+        Attachment_1: {
+            filename: string;
+            size: number;
+            url: string;
+            proxy_url: string;
+            height?: number;
+            width?: number;
+            content_type?: string;
+            message_id: string;
+            message: components["schemas"]["Message"];
+            id: string;
+        };
+        Reaction: {
+            count: number;
+            emoji: components["schemas"]["PartialEmoji"];
+            user_ids: string[];
+        };
+        PartialEmoji: {
+            id?: string;
+            name: string;
+            animated?: boolean;
+        };
+        /** @enum {number} */
+        MessageType:
+            | 0
+            | 1
+            | 10
+            | 11
+            | 12
+            | 13
+            | 14
+            | 15
+            | 16
+            | 19
+            | 2
+            | 20
+            | 255
+            | 3
+            | 4
+            | 41
+            | 42
+            | 43
+            | 5
+            | 50
+            | 6
+            | 63
+            | 7
+            | 8
+            | 9;
+        /** @enum {number} */
+        InteractionType: 0 | 1 | 2;
+        MessageComponent: {
+            type: number;
+            style?: number;
+            label?: string;
+            emoji?: components["schemas"]["PartialEmoji"];
+            custom_id?: string;
+            url?: string;
+            disabled?: boolean;
+            components: components["schemas"]["MessageComponent"][];
+        };
+        VoiceState: {
+            guild_id: string;
+            guild?: components["schemas"]["Guild"];
+            channel_id: string;
+            channel: components["schemas"]["Channel"];
+            user_id: string;
+            user: components["schemas"]["User"];
+            member: components["schemas"]["Member"];
+            session_id: string;
+            token: string;
+            deaf: boolean;
+            mute: boolean;
+            self_deaf: boolean;
+            self_mute: boolean;
+            self_stream?: boolean;
+            self_video: boolean;
+            suppress: boolean;
+            /** Format: date-time */
+            request_to_speak_timestamp?: string;
+            id: string;
+        };
+        ReadState: {
+            channel_id: string;
+            channel: components["schemas"]["Channel"];
+            user_id: string;
+            user: components["schemas"]["User"];
+            last_message_id: string;
+            public_ack: string;
+            notifications_cursor: string;
+            /** Format: date-time */
+            last_pin_timestamp?: string;
+            mention_count: number;
+            manual: boolean;
+            id: string;
+        };
+        Ban: {
+            user_id: string;
+            user: components["schemas"]["User"];
+            guild_id: string;
+            guild: components["schemas"]["Guild"];
+            executor_id: string;
+            executor: components["schemas"]["User"];
+            ip: string;
+            reason?: string;
+            id: string;
+        };
+        Template: {
+            code: string;
+            name: string;
+            description?: string;
+            usage_count?: number;
+            creator_id: string;
+            creator: components["schemas"]["User"];
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            source_guild_id: string;
+            source_guild: components["schemas"]["Guild"];
+            serialized_source_guild: components["schemas"]["Guild"];
+            id: string;
+        };
+        Emoji: {
+            animated: boolean;
+            available: boolean;
+            guild_id: string;
+            guild: components["schemas"]["Guild"];
+            user_id: string;
+            user: components["schemas"]["User"];
+            managed: boolean;
+            name: string;
+            require_colons: boolean;
+            roles: string[];
+            groups: string[];
+            id: string;
+        };
+        GuildWelcomeScreen: {
+            enabled: boolean;
+            description: string;
+            welcome_channels: {
+                description: string;
+                emoji_id?: string;
+                emoji_name?: string;
+                channel_id: string;
+            }[];
+        };
+        Categories: {
+            id: number;
+            name: string;
+            localizations: string;
+            is_primary: boolean;
+        };
+        GuildMessagesSearchMessage: {
+            id: string;
+            type: components["schemas"]["MessageType"];
+            content?: string;
+            channel_id: string;
+            author: components["schemas"]["PublicUser"];
+            attachments: components["schemas"]["Attachment_1"][];
+            embeds: components["schemas"]["Embed"][];
+            mentions: components["schemas"]["PublicUser"][];
+            mention_roles: components["schemas"]["Role"][];
+            pinned: boolean;
+            mention_everyone?: boolean;
+            tts: boolean;
+            timestamp: string;
+            edited_timestamp: string | null;
+            flags: number;
+            components: Record<string, never>[];
+            /** @enum {boolean} */
+            hit: true;
+        };
+        PublicUser: {
+            id: string;
+            /** Format: date-time */
+            premium_since: string;
+            username: string;
+            discriminator: string;
+            public_flags: number;
+            avatar?: string;
+            accent_color?: number;
+            banner?: string;
+            bio: string;
+            bot: boolean;
+            premium_type: number;
+            theme_colors?: number[];
+            pronouns?: string;
+        };
+        GuildVanityUrl: {
+            code: string;
+            uses: number;
+        };
+        GuildVanityUrlNoInvite: {
+            code: null;
+        };
+        GuildVoiceRegion: {
+            id: string;
+            name: string;
+            custom: boolean;
+            deprecated: boolean;
+            optimal: boolean;
+        };
+        ClientStatus: {
+            desktop?: string;
+            mobile?: string;
+            web?: string;
+        };
+        /** @description A container for useful snowflake-related methods. */
+        Snowflake: Record<string, never>;
+        UserLimits: {
+            /** @default 1048576 */
+            maxGuilds: number;
+            /** @default 32 */
+            maxUsername: number;
+            /** @default 5000 */
+            maxFriends: number;
+        };
+        GuildLimits: {
+            /** @default 1000 */
+            maxRoles: number;
+            /** @default 2000 */
+            maxEmojis: number;
+            /** @default 25000000 */
+            maxMembers: number;
+            /** @default 65535 */
+            maxChannels: number;
+            /** @default 65535 */
+            maxChannelsInCategory: number;
+        };
+        MessageLimits: {
+            /** @default 1048576 */
+            maxCharacters: number;
+            /** @default 160 */
+            maxTTSCharacters: number;
+            /** @default 2048 */
+            maxReactions: number;
+            /** @default 1073741824 */
+            maxAttachmentSize: number;
+            /** @default 1000 */
+            maxBulkDelete: number;
+            /** @default 5242880 */
+            maxEmbedDownloadSize: number;
+        };
+        ChannelLimits: {
+            /** @default 500 */
+            maxPins: number;
+            /** @default 1024 */
+            maxTopic: number;
+            /** @default 100 */
+            maxWebhooks: number;
+        };
+        RateLimits: {
+            /** @default false */
+            enabled: boolean;
+            ip: components["schemas"]["RateLimitOptions"];
+            global: components["schemas"]["RateLimitOptions"];
+            error: components["schemas"]["RateLimitOptions"];
+            routes: components["schemas"]["RouteRateLimit"];
+        };
+        RateLimitOptions: {
+            bot?: number;
+            count: number;
+            window: number;
+            onyIp?: boolean;
+        };
+        RouteRateLimit: {
+            guild: components["schemas"]["RateLimitOptions"];
+            webhook: components["schemas"]["RateLimitOptions"];
+            channel: components["schemas"]["RateLimitOptions"];
+            auth: Record<string, never>;
+        };
+        GlobalRateLimits: {
+            register: components["schemas"]["GlobalRateLimit"];
+            sendMessage: components["schemas"]["GlobalRateLimit"];
+        };
+        GlobalRateLimit: {
+            /** @default 100 */
+            limit: number;
+            /** @default 3600000 */
+            window: number;
+            /** @default true */
+            enabled: boolean;
+        };
+        TenorGifResponse: {
+            id: string;
+            title: string;
+            url: string;
+            src: string;
+            gif_src: string;
             width: number;
             height: number;
-          };
-        })[];
+            preview: string;
+        };
+        BackupCode: {
+            user: components["schemas"]["User"];
+            code: string;
+            consumed: boolean;
+            expired: boolean;
+            id: string;
+        };
+        PublicConnectedAccount: {
+            type: string;
+            name: string;
+            verified: boolean;
+        };
+        DmChannelDTO: {
+            icon: string | null;
+            id: string;
+            last_message_id: string | null;
+            name: string | null;
+            origin_channel_id: string | null;
+            owner_id?: string;
+            recipients: components["schemas"]["MinimalPublicUserDTO"][];
+            type: number;
+        };
+        MinimalPublicUserDTO: {
+            avatar?: string | null;
+            discriminator: string;
+            id: string;
+            public_flags: number;
+            username: string;
+        };
+        GenerateWebAuthnCredentialsSchema: {
+            password: string;
+        };
+        CreateWebAuthnCredentialSchema: {
+            credential: string;
+            name: string;
+            ticket: string;
+        };
+        TokenResponse: {
+            token: string;
+            settings: components["schemas"]["UserSettings"];
+        };
+        MFAResponse: {
+            ticket: string;
+            /** @enum {boolean} */
+            mfa: true;
+            /** @enum {boolean} */
+            sms: false;
+            token: null;
+        };
+        WebAuthnResponse: {
+            webauthn: string;
+            ticket: string;
+            /** @enum {boolean} */
+            mfa: true;
+            /** @enum {boolean} */
+            sms: false;
+            token: null;
+        };
+        ChannelPermissionOverwriteSchema: {
+            allow: string;
+            deny: string;
+            id: string;
+            type: components["schemas"]["ChannelPermissionOverwriteType"];
+        };
+        ChannelReorderSchema: {
+            id: string;
+            position?: number;
+            lock_permissions?: boolean;
+            parent_id?: string;
+        }[];
+        CodesVerificationSchema: {
+            key: string;
+            nonce: string;
+            regenerate?: boolean;
+        };
+        DmChannelCreateSchema: {
+            name?: string;
+            recipients: string[];
+        };
+        EmojiCreateSchema: {
+            name?: string;
+            image: string;
+            require_colons?: boolean | null;
+            roles?: string[];
+        };
+        EmojiModifySchema: {
+            name?: string;
+            roles?: string[];
+        };
+        ForgotPasswordSchema: {
+            login: string;
+            captcha_key?: string;
+        };
+        GuildCreateSchema: {
+            name?: string;
+            region?: string;
+            icon?: string | null;
+            channels?: components["schemas"]["ChannelModifySchema"][];
+            guild_template_code?: string;
+            system_channel_id?: string;
+            rules_channel_id?: string;
+        };
+        GuildTemplateCreateSchema: {
+            name: string;
+            avatar?: string | null;
+        };
+        GuildUpdateSchema: {
+            name?: string;
+            banner?: string | null;
+            splash?: string | null;
+            description?: string;
+            features?: string[];
+            verification_level?: number;
+            default_message_notifications?: number;
+            system_channel_flags?: number;
+            explicit_content_filter?: number;
+            public_updates_channel_id?: string;
+            afk_timeout?: number;
+            afk_channel_id?: string;
+            preferred_locale?: string;
+            premium_progress_bar_enabled?: boolean;
+            discovery_splash?: string;
+            region?: string;
+            icon?: string | null;
+            guild_template_code?: string;
+            system_channel_id?: string;
+            rules_channel_id?: string;
+        };
+        GuildUpdateWelcomeScreenSchema: {
+            welcome_channels?: {
+                channel_id: string;
+                description: string;
+                emoji_id?: string;
+                emoji_name?: string;
+            }[];
+            enabled?: boolean;
+            description?: string;
+        };
+        IdentifySchema: {
+            token: string;
+            properties: {
+                os?: string;
+                os_atch?: string;
+                browser?: string;
+                device?: string;
+                $os?: string;
+                $browser?: string;
+                $device?: string;
+                browser_user_agent?: string;
+                browser_version?: string;
+                os_version?: string;
+                referrer?: string;
+                referring_domain?: string;
+                referrer_current?: string;
+                referring_domain_current?: string;
+                /** @enum {string} */
+                release_channel?: "canary" | "dev" | "ptb" | "stable";
+                client_build_number?: number;
+                client_event_source?: string;
+                client_version?: string;
+                system_locale?: string;
+            };
+            intents?: number;
+            presence?: components["schemas"]["ActivitySchema"];
+            compress?: boolean;
+            large_threshold?: number;
+            largeThreshold?: number;
+            shard?: number[];
+            guild_subscriptions?: boolean;
+            capabilities?: number;
+            client_state?: {
+                guild_hashes?: Record<string, never>;
+                highest_last_message_id?: OneOf<[string, number]>;
+                read_state_version?: number;
+                user_guild_settings_version?: number;
+                user_settings_version?: number;
+                useruser_guild_settings_version?: number;
+                private_channels_version?: number;
+                guild_versions?: Record<string, never>;
+                api_code_version?: number;
+            };
+            clientState?: {
+                guildHashes?: Record<string, never>;
+                highestLastMessageId?: OneOf<[string, number]>;
+                readStateVersion?: number;
+                userGuildSettingsVersion?: number;
+                useruserGuildSettingsVersion?: number;
+                guildVersions?: Record<string, never>;
+                apiCodeVersion?: number;
+            };
+            v?: number;
+        };
+        InviteCreateSchema: {
+            target_user_id?: string;
+            target_type?: string;
+            validate?: string;
+            max_age?: number;
+            max_uses?: number;
+            temporary?: boolean;
+            unique?: boolean;
+            target_user?: string;
+            target_user_type?: number;
+        };
+        LazyRequestSchema: {
+            guild_id: string;
+            channels?: {
+                [key: string]: number[][] | undefined;
+            };
+            activities?: boolean;
+            threads?: boolean;
+            /** @enum {boolean} */
+            typing?: true;
+            members?: string[];
+            thread_member_lists?: Record<string, never>[];
+        };
+        LoginSchema: {
+            login: string;
+            password: string;
+            undelete?: boolean;
+            captcha_key?: string;
+            login_source?: string;
+            gift_code_sku_id?: string;
+        };
+        MemberChangeProfileSchema: {
+            banner?: string | null;
+            nick?: string;
+            bio?: string;
+            pronouns?: string;
+            theme_colors?: number[];
+        };
+        MemberChangeSchema: {
+            roles?: string[];
+            nick?: string;
+            avatar?: string | null;
+            bio?: string;
+        };
+        MessageAcknowledgeSchema: {
+            manual?: boolean;
+            mention_count?: number;
+        };
+        MessageCreateSchema: {
+            type?: number;
+            content?: string;
+            nonce?: string;
+            channel_id?: string;
+            tts?: boolean;
+            flags?: string;
+            embeds?: components["schemas"]["Embed"][];
+            embed?: components["schemas"]["Embed"];
+            allowed_mentions?: {
+                parse?: string[];
+                roles?: string[];
+                users?: string[];
+                replied_user?: boolean;
+            };
+            message_reference?: {
+                message_id: string;
+                channel_id: string;
+                guild_id?: string;
+                fail_if_not_exists?: boolean;
+            };
+            payload_json?: string;
+            file?: {
+                filename: string;
+            };
+            /**
+             * @description TODO: we should create an interface for attachments
+             * TODO: OpenWAAO<-->attachment-style metadata conversion
+             */
+            attachments?: {
+                id: string;
+                filename: string;
+            }[];
+            sticker_ids?: string[];
+        };
+        MessageEditSchema: {
+            file?: {
+                filename: string;
+            };
+            embed?: components["schemas"]["Embed"];
+            flags?: string;
+            content?: string;
+            nonce?: string;
+            channel_id?: string;
+            tts?: boolean;
+            embeds?: components["schemas"]["Embed"][];
+            allowed_mentions?: {
+                parse?: string[];
+                roles?: string[];
+                users?: string[];
+                replied_user?: boolean;
+            };
+            message_reference?: {
+                message_id: string;
+                channel_id: string;
+                guild_id?: string;
+                fail_if_not_exists?: boolean;
+            };
+            payload_json?: string;
+            /**
+             * @description TODO: we should create an interface for attachments
+             * TODO: OpenWAAO<-->attachment-style metadata conversion
+             */
+            attachments?: {
+                id: string;
+                filename: string;
+            }[];
+            sticker_ids?: string[];
+        };
+        MfaCodesSchema: {
+            password: string;
+            regenerate?: boolean;
+        };
+        ModifyGuildStickerSchema: {
+            name: string;
+            description?: string;
+            tags: string;
+        };
+        PasswordResetSchema: {
+            password: string;
+            token: string;
+        };
+        PurgeSchema: {
+            before: string;
+            after: string;
+        };
+        RegisterSchema: {
+            username: string;
+            password?: string;
+            consent: boolean;
+            /** Format: email */
+            email?: string;
+            fingerprint?: string;
+            invite?: string;
+            date_of_birth?: string;
+            gift_code_sku_id?: string;
+            captcha_key?: string;
+            promotional_email_opt_in?: boolean;
+        };
+        RelationshipPostSchema: {
+            discriminator: string;
+            username: string;
+        };
+        RelationshipPutSchema: {
+            /** @enum {number} */
+            type?: 1 | 2 | 3 | 4;
+        };
+        APIErrorOrCaptchaResponse:
+            | components["schemas"]["APIErrorResponse"]
+            | components["schemas"]["CaptchaRequiredResponse"];
+        ApplicationDetectableResponse: Record<string, never>[];
+        ApplicationEntitlementsResponse: Record<string, never>[];
+        ApplicationSkusResponse: Record<string, never>[];
+        ApplicationsResponse: components["schemas"]["Application"][];
+        BackupCodesChallengeResponse: {
+            nonce: string;
+            regenerate_nonce: string;
+        };
+        ChannelInvitesResponse: components["schemas"]["Invite"][];
+        ChannelPinsResponse: components["schemas"]["Message"][];
+        ChannelWebhooksResponse: components["schemas"]["Webhook"][];
+        DiscoverableGuildsResponse: {
+            total: number;
+            guilds: components["schemas"]["Guild"][];
+            offset: number;
+            limit: number;
+        };
+        DiscoveryCategoriesResponse: components["schemas"]["Categories"][];
+        GatewayBotResponse: {
+            url: string;
+            shards: number;
+            session_start_limit: {
+                total: number;
+                remaining: number;
+                reset_after: number;
+                max_concurrency: number;
+            };
+        };
+        GatewayResponse: {
+            url: string;
+        };
+        GeneralConfigurationResponse: {
+            /** @default Spacebar Instance */
+            instanceName: string;
+            /** @default This is a Spacebar instance made in the pre-release days */
+            instanceDescription: string | null;
+            /** @default null */
+            frontPage: string | null;
+            /** @default null */
+            tosPage: string | null;
+            /** @default null */
+            correspondenceEmail: string | null;
+            /** @default null */
+            correspondenceUserID: string | null;
+            /** @default null */
+            image: string | null;
+            instanceId: string;
+        };
+        GenerateRegistrationTokensResponse: {
+            tokens: string[];
+        };
+        GuildBansResponse: {
+            reason: string;
+            user: {
+                username: string;
+                discriminator: string;
+                id: string;
+                avatar: OneOf<[null, string]>;
+                public_flags: number;
+            };
+        };
+        GuildChannelsResponse: components["schemas"]["Channel"][];
+        GuildCreateResponse: {
+            id: string;
+        };
+        GuildDiscoveryRequirementsResponse: {
+            uild_id: string;
+            safe_environment: boolean;
+            healthy: boolean;
+            health_score_pending: boolean;
+            size: boolean;
+            nsfw_properties: Record<string, never>;
+            protected: boolean;
+            sufficient: boolean;
+            sufficient_without_grace_period: boolean;
+            valid_rules_channel: boolean;
+            retention_healthy: boolean;
+            engagement_healthy: boolean;
+            age: boolean;
+            minimum_age: number;
+            health_score: {
+                avg_nonnew_participators: number;
+                avg_nonnew_communicators: number;
+                num_intentful_joiners: number;
+                perc_ret_w1_intentful: number;
+            };
+            minimum_size: number;
+        };
+        GuildEmojisResponse: components["schemas"]["Emoji"][];
+        GuildInvitesResponse: components["schemas"]["Invite"][];
+        GuildMembersResponse: components["schemas"]["Member"][];
+        GuildMessagesSearchResponse: {
+            messages: components["schemas"]["GuildMessagesSearchMessage"][];
+            total_results: number;
+        };
+        GuildPruneResponse: {
+            pruned: number;
+        };
+        GuildPurgeResponse: {
+            purged: number;
+        };
+        GuildRecommendationsResponse: {
+            recommended_guilds: components["schemas"]["Guild"][];
+            load_id: string;
+        };
+        GuildResponse: {
+            joined_at: string;
+        };
+        GuildRolesResponse: components["schemas"]["Role"][];
+        GuildStickersResponse: components["schemas"]["Sticker"][];
+        GuildTemplatesResponse: components["schemas"]["Template"][];
+        GuildVanityUrlResponse:
+            | components["schemas"]["GuildVanityUrl"]
+            | components["schemas"]["GuildVanityUrlNoInvite"]
+            | components["schemas"]["GuildVanityUrl"][];
+        GuildVanityUrlCreateResponse: {
+            code: string;
+        };
+        GuildVoiceRegionsResponse: components["schemas"]["GuildVoiceRegion"][];
+        GuildWidgetJsonResponse: {
+            id: string;
+            name: string;
+            instant_invite: string;
+            channels: {
+                id: string;
+                name: string;
+                position: number;
+            }[];
+            members: {
+                id: string;
+                username: string;
+                discriminator: string;
+                avatar: OneOf<[null, string]>;
+                status: components["schemas"]["ClientStatus"];
+                avatar_url: string;
+            }[];
+            presence_count: number;
+        };
+        GuildWidgetSettingsResponse: {
+            enabled: boolean;
+            channel_id: components["schemas"]["Snowflake"] | null;
+        };
+        InstanceDomainsResponse: {
+            cdn: string;
+            gateway: string;
+            defaultApiVersion: string;
+            apiEndpoint: string;
+        };
+        InstancePingResponse: {
+            /** @enum {string} */
+            ping: "pong!";
+            instance: {
+                id: string;
+                name: string;
+                description: OneOf<[null, string]>;
+                image: OneOf<[null, string]>;
+                correspondenceEmail: OneOf<[null, string]>;
+                correspondenceUserID: OneOf<[null, string]>;
+                frontPage: OneOf<[null, string]>;
+                tosPage: OneOf<[null, string]>;
+            };
+        };
+        InstanceStatsResponse: {
+            counts: {
+                user: number;
+                guild: number;
+                message: number;
+                members: number;
+            };
+        };
+        LimitsConfigurationResponse: {
+            user: components["schemas"]["UserLimits"];
+            guild: components["schemas"]["GuildLimits"];
+            message: components["schemas"]["MessageLimits"];
+            channel: components["schemas"]["ChannelLimits"];
+            rate: components["schemas"]["RateLimits"];
+            absoluteRate: components["schemas"]["GlobalRateLimits"];
+        };
+        LocationMetadataResponse: {
+            consent_required: boolean;
+            country_code: string;
+            promotional_email_opt_in: {
+                /** @enum {boolean} */
+                required: true;
+                /** @enum {boolean} */
+                pre_checked: false;
+            };
+        };
+        MemberJoinGuildResponse: {
+            guild: components["schemas"]["Guild"];
+            emojis: components["schemas"]["Emoji"][];
+            roles: components["schemas"]["Role"][];
+            stickers: components["schemas"]["Sticker"][];
+        };
+        OAuthAuthorizeResponse: {
+            location: string;
+        };
+        StickerPacksResponse: components["schemas"]["StickerPack"][];
+        TenorTrendingResponse: {
+            categories: {
+                tags: {
+                    searchterm: string;
+                    path: string;
+                    image: string;
+                    name: string;
+                }[];
+            };
+            gifs: components["schemas"]["TenorGifResponse"][];
+        };
+        TenorGifsResponse: components["schemas"]["TenorGifResponse"][];
+        TokenOnlyResponse: {
+            token: string;
+        };
+        TokenWithBackupCodesResponse: {
+            token: string;
+            backup_codes: components["schemas"]["BackupCode"][];
+        };
+        UpdatesResponse: {
+            name: string;
+            pub_date: string;
+            url: string;
+            notes: string | null;
+        };
+        UserNoteResponse: {
+            note: string;
+            note_user_id: string;
+            user_id: string;
+        };
+        UserProfileResponse: {
+            user: components["schemas"]["PublicUser"];
+            connected_accounts: components["schemas"]["PublicConnectedAccount"];
+            /** Format: date-time */
+            premium_guild_since?: string;
+            /** Format: date-time */
+            premium_since?: string;
+        };
+        UserRelationshipsResponse: {
+            id: string;
+            type: components["schemas"]["RelationshipType"];
+            nickname: null;
+            user: components["schemas"]["PublicUser"];
+        };
+        UserRelationsResponse: {
+            object: {
+                id?: string;
+                username?: string;
+                avatar?: string;
+                discriminator?: string;
+                public_flags?: number;
+            };
+        };
+        PublicUserResponse: components["schemas"]["PublicUser"];
+        PrivateUserResponse: {
+            verified: boolean;
+            id: string;
+            /** Format: date-time */
+            premium_since: string;
+            username: string;
+            discriminator: string;
+            public_flags: number;
+            avatar?: string;
+            accent_color?: number;
+            banner?: string;
+            bio: string;
+            bot: boolean;
+            premium_type: number;
+            theme_colors?: number[];
+            pronouns?: string;
+            flags: string;
+            mfa_enabled: boolean;
+            email?: string;
+            phone?: string;
+            nsfw_allowed: boolean;
+            premium: boolean;
+            purchased_flags: number;
+            premium_usage_flags: number;
+            disabled: boolean;
+        };
+        UserUpdateResponse: {
+            newToken?: string;
+            verified: boolean;
+            id: string;
+            /** Format: date-time */
+            premium_since: string;
+            username: string;
+            discriminator: string;
+            public_flags: number;
+            avatar?: string;
+            accent_color?: number;
+            banner?: string;
+            bio: string;
+            bot: boolean;
+            premium_type: number;
+            theme_colors?: number[];
+            pronouns?: string;
+            flags: string;
+            mfa_enabled: boolean;
+            email?: string;
+            phone?: string;
+            nsfw_allowed: boolean;
+            premium: boolean;
+            purchased_flags: number;
+            premium_usage_flags: number;
+            disabled: boolean;
+        };
+        UserGuildsResponse: components["schemas"]["Guild"][];
+        UserChannelsResponse: components["schemas"]["DmChannelDTO"][];
+        UserBackupCodesResponse: components["schemas"]["BackupCode"][];
+        WebAuthnCreateResponse: {
+            name: string;
+            id: string;
+        };
+        WebhookCreateResponse: {
+            user: components["schemas"]["User"];
+            hook: components["schemas"]["Webhook"];
+        };
+        RoleModifySchema: {
+            name?: string;
+            permissions?: string;
+            color?: number;
+            hoist?: boolean;
+            mentionable?: boolean;
+            position?: number;
+            icon?: string;
+            unicode_emoji?: string;
+        };
+        RolePositionUpdateSchema: {
+            id: string;
+            position: number;
+        }[];
+        SelectProtocolSchema: {
+            /** @enum {string} */
+            protocol: "udp" | "webrtc";
+            data: OneOf<
+                [
+                    {
+                        address: string;
+                        port: number;
+                        mode: string;
+                    },
+                    string
+                ]
+            >;
+            sdp?: string;
+            codecs?: {
+                /** @enum {string} */
+                name: "H264" | "VP8" | "VP9" | "opus";
+                /** @enum {string} */
+                type: "audio" | "video";
+                priority: number;
+                payload_type: number;
+                rtx_payload_type?: OneOf<[null, number]>;
+            }[];
+            rtc_connection_id?: string;
+        };
+        TemplateCreateSchema: {
+            name: string;
+            description?: string;
+        };
+        TemplateModifySchema: {
+            name: string;
+            description?: string;
+        };
+        TotpDisableSchema: {
+            code: string;
+        };
+        TotpEnableSchema: {
+            password: string;
+            code?: string;
+            secret?: string;
+        };
+        TotpSchema: {
+            code: string;
+            ticket: string;
+            gift_code_sku_id?: string | null;
+            login_source?: string | null;
+        };
+        UserDeleteSchema: {
+            user_id: string;
+        };
+        UserGuildSettingsSchema: {
+            channel_overrides?: {
+                [key: string]:
+                    | components["schemas"]["ChannelOverride"]
+                    | undefined;
+            };
+            version?: number;
+            guild_id?: string | null;
+            flags?: number;
+            message_notifications?: number;
+            mobile_push?: boolean;
+            mute_config?: components["schemas"]["MuteConfig"] | null;
+            muted?: boolean;
+            suppress_everyone?: boolean;
+            suppress_roles?: boolean;
+            mute_scheduled_events?: boolean;
+            hide_muted_channels?: boolean;
+            /** @enum {number} */
+            notify_highlights?: 0;
+        };
+        UserModifySchema: {
+            username?: string;
+            avatar?: string | null;
+            bio?: string;
+            accent_color?: number;
+            banner?: string | null;
+            password?: string;
+            new_password?: string;
+            code?: string;
+            email?: string;
+            discriminator?: string;
+        };
+        UserNoteUpdateSchema: {
+            note: string;
+        };
+        UserProfileModifySchema: {
+            bio?: string;
+            accent_color?: number | null;
+            banner?: string | null;
+            pronouns?: string;
+            theme_colors?: number[];
+        };
+        UserSettingsSchema: {
+            afk_timeout?: number;
+            allow_accessibility_detection?: boolean;
+            animate_emoji?: boolean;
+            animate_stickers?: number;
+            contact_sync_enabled?: boolean;
+            convert_emoticons?: boolean;
+            custom_status?: components["schemas"]["CustomStatus"] | null;
+            default_guilds_restricted?: boolean;
+            detect_platform_accounts?: boolean;
+            developer_mode?: boolean;
+            disable_games_tab?: boolean;
+            enable_tts_command?: boolean;
+            explicit_content_filter?: number;
+            friend_source_flags?: components["schemas"]["FriendSourceFlags"];
+            gateway_connected?: boolean;
+            gif_auto_play?: boolean;
+            guild_folders?: components["schemas"]["GuildFolder"][];
+            guild_positions?: string[];
+            inline_attachment_media?: boolean;
+            inline_embed_media?: boolean;
+            locale?: string;
+            message_display_compact?: boolean;
+            native_phone_integration_enabled?: boolean;
+            render_embeds?: boolean;
+            render_reactions?: boolean;
+            restricted_guilds?: string[];
+            show_current_game?: boolean;
+            /** @enum {string} */
+            status?: "dnd" | "idle" | "invisible" | "offline" | "online";
+            stream_notifications_enabled?: boolean;
+            /** @enum {string} */
+            theme?: "dark" | "light";
+            timezone_offset?: number;
+        };
+        VanityUrlSchema: {
+            code?: string;
+        };
+        VoiceIdentifySchema: {
+            server_id: string;
+            user_id: string;
+            session_id: string;
+            token: string;
+            video?: boolean;
+            streams?: {
+                type: string;
+                rid: string;
+                quality: number;
+            }[];
+        };
+        VoiceStateUpdateSchema: {
+            guild_id?: string;
+            channel_id?: string;
+            self_mute: boolean;
+            self_deaf: boolean;
+            self_video?: boolean;
+            preferred_region?: string;
+            /** Format: date-time */
+            request_to_speak_timestamp?: string;
+            suppress?: boolean;
+        };
+        VoiceVideoSchema: {
+            audio_ssrc: number;
+            video_ssrc: number;
+            rtx_ssrc?: number;
+            user_id?: string;
+            streams?: {
+                /** @enum {string} */
+                type: "audio" | "video";
+                rid: string;
+                ssrc: number;
+                active: boolean;
+                quality: number;
+                rtx_ssrc: number;
+                max_bitrate: number;
+                max_framerate: number;
+                max_resolution: {
+                    type: string;
+                    width: number;
+                    height: number;
+                };
+            }[];
+        };
+        WebAuthnPostSchema:
+            | components["schemas"]["GenerateWebAuthnCredentialsSchema"]
+            | components["schemas"]["CreateWebAuthnCredentialSchema"];
+        WebAuthnTotpSchema: {
+            code: string;
+            ticket: string;
+        };
+        WebhookCreateSchema: {
+            name: string;
+            avatar?: string;
+        };
+        WidgetModifySchema: {
+            enabled: boolean;
+            channel_id: string;
+        };
+        BulkDeleteSchema: {
+            messages: string[];
+        };
+        LoginResponse:
+            | components["schemas"]["TokenResponse"]
+            | components["schemas"]["MFAResponse"]
+            | components["schemas"]["WebAuthnResponse"];
+        MemberNickChangeSchema: {
+            nick: string;
+        };
+        PruneSchema: {
+            days: number;
+        };
+        ChannelMessagesResponse: components["schemas"]["Message"][];
+        VerifyEmailSchema: {
+            captcha_key?: string | null;
+            token: string;
+        };
     };
-    WebAuthnPostSchema: components["schemas"]["GenerateWebAuthnCredentialsSchema"] | components["schemas"]["CreateWebAuthnCredentialSchema"];
-    WebAuthnTotpSchema: {
-      code: string;
-      ticket: string;
-    };
-    WebhookCreateSchema: {
-      name: string;
-      avatar?: string;
-    };
-    WidgetModifySchema: {
-      enabled: boolean;
-      channel_id: string;
-    };
-    BulkDeleteSchema: {
-      messages: (string)[];
-    };
-    LoginResponse: components["schemas"]["TokenResponse"] | components["schemas"]["MFAResponse"] | components["schemas"]["WebAuthnResponse"];
-    MemberNickChangeSchema: {
-      nick: string;
-    };
-    PruneSchema: {
-      days: number;
-    };
-    ChannelMessagesResponse: (components["schemas"]["Message"])[];
-    VerifyEmailSchema: {
-      captcha_key?: string | null;
-      token: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 
 export type external = Record<string, never>;
