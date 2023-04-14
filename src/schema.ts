@@ -4,5008 +4,6219 @@
  */
 
 export interface paths {
-  "/": {
-    /** Fetch the server configuration for this Revolt instance. */
-    get: operations["root_root"];
-  };
-  "/admin/stats": {
-    /** Fetch various technical statistics. */
-    get: operations["stats_stats"];
-  };
-  "/admin/messages": {
-    /** This is a privileged route to globally fetch messages. */
-    post: operations["message_query_message_query"];
-  };
-  "/users/@me": {
-    /** Retrieve your user information. */
-    get: operations["fetch_self_req"];
-  };
-  "/users/{target}": {
-    /** Retrieve a user's information. */
-    get: operations["fetch_user_req"];
-    /** Edit currently authenticated user. */
-    patch: operations["edit_user_req"];
-  };
-  "/users/{target}/flags": {
-    /** Retrieve a user's flags. */
-    get: operations["fetch_user_flags_fetch_user_flags"];
-  };
-  "/users/@me/username": {
-    /** Change your username. */
-    patch: operations["change_username_req"];
-  };
-  "/users/{target}/default_avatar": {
-    /** This returns a default avatar based on the given id. */
-    get: operations["get_default_avatar_req"];
-  };
-  "/users/{target}/profile": {
-    /**
-     * Retrieve a user's profile data.
-     *
-     * Will fail if you do not have permission to access the other user's profile.
-     */
-    get: operations["fetch_profile_req"];
-  };
-  "/users/dms": {
-    /** This fetches your direct messages, including any DM and group DM conversations. */
-    get: operations["fetch_dms_req"];
-  };
-  "/users/{target}/dm": {
-    /**
-     * Open a DM with another user.
-     *
-     * If the target is oneself, a saved messages channel is returned.
-     */
-    get: operations["open_dm_req"];
-  };
-  "/users/{target}/mutual": {
-    /** Retrieve a list of mutual friends and servers with another user. */
-    get: operations["find_mutual_req"];
-  };
-  "/users/{target}/friend": {
-    /** Accept another user's friend request. */
-    put: operations["add_friend_req"];
-    /** Denies another user's friend request or removes an existing friend. */
-    delete: operations["remove_friend_req"];
-  };
-  "/users/{target}/block": {
-    /** Block another user by their id. */
-    put: operations["block_user_req"];
-    /** Unblock another user by their id. */
-    delete: operations["unblock_user_req"];
-  };
-  "/users/friend": {
-    /** Send a friend request to another user. */
-    post: operations["send_friend_request_req"];
-  };
-  "/bots/create": {
-    /** Create a new Revolt bot. */
-    post: operations["create_create_bot"];
-  };
-  "/bots/{target}/invite": {
-    /** Fetch details of a public (or owned) bot by its id. */
-    get: operations["fetch_public_fetch_public_bot"];
-    /** Invite a bot to a server or group by its id.` */
-    post: operations["invite_invite_bot"];
-  };
-  "/bots/{target}": {
-    /** Fetch details of a bot you own by its id. */
-    get: operations["fetch_fetch_bot"];
-    /** Delete a bot by its id. */
-    delete: operations["delete_delete_bot"];
-    /** Edit bot details by its id. */
-    patch: operations["edit_edit_bot"];
-  };
-  "/bots/@me": {
-    /** Fetch all of the bots that you have control over. */
-    get: operations["fetch_owned_fetch_owned_bots"];
-  };
-  "/channels/{target}/ack/{message}": {
-    /** Lets the server and all other clients know that we've seen this message id in this channel. */
-    put: operations["channel_ack_req"];
-  };
-  "/channels/{target}": {
-    /** Fetch channel by its id. */
-    get: operations["channel_fetch_req"];
-    /** Deletes a server channel, leaves a group or closes a group. */
-    delete: operations["channel_delete_req"];
-    /** Edit a channel object by its id. */
-    patch: operations["channel_edit_req"];
-  };
-  "/channels/{target}/members": {
-    /** Retrieves all users who are part of this group. */
-    get: operations["members_fetch_req"];
-  };
-  "/channels/{target}/invites": {
-    /**
-     * Creates an invite to this channel.
-     *
-     * Channel must be a `TextChannel`.
-     */
-    post: operations["invite_create_req"];
-  };
-  "/channels/{target}/messages": {
-    /** Fetch multiple messages. */
-    get: operations["message_query_req"];
-    /** Sends a message to the given channel. */
-    post: operations["message_send_message_send"];
-  };
-  "/channels/{target}/search": {
-    /** This route searches for messages within the given parameters. */
-    post: operations["message_search_req"];
-  };
-  "/channels/{_target}/messages/stale": {
-    /**
-     * This route returns any changed message objects and tells you if any have been deleted.
-     *
-     * Don't actually poll this route, instead use this to update your local database.
-     *
-     * **DEPRECATED**
-     */
-    post: operations["message_query_stale_req"];
-  };
-  "/channels/{target}/messages/{msg}": {
-    /** Retrieves a message by its id. */
-    get: operations["message_fetch_req"];
-    /** Delete a message you've sent or one you have permission to delete. */
-    delete: operations["message_delete_req"];
-    /** Edits a message that you've previously sent. */
-    patch: operations["message_edit_req"];
-  };
-  "/channels/{target}/messages/bulk": {
-    /**
-     * Delete multiple messages you've sent or one you have permission to delete.
-     *
-     * This will always require `ManageMessages` permission regardless of whether you own the message or not.
-     *
-     * Messages must have been sent within the past 1 week.
-     */
-    delete: operations["message_bulk_delete_req"];
-  };
-  "/channels/create": {
-    /** Create a new group channel. */
-    post: operations["group_create_req"];
-  };
-  "/channels/{target}/recipients/{member}": {
-    /** Adds another user to the group. */
-    put: operations["group_add_member_req"];
-    /** Removes a user from the group. */
-    delete: operations["group_remove_member_req"];
-  };
-  "/channels/{target}/join_call": {
-    /** Asks the voice server for a token to join the call. */
-    post: operations["voice_join_req"];
-  };
-  "/channels/{target}/permissions/{role_id}": {
-    /**
-     * Sets permissions for the specified role in this channel.
-     *
-     * Channel must be a `TextChannel` or `VoiceChannel`.
-     */
-    put: operations["permissions_set_req"];
-  };
-  "/channels/{target}/permissions/default": {
-    /**
-     * Sets permissions for the default role in this channel.
-     *
-     * Channel must be a `Group`, `TextChannel` or `VoiceChannel`.
-     */
-    put: operations["permissions_set_default_req"];
-  };
-  "/channels/{target}/messages/{msg}/reactions/{emoji}": {
-    /** React to a given message. */
-    put: operations["message_react_react_message"];
-    /**
-     * Remove your own, someone else's or all of a given reaction.
-     *
-     * Requires `ManageMessages` if changing others' reactions.
-     */
-    delete: operations["message_unreact_unreact_message"];
-  };
-  "/channels/{target}/messages/{msg}/reactions": {
-    /**
-     * Remove your own, someone else's or all of a given reaction.
-     *
-     * Requires `ManageMessages` permission.
-     */
-    delete: operations["message_clear_reactions_clear_reactions"];
-  };
-  "/servers/create": {
-    /** Create a new server. */
-    post: operations["server_create_req"];
-  };
-  "/servers/{target}": {
-    /** Fetch a server by its id. */
-    get: operations["server_fetch_req"];
-    /** Deletes a server if owner otherwise leaves. */
-    delete: operations["server_delete_req"];
-    /** Edit a server by its id. */
-    patch: operations["server_edit_req"];
-  };
-  "/servers/{target}/ack": {
-    /** Mark all channels in a server as read. */
-    put: operations["server_ack_req"];
-  };
-  "/servers/{target}/channels": {
-    /** Create a new Text or Voice channel. */
-    post: operations["channel_create_req"];
-  };
-  "/servers/{target}/members": {
-    /** Fetch all server members. */
-    get: operations["member_fetch_all_req"];
-  };
-  "/servers/{target}/members/{member}": {
-    /** Retrieve a member. */
-    get: operations["member_fetch_req"];
-    /** Removes a member from the server. */
-    delete: operations["member_remove_req"];
-  };
-  "/servers/{server}/members/{target}": {
-    /** Edit a member by their id. */
-    patch: operations["member_edit_req"];
-  };
-  "/servers/{server}/bans/{target}": {
-    /** Ban a user by their id. */
-    put: operations["ban_create_req"];
-    /** Remove a user's ban. */
-    delete: operations["ban_remove_req"];
-  };
-  "/servers/{target}/bans": {
-    /** Fetch all bans on a server. */
-    get: operations["ban_list_req"];
-  };
-  "/servers/{target}/invites": {
-    /** Fetch all server invites. */
-    get: operations["invites_fetch_req"];
-  };
-  "/servers/{target}/roles": {
-    /** Creates a new server role. */
-    post: operations["roles_create_req"];
-  };
-  "/servers/{target}/roles/{role_id}": {
-    /** Delete a server role by its id. */
-    delete: operations["roles_delete_req"];
-    /** Edit a role by its id. */
-    patch: operations["roles_edit_req"];
-  };
-  "/servers/{target}/permissions/{role_id}": {
-    /** Sets permissions for the specified role in the server. */
-    put: operations["permissions_set_req"];
-  };
-  "/servers/{target}/permissions/default": {
-    /** Sets permissions for the default role in this server. */
-    put: operations["permissions_set_default_req"];
-  };
-  "/servers/{target}/emojis": {
-    /** Fetch all emoji on a server. */
-    get: operations["emoji_list_list_emoji"];
-  };
-  "/invites/{target}": {
-    /** Fetch an invite by its id. */
-    get: operations["invite_fetch_req"];
-    /** Join an invite by its ID. */
-    post: operations["invite_join_req"];
-    /** Delete an invite by its id. */
-    delete: operations["invite_delete_req"];
-  };
-  "/custom/emoji/{id}": {
-    /** Fetch an emoji by its id. */
-    get: operations["emoji_fetch_fetch_emoji"];
-    /** Create an emoji by its Autumn upload id. */
-    put: operations["emoji_create_create_emoji"];
-    /** Delete an emoji by its id. */
-    delete: operations["emoji_delete_delete_emoji"];
-  };
-  "/safety/reports/{report}": {
-    /** Edit a report. */
-    patch: operations["edit_report_edit_report"];
-  };
-  "/safety/report/{id}": {
-    /** Fetch a report by its ID */
-    get: operations["fetch_report_fetch_report"];
-  };
-  "/safety/reports": {
-    /** Fetch all available reports */
-    get: operations["fetch_reports_fetch_reports"];
-  };
-  "/safety/report": {
-    /** Report a piece of content to the moderation team. */
-    post: operations["report_content_report_content"];
-  };
-  "/safety/snapshot/{report_id}": {
-    /** Fetch a snapshot for a given report */
-    get: operations["fetch_snapshot_fetch_snapshot"];
-  };
-  "/auth/account/create": {
-    /** Create a new account. */
-    post: operations["create_account_create_account"];
-  };
-  "/auth/account/reverify": {
-    /** Resend account creation verification email. */
-    post: operations["resend_verification_resend_verification"];
-  };
-  "/auth/account/delete": {
-    /** Schedule an account for deletion by confirming the received token. */
-    put: operations["confirm_deletion_confirm_deletion"];
-    /** Request to have an account deleted. */
-    post: operations["delete_account_delete_account"];
-  };
-  "/auth/account/": {
-    /** Fetch account information from the current session. */
-    get: operations["fetch_account_fetch_account"];
-  };
-  "/auth/account/disable": {
-    /** Disable an account. */
-    post: operations["disable_account_disable_account"];
-  };
-  "/auth/account/change/password": {
-    /** Change the current account password. */
-    patch: operations["change_password_change_password"];
-  };
-  "/auth/account/change/email": {
-    /** Change the associated account email. */
-    patch: operations["change_email_change_email"];
-  };
-  "/auth/account/verify/{code}": {
-    /** Verify an email address. */
-    post: operations["verify_email_verify_email"];
-  };
-  "/auth/account/reset_password": {
-    /** Send an email to reset account password. */
-    post: operations["send_password_reset_send_password_reset"];
-    /** Confirm password reset and change the password. */
-    patch: operations["password_reset_password_reset"];
-  };
-  "/auth/session/login": {
-    /** Login to an account. */
-    post: operations["login_login"];
-  };
-  "/auth/session/logout": {
-    /** Delete current session. */
-    post: operations["logout_logout"];
-  };
-  "/auth/session/all": {
-    /** Fetch all sessions associated with this account. */
-    get: operations["fetch_all_fetch_all"];
-    /** Delete all active sessions, optionally including current one. */
-    delete: operations["revoke_all_revoke_all"];
-  };
-  "/auth/session/{id}": {
-    /** Delete a specific active session. */
-    delete: operations["revoke_revoke"];
-    /** Edit current session information. */
-    patch: operations["edit_edit"];
-  };
-  "/auth/mfa/ticket": {
-    /** Create a new MFA ticket or validate an existing one. */
-    put: operations["create_ticket_create_ticket"];
-  };
-  "/auth/mfa/": {
-    /** Fetch MFA status of an account. */
-    get: operations["fetch_status_fetch_status"];
-  };
-  "/auth/mfa/recovery": {
-    /** Fetch recovery codes for an account. */
-    post: operations["fetch_recovery_fetch_recovery"];
-    /** Re-generate recovery codes for an account. */
-    patch: operations["generate_recovery_generate_recovery"];
-  };
-  "/auth/mfa/methods": {
-    /** Fetch available MFA methods. */
-    get: operations["get_mfa_methods_get_mfa_methods"];
-  };
-  "/auth/mfa/totp": {
-    /** Generate a new secret for TOTP. */
-    put: operations["totp_enable_totp_enable"];
-    /** Generate a new secret for TOTP. */
-    post: operations["totp_generate_secret_totp_generate_secret"];
-    /** Disable TOTP 2FA for an account. */
-    delete: operations["totp_disable_totp_disable"];
-  };
-  "/onboard/hello": {
-    /** This will tell you whether the current account requires onboarding or whether you can continue to send requests as usual. You may skip calling this if you're restoring an existing session. */
-    get: operations["hello_req"];
-  };
-  "/onboard/complete": {
-    /** This sets a new username, completes onboarding and allows a user to start using Revolt. */
-    post: operations["complete_req"];
-  };
-  "/push/subscribe": {
-    /**
-     * Create a new Web Push subscription.
-     *
-     * If an existing subscription exists on this session, it will be removed.
-     */
-    post: operations["subscribe_req"];
-  };
-  "/push/unsubscribe": {
-    /** Remove the Web Push subscription associated with the current session. */
-    post: operations["unsubscribe_req"];
-  };
-  "/sync/settings/fetch": {
-    /**
-     * Fetch settings from server filtered by keys.
-     *
-     * This will return an object with the requested keys, each value is a tuple of `(timestamp, value)`, the value is the previously uploaded data.
-     */
-    post: operations["get_settings_req"];
-  };
-  "/sync/settings/set": {
-    /** Upload data to save to settings. */
-    post: operations["set_settings_req"];
-  };
-  "/sync/unreads": {
-    /** Fetch information about unread state on channels. */
-    get: operations["get_unreads_req"];
+  "/voice/regions/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIGuildVoiceRegion"];
+          };
+        };
+      };
+    };
+  };
+  "/users/@me/settings/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserSettings"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserSettings"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UserSettingsSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/relationships/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserRelationshipsResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RelationshipPostSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/relationships/{id}": {
+    put: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RelationshipPutSchema"];
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/users/@me/notes/{id}": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserNoteResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    put: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UserNoteUpdateSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/mfa/webauthn/credentials/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["WebAuthnCreateResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["WebAuthnPostSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/mfa/webauthn/credentials/{key_id}/": {
+    delete: {
+      parameters: {
+        path: {
+          /** key_id */
+          key_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+      };
+    };
+  };
+  "/users/@me/mfa/totp/enable/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenWithBackupCodesResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["TotpEnableSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/mfa/totp/disable/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenOnlyResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["TotpDisableSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/mfa/codes/": {
+    /** This route is replaced with users/@me/mfa/codes-verification in newer clients */
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIBackupCodeArray"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MfaCodesSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/mfa/codes-verification/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIBackupCodeArray"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CodesVerificationSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/library/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIPrivateUser"];
+          };
+        };
+      };
+    };
+    patch: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserUpdateResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UserModifySchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/guilds/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIGuildArray"];
+          };
+        };
+      };
+    };
+  };
+  "/users/@me/guilds/{guild_id}": {
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/users/@me/guilds/premium/subscription-slots/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/guilds/{guild_id}/settings/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        200: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        200: unknown;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UserGuildSettingsSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/entitlements/gifts": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/email-settings/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/disable/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/users/@me/devices/": {
+    post: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/delete/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+        401: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/users/@me/connections/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/connections/{connection_name}/{connection_id}/": {
+    delete: {
+      parameters: {
+        path: {
+          /** connection_name */
+          connection_name: string;
+          /** connection_id */
+          connection_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** connection_name */
+          connection_name: string;
+          /** connection_id */
+          connection_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ConnectionUpdateSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/connections/{connection_name}/{connection_id}/access-token/": {
+    get: {
+      parameters: {
+        path: {
+          /** connection_name */
+          connection_name: string;
+          /** connection_id */
+          connection_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/channels/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIDMChannelArray"];
+          };
+        };
+      };
+    };
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["DmChannelDTO"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["DmChannelCreateSchema"];
+        };
+      };
+    };
+  };
+  "/users/@me/billing/subscriptions/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/billing/payment-sources/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/billing/country-code/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/applications/{app_id}/entitlements/": {
+    get: {
+      parameters: {
+        path: {
+          /** app_id */
+          app_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/affinities/users/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/affinities/guilds/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/@me/activities/statistics/applications/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/users/{id}/relationships/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserRelationsResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/users/{id}/profile/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UserProfileResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UserProfileModifySchema"];
+        };
+      };
+    };
+  };
+  "/users/{id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIPublicUser"];
+          };
+        };
+      };
+    };
+  };
+  "/users/{id}/delete/": {
+    post: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/updates/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["UpdatesResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/track/": {
+    post: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/teams/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/store/published-listings/skus/{id}": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/store/published-listings/skus/{sku_id}/subscription-plans/": {
+    get: {
+      parameters: {
+        path: {
+          /** sku_id */
+          sku_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/store/published-listings/applications/{id}": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/store/published-listings/applications/{id}/subscription-plans/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/stop/": {
+    post: {
+      responses: {
+        /** No description available */
+        200: unknown;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/stickers/{sticker_id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** sticker_id */
+          sticker_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Sticker"];
+          };
+        };
+      };
+    };
+  };
+  "/sticker-packs/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIStickerPackArray"];
+          };
+        };
+      };
+    };
+  };
+  "/stage-instances/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/science/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+      };
+    };
+  };
+  "/scheduled-maintenances/upcoming_json/scheduled-maintenances/upcoming.json": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/read-states/ack-bulk/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["AckBulkSchema"];
+        };
+      };
+    };
+  };
+  "/policies/stats/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["InstanceStatsResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/policies/instance/limits/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APILimitsConfiguration"];
+          };
+        };
+      };
+    };
+  };
+  "/policies/instance/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIGeneralConfiguration"];
+          };
+        };
+      };
+    };
+  };
+  "/policies/instance/domains/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["InstanceDomainsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/ping/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["InstancePingResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/partners/{guild_id}/requirements/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/outbound-promotions/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/oauth2/tokens/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/oauth2/authorize/": {
+    get: {
+      responses: {
+        /** No description available */
+        200: unknown;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        query: {
+          client_id?: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["OAuthAuthorizeResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ApplicationAuthorizeSchema"];
+        };
+      };
+    };
+  };
+  "/invites/{code}": {
+    get: {
+      parameters: {
+        path: {
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Invite"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Invite"];
+          };
+        };
+        401: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Invite"];
+          };
+        };
+        401: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/templates/{code}": {
+    get: {
+      parameters: {
+        path: {
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Template"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["GuildTemplateCreateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/": {
+    post: {
+      responses: {
+        201: {
+          content: {
+            "application/json": components["schemas"]["GuildCreateResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["GuildCreateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/widget.png/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        200: unknown;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/widget.json/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildWidgetJsonResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/widget/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildWidgetSettingsResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["WidgetModifySchema"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["WidgetModifySchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/welcome-screen/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildWelcomeScreen"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["GuildUpdateWelcomeScreenSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/webhooks/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guilds/{guild_id}/voice-states/{user_id}/": {
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["VoiceStateUpdateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/vanity-url/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildVanityUrlResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildVanityUrlCreateResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["VanityUrlSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/templates/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APITemplateArray"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Template"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["TemplateCreateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/templates/{code}": {
+    put: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Template"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Template"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** code */
+          code: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Template"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["TemplateModifySchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/stickers/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIStickerArray"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Sticker"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ModifyGuildStickerSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/stickers/{sticker_id}": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** sticker_id */
+          sticker_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Sticker"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** sticker_id */
+          sticker_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** sticker_id */
+          sticker_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Sticker"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ModifyGuildStickerSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/roles/member-counts/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guilds/{guild_id}/roles/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Role"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RoleModifySchema"];
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIRoleArray"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RolePositionUpdateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/roles/{role_id}/members/": {
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guilds/{guild_id}/roles/{role_id}/member-ids/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guilds/{guild_id}/roles/{role_id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Role"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Role"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RoleModifySchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/regions/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIGuildVoiceRegion"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/prune/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildPruneResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildPurgeResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/profile/{member_id}": {
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Member"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MemberChangeProfileSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/premium/subscriptions": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guilds/{guild_id}/messages/search/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildMessagesSearchResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        422: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/members/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+        query: {
+          /** max number of members to return (1-1000). default 1 */
+          limit?: number;
+          after?: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIMemberArray"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/members/{member_id}/roles/{role_id}/": {
+    put: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        /** No description available */
+        403: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+          /** role_id */
+          role_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/members/{member_id}/nick/": {
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        200: unknown;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MemberNickChangeSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/members/{member_id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Member"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    put: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["MemberJoinGuildResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** member_id */
+          member_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Member"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MemberChangeSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/member-verification/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/invites/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIInviteArray"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/integrations/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guilds/{guild_id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIGuildWithJoinedAt"];
+          };
+        };
+        401: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildUpdateSchema"];
+          };
+        };
+        401: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["GuildUpdateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/emojis/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIEmojiArray"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        201: {
+          content: {
+            "application/json": components["schemas"]["Emoji"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["EmojiCreateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/emojis/{emoji_id}": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** emoji_id */
+          emoji_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Emoji"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** emoji_id */
+          emoji_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** emoji_id */
+          emoji_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Emoji"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["EmojiModifySchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/discovery-requirements/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildDiscoveryRequirementsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/delete/": {
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        401: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/channels/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        201: {
+          content: {
+            "application/json": components["schemas"]["APIChannelArray"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        201: {
+          content: {
+            "application/json": components["schemas"]["Channel"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChannelModifySchema"];
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChannelReorderSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/bans/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildBansResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/bans/{user}": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** user */
+          user: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["BanModeratorSchema"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/bans/{user_id}": {
+    put: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Ban"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["BanCreateSchema"];
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/bans/@me": {
+    put: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Ban"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        403: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["BanCreateSchema"];
+        };
+      };
+    };
+  };
+  "/guilds/{guild_id}/audit-logs/": {
+    get: {
+      parameters: {
+        path: {
+          /** guild_id */
+          guild_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/guild-recommendations/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GuildRecommendationsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/gifs/trending/": {
+    get: {
+      parameters: {
+        query: {
+          /** Locale */
+          locale?: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TenorTrendingResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/gifs/trending-gifs/": {
+    get: {
+      parameters: {
+        query: {
+          /** Media format */
+          media_format?: string;
+          /** Locale */
+          locale?: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TenorGifsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/gifs/search/": {
+    get: {
+      parameters: {
+        query: {
+          /** Search query */
+          q: string;
+          /** Media format */
+          media_format?: string;
+          /** Locale */
+          locale?: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TenorGifsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/gateway/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GatewayResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/gateway/bot/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GatewayBotResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/experiments/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/download/": {
+    get: {
+      responses: {
+        /** No description available */
+        302: never;
+        404: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/discovery/categories": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIDiscoveryCategoryArray"];
+          };
+        };
+      };
+    };
+  };
+  "/discoverable-guilds/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["DiscoverableGuildsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/connections/{connection_name}/callback/": {
+    post: {
+      parameters: {
+        path: {
+          /** connection_name */
+          connection_name: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ConnectionCallbackSchema"];
+        };
+      };
+    };
+  };
+  "/connections/{connection_name}/authorize/": {
+    get: {
+      parameters: {
+        path: {
+          /** connection_name */
+          connection_name: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/connections/{connection_name}/{connection_id}/refresh/": {
+    post: {
+      parameters: {
+        path: {
+          /** connection_name */
+          connection_name: string;
+          /** connection_id */
+          connection_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/webhooks/": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIWebhookArray"];
+          };
+        };
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["WebhookCreateResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["WebhookCreateSchema"];
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/typing/": {
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/recipients/{user_id}": {
+    put: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        201: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/purge/": {
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/pins/{message_id}": {
+    put: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/pins/": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIMessageArray"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/permissions/{overwrite_id}": {
+    put: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** overwrite_id */
+          overwrite_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+        /** No description available */
+        501: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChannelPermissionOverwriteSchema"];
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** overwrite_id */
+          overwrite_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/bulk-delete/": {
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["BulkDeleteSchema"];
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/{message_id}/reactions/": {
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/{message_id}/reactions/{emoji}": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+          /** emoji */
+          emoji: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["PublicUser"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+          /** emoji */
+          emoji: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/{user_id}": {
+    put: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+          /** emoji */
+          emoji: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+          /** emoji */
+          emoji: string;
+          /** user_id */
+          user_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/{message_id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Message"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    put: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Message"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MessageCreateSchema"];
+        };
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Message"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MessageEditSchema"];
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/{message_id}/crosspost/": {
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Message"];
+          };
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/messages/{message_id}/ack/": {
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+          /** message_id */
+          message_id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        200: unknown;
+        /** No description available */
+        403: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MessageAcknowledgeSchema"];
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/invites/": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIInviteArray"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        201: {
+          content: {
+            "application/json": components["schemas"]["Invite"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["InviteCreateSchema"];
+        };
+      };
+    };
+  };
+  "/channels/{channel_id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Channel"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Channel"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Channel"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        404: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChannelModifySchema"];
+        };
+      };
+    };
+  };
+  "/auth/verify/view-backup-codes-challenge/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["BackupCodesChallengeResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["BackupCodesChallengeSchema"];
+        };
+      };
+    };
+  };
+  "/auth/verify/resend/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        500: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/auth/verify/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["VerifyEmailSchema"];
+        };
+      };
+    };
+  };
+  "/auth/reset/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenOnlyResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["PasswordResetSchema"];
+        };
+      };
+    };
+  };
+  "/auth/register/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenOnlyResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RegisterSchema"];
+        };
+      };
+    };
+  };
+  "/auth/mfa/webauthn/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["WebAuthnTotpSchema"];
+        };
+      };
+    };
+  };
+  "/auth/mfa/totp/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["TotpSchema"];
+        };
+      };
+    };
+  };
+  "/auth/logout/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+      };
+    };
+  };
+  "/auth/login/": {
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["LoginResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["LoginSchema"];
+        };
+      };
+    };
+  };
+  "/auth/location-metadata/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["LocationMetadataResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/auth/generate-registration-tokens/": {
+    get: {
+      parameters: {
+        query: {
+          /** The number of registration tokens to generate. Defaults to 1. */
+          count?: number;
+          /** The length of each registration token. Defaults to 255. */
+          length?: number;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["GenerateRegistrationTokensResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/auth/forgot/": {
+    post: {
+      responses: {
+        /** No description available */
+        204: never;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorOrCaptchaResponse"];
+          };
+        };
+        500: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ForgotPasswordSchema"];
+        };
+      };
+    };
+  };
+  "/applications/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIApplicationArray"];
+          };
+        };
+      };
+    };
+    post: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Application"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ApplicationCreateSchema"];
+        };
+      };
+    };
+  };
+  "/applications/detectable/": {
+    get: {
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApplicationDetectableResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/applications/{id}/skus/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApplicationSkusResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/applications/{id}/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Application"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Application"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ApplicationModifySchema"];
+        };
+      };
+    };
+  };
+  "/applications/{id}/delete": {
+    post: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        /** No description available */
+        200: unknown;
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/applications/{id}/entitlements/": {
+    get: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApplicationEntitlementsResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/applications/{id}/bot/": {
+    post: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        204: {
+          content: {
+            "application/json": components["schemas"]["TokenOnlyResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+    patch: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Application"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["BotModifySchema"];
+        };
+      };
+    };
+  };
+  "/applications/{id}/bot/reset": {
+    post: {
+      parameters: {
+        path: {
+          /** id */
+          id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["TokenResponse"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+      };
+    };
+  };
+  "/-/readyz/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
+  };
+  "/-/healthz/": {
+    get: {
+      responses: {
+        /** No description available */
+        default: unknown;
+      };
+    };
   };
 }
 
 export interface components {
   schemas: {
-    /** Server Configuration */
-    RevoltConfig: {
-      /** @description Revolt API Version */
-      revolt: string;
-      /** @description Features enabled on this Revolt node */
-      features: components["schemas"]["RevoltFeatures"];
-      /** @description WebSocket URL */
-      ws: string;
-      /** @description URL pointing to the client serving this node */
-      app: string;
-      /** @description Web Push VAPID public key */
-      vapid: string;
-      /** @description Build information */
-      build: components["schemas"]["BuildInformation"];
+    AckBulkSchema: {
+      read_states: {
+        channel_id: string;
+        message_id: string;
+        read_state_type: number;
+      }[];
     };
-    /** Feature Configuration */
-    RevoltFeatures: {
-      /** @description hCaptcha configuration */
-      captcha: components["schemas"]["CaptchaFeature"];
-      /** @description Whether email verification is enabled */
-      email: boolean;
-      /** @description Whether this server is invite only */
-      invite_only: boolean;
-      /** @description File server service configuration */
-      autumn: components["schemas"]["Feature"];
-      /** @description Proxy service configuration */
-      january: components["schemas"]["Feature"];
-      /** @description Voice server configuration */
-      voso: components["schemas"]["VoiceFeature"];
+    ConnectedAccountCommonOAuthTokenResponse: {
+      access_token: string;
+      token_type: string;
+      scope: string;
+      refresh_token?: string;
+      expires_in?: number;
     };
-    /** hCaptcha Configuration */
-    CaptchaFeature: {
-      /** @description Whether captcha is enabled */
-      enabled: boolean;
-      /** @description Client key used for solving captcha */
-      key: string;
+    ApplicationAuthorizeSchema: {
+      authorize: boolean;
+      guild_id: string;
+      permissions: string;
+      captcha_key?: string;
+      code?: string;
     };
-    /** Generic Service Configuration */
-    Feature: {
-      /** @description Whether the service is enabled */
-      enabled: boolean;
-      /** @description URL pointing to the service */
-      url: string;
-    };
-    /** Voice Server Configuration */
-    VoiceFeature: {
-      /** @description Whether voice is enabled */
-      enabled: boolean;
-      /** @description URL pointing to the voice API */
-      url: string;
-      /** @description URL pointing to the voice WebSocket server */
-      ws: string;
-    };
-    /** Build Information */
-    BuildInformation: {
-      /** @description Commit Hash */
-      commit_sha: string;
-      /** @description Commit Timestamp */
-      commit_timestamp: string;
-      /** @description Git Semver */
-      semver: string;
-      /** @description Git Origin URL */
-      origin_url: string;
-      /** @description Build Timestamp */
-      timestamp: string;
-    };
-    /**
-     * @description Permission value on Revolt
-     *
-     * This should be restricted to the lower 52 bits to prevent any potential issues with Javascript. Also leave empty spaces for future permission flags to be added.
-     * @enum {string}
-     */
-    Permission:
-      | "ManageChannel"
-      | "ManageServer"
-      | "ManagePermissions"
-      | "ManageRole"
-      | "ManageCustomisation"
-      | "KickMembers"
-      | "BanMembers"
-      | "TimeoutMembers"
-      | "AssignRoles"
-      | "ChangeNickname"
-      | "ManageNicknames"
-      | "ChangeAvatar"
-      | "RemoveAvatars"
-      | "ViewChannel"
-      | "ReadMessageHistory"
-      | "SendMessage"
-      | "ManageMessages"
-      | "ManageWebhooks"
-      | "InviteOthers"
-      | "SendEmbeds"
-      | "UploadFiles"
-      | "Masquerade"
-      | "React"
-      | "Connect"
-      | "Speak"
-      | "Video"
-      | "MuteMembers"
-      | "DeafenMembers"
-      | "MoveMembers"
-      | "GrantAllSafe"
-      | "GrantAll";
-    /**
-     * @description User permission definitions
-     * @enum {string}
-     */
-    UserPermission: "Access" | "ViewProfile" | "SendMessage" | "Invite";
-    /**
-     * Error
-     * @description Possible API Errors
-     */
-    Error:
-      | {
-          /** @enum {string} */
-          type: "LabelMe";
-        }
-      | {
-          /** @enum {string} */
-          type: "AlreadyOnboarded";
-        }
-      | {
-          /** @enum {string} */
-          type: "UsernameTaken";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidUsername";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnknownUser";
-        }
-      | {
-          /** @enum {string} */
-          type: "AlreadyFriends";
-        }
-      | {
-          /** @enum {string} */
-          type: "AlreadySentRequest";
-        }
-      | {
-          /** @enum {string} */
-          type: "Blocked";
-        }
-      | {
-          /** @enum {string} */
-          type: "BlockedByOther";
-        }
-      | {
-          /** @enum {string} */
-          type: "NotFriends";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnknownChannel";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnknownAttachment";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnknownMessage";
-        }
-      | {
-          /** @enum {string} */
-          type: "CannotEditMessage";
-        }
-      | {
-          /** @enum {string} */
-          type: "CannotJoinCall";
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyAttachments";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyReplies";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyChannels";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "EmptyMessage";
-        }
-      | {
-          /** @enum {string} */
-          type: "PayloadTooLarge";
-        }
-      | {
-          /** @enum {string} */
-          type: "CannotRemoveYourself";
-        }
-      | {
-          /** @enum {string} */
-          type: "GroupTooLarge";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "AlreadyInGroup";
-        }
-      | {
-          /** @enum {string} */
-          type: "NotInGroup";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnknownServer";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidRole";
-        }
-      | {
-          /** @enum {string} */
-          type: "Banned";
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyServers";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyEmoji";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyRoles";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "ReachedMaximumBots";
-        }
-      | {
-          /** @enum {string} */
-          type: "IsBot";
-        }
-      | {
-          /** @enum {string} */
-          type: "BotIsPrivate";
-        }
-      | {
-          /** @enum {string} */
-          type: "CannotReportYourself";
-        }
-      | {
-          /** @enum {string} */
-          type: "MissingPermission";
-          permission: components["schemas"]["Permission"];
-        }
-      | {
-          /** @enum {string} */
-          type: "MissingUserPermission";
-          permission: components["schemas"]["UserPermission"];
-        }
-      | {
-          /** @enum {string} */
-          type: "NotElevated";
-        }
-      | {
-          /** @enum {string} */
-          type: "NotPrivileged";
-        }
-      | {
-          /** @enum {string} */
-          type: "CannotGiveMissingPermissions";
-        }
-      | {
-          /** @enum {string} */
-          type: "NotOwner";
-        }
-      | {
-          /** @enum {string} */
-          type: "DatabaseError";
-          operation: string;
-          with: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "InternalError";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidOperation";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidCredentials";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidProperty";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidSession";
-        }
-      | {
-          /** @enum {string} */
-          type: "DuplicateNonce";
-        }
-      | {
-          /** @enum {string} */
-          type: "VosoUnavailable";
-        }
-      | {
-          /** @enum {string} */
-          type: "NotFound";
-        }
-      | {
-          /** @enum {string} */
-          type: "NoEffect";
-        }
-      | {
-          /** @enum {string} */
-          type: "FailedValidation";
-        };
-    /** @description Server Stats */
-    Stats: {
-      /** @description Index usage information */
-      indices: { [key: string]: components["schemas"]["Index"][] };
-      /** @description Collection stats */
-      coll_stats: { [key: string]: components["schemas"]["CollectionStats"] };
-    };
-    /** @description Collection index */
-    Index: {
-      /** @description Index name */
+    ApplicationCreateSchema: {
       name: string;
-      /** @description Access information */
-      accesses: components["schemas"]["IndexAccess"];
+      team_id?: unknown;
     };
-    /** @description Index access information */
-    IndexAccess: {
-      /**
-       * Format: int32
-       * @description Operations since timestamp
-       */
-      ops: number;
-      /** @description Timestamp at which data keeping begun */
-      since: components["schemas"]["ISO8601 Timestamp"];
+    ApplicationModifySchema: {
+      description?: string;
+      icon?: string;
+      interactions_endpoint_url?: string;
+      max_participants?: number | null;
+      name?: string;
+      privacy_policy_url?: string;
+      role_connections_verification_url?: string;
+      tags?: string[];
+      terms_of_service_url?: string;
+      bot_public?: boolean;
+      bot_require_code_grant?: boolean;
+      flags?: number;
     };
-    /**
-     * Format: date-time
-     * @description ISO8601 formatted timestamp
-     * @example 1970-01-01T00:00:00Z
-     */
-    "ISO8601 Timestamp": string;
-    /** @description Collection stats */
-    CollectionStats: {
-      /** @description Namespace */
-      ns: string;
-      /** @description Local time */
-      localTime: components["schemas"]["ISO8601 Timestamp"];
-      /** @description Latency stats */
-      latencyStats: { [key: string]: components["schemas"]["LatencyStats"] };
-      /** @description Query exec stats */
-      queryExecStats: components["schemas"]["QueryExecStats"];
-      /**
-       * Format: uint64
-       * @description Number of documents in collection
-       */
-      count: number;
-    };
-    /** @description Collection latency stats */
-    LatencyStats: {
-      /**
-       * Format: int64
-       * @description Total operations
-       */
-      ops: number;
-      /**
-       * Format: int64
-       * @description Timestamp at which data keeping begun
-       */
-      latency: number;
-      /** @description Histogram representation of latency data */
-      histogram: components["schemas"]["LatencyHistogramEntry"][];
-    };
-    /** @description Histogram entry */
-    LatencyHistogramEntry: {
-      /**
-       * Format: int64
-       * @description Time
-       */
-      micros: number;
-      /**
-       * Format: int64
-       * @description Count
-       */
-      count: number;
-    };
-    /** @description Collection query execution stats */
-    QueryExecStats: {
-      /** @description Stats regarding collection scans */
-      collectionScans: components["schemas"]["CollectionScans"];
-    };
-    /** @description Query collection scan stats */
-    CollectionScans: {
-      /**
-       * Format: int64
-       * @description Number of total collection scans
-       */
-      total: number;
-      /**
-       * Format: int64
-       * @description Number of total collection scans not using a tailable cursor
-       */
-      nonTailable: number;
-    };
-    /**
-     * Bulk Message Response
-     * @description Response used when multiple messages are fetched
-     */
-    BulkMessageResponse:
-      | components["schemas"]["Message"][]
-      | {
-          /** @description List of messages */
-          messages: components["schemas"]["Message"][];
-          /** @description List of users */
-          users: components["schemas"]["User"][];
-          /** @description List of members */
-          members?: components["schemas"]["Member"][] | null;
-        };
-    /** @description Representation of a Message on Revolt */
-    Message: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Unique value generated by client sending this message */
-      nonce?: string | null;
-      /** @description Id of the channel this message was sent in */
-      channel: string;
-      /** @description Id of the user that sent this message */
-      author: string;
-      /** @description Message content */
-      content?: string | null;
-      /** @description System message */
-      system?: components["schemas"]["SystemMessage"] | null;
-      /** @description Array of attachments */
-      attachments?: components["schemas"]["File"][] | null;
-      /** @description Time at which this message was last edited */
-      edited?: components["schemas"]["ISO8601 Timestamp"] | null;
-      /** @description Attached embeds to this message */
-      embeds?: components["schemas"]["Embed"][] | null;
-      /** @description Array of user ids mentioned in this message */
-      mentions?: string[] | null;
-      /** @description Array of message ids this message is replying to */
-      replies?: string[] | null;
-      /** @description Hashmap of emoji IDs to array of user IDs */
-      reactions?: { [key: string]: string[] };
-      /** @description Information about how this message should be interacted with */
-      interactions?: components["schemas"]["Interactions"];
-      /** @description Name and / or avatar overrides for this message */
-      masquerade?: components["schemas"]["Masquerade"] | null;
-    };
-    /** @description Representation of a system event message */
-    SystemMessage:
-      | {
-          /** @enum {string} */
-          type: "text";
-          content: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "user_added";
-          id: string;
-          by: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "user_remove";
-          id: string;
-          by: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "user_joined";
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "user_left";
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "user_kicked";
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "user_banned";
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "channel_renamed";
-          name: string;
-          by: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "channel_description_changed";
-          by: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "channel_icon_changed";
-          by: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "channel_ownership_changed";
-          from: string;
-          to: string;
-        };
-    /** @description Representation of a File on Revolt Generated by Autumn */
-    File: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Tag / bucket this file was uploaded to */
-      tag: string;
-      /** @description Original filename */
-      filename: string;
-      /** @description Parsed metadata of this file */
-      metadata: components["schemas"]["Metadata"];
-      /** @description Raw content type of this file */
-      content_type: string;
-      /**
-       * Format: int
-       * @description Size of this file (in bytes)
-       */
-      size: number;
-      /** @description Whether this file was deleted */
-      deleted?: boolean | null;
-      /** @description Whether this file was reported */
-      reported?: boolean | null;
-      message_id?: string | null;
-      user_id?: string | null;
-      server_id?: string | null;
-      /** @description Id of the object this file is associated with */
-      object_id?: string | null;
-    };
-    /** @description Metadata associated with file */
-    Metadata:
-      | {
-          /** @enum {string} */
-          type: "File";
-        }
-      | {
-          /** @enum {string} */
-          type: "Text";
-        }
-      | {
-          /** @enum {string} */
-          type: "Image";
-          /** Format: int */
-          width: number;
-          /** Format: int */
-          height: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "Video";
-          /** Format: int */
-          width: number;
-          /** Format: int */
-          height: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "Audio";
-        };
-    /** @description Embed */
-    Embed:
-      | {
-          /** @enum {string} */
-          type: "Website";
-          /** @description Direct URL to web page */
-          url?: string | null;
-          /** @description Original direct URL */
-          original_url?: string | null;
-          /** @description Remote content */
-          special?: components["schemas"]["Special"] | null;
-          /** @description Title of website */
-          title?: string | null;
-          /** @description Description of website */
-          description?: string | null;
-          /** @description Embedded image */
-          image?: components["schemas"]["Image"] | null;
-          /** @description Embedded video */
-          video?: components["schemas"]["Video"] | null;
-          /** @description Site name */
-          site_name?: string | null;
-          /** @description URL to site icon */
-          icon_url?: string | null;
-          /** @description CSS Colour */
-          colour?: string | null;
-        }
-      | {
-          /** @enum {string} */
-          type: "Image";
-          /** @description URL to the original image */
-          url: string;
-          /**
-           * Format: int
-           * @description Width of the image
-           */
-          width: number;
-          /**
-           * Format: int
-           * @description Height of the image
-           */
-          height: number;
-          /** @description Positioning and size */
-          size: components["schemas"]["ImageSize"];
-        }
-      | {
-          /** @enum {string} */
-          type: "Video";
-          /** @description URL to the original video */
-          url: string;
-          /**
-           * Format: int
-           * @description Width of the video
-           */
-          width: number;
-          /**
-           * Format: int
-           * @description Height of the video
-           */
-          height: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "Text";
-          /** @description URL to icon */
-          icon_url?: string | null;
-          /** @description URL for title */
-          url?: string | null;
-          /** @description Title of text embed */
-          title?: string | null;
-          /** @description Description of text embed */
-          description?: string | null;
-          /** @description ID of uploaded autumn file */
-          media?: components["schemas"]["File"] | null;
-          /** @description CSS Colour */
-          colour?: string | null;
-        }
-      | {
-          /** @enum {string} */
-          type: "None";
-        };
-    /** @description Information about special remote content */
-    Special:
-      | {
-          /** @enum {string} */
-          type: "None";
-        }
-      | {
-          /** @enum {string} */
-          type: "GIF";
-        }
-      | {
-          /** @enum {string} */
-          type: "YouTube";
-          id: string;
-          timestamp?: string | null;
-        }
-      | {
-          /** @enum {string} */
-          type: "Lightspeed";
-          content_type: components["schemas"]["LightspeedType"];
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "Twitch";
-          content_type: components["schemas"]["TwitchType"];
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "Spotify";
-          content_type: string;
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "Soundcloud";
-        }
-      | {
-          /** @enum {string} */
-          type: "Bandcamp";
-          content_type: components["schemas"]["BandcampType"];
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "Streamable";
-          id: string;
-        };
-    /**
-     * @description Type of remote Lightspeed.tv content
-     * @enum {string}
-     */
-    LightspeedType: "Channel";
-    /**
-     * @description Type of remote Twitch content
-     * @enum {string}
-     */
-    TwitchType: "Channel" | "Video" | "Clip";
-    /**
-     * @description Type of remote Bandcamp content
-     * @enum {string}
-     */
-    BandcampType: "Album" | "Track";
-    /** @description Image */
-    Image: {
-      /** @description URL to the original image */
-      url: string;
-      /**
-       * Format: int
-       * @description Width of the image
-       */
-      width: number;
-      /**
-       * Format: int
-       * @description Height of the image
-       */
-      height: number;
-      /** @description Positioning and size */
-      size: components["schemas"]["ImageSize"];
-    };
-    /**
-     * @description Image positioning and size
-     * @enum {string}
-     */
-    ImageSize: "Large" | "Preview";
-    /** @description Video */
-    Video: {
-      /** @description URL to the original video */
-      url: string;
-      /**
-       * Format: int
-       * @description Width of the video
-       */
-      width: number;
-      /**
-       * Format: int
-       * @description Height of the video
-       */
-      height: number;
-    };
-    /** @description Information to guide interactions on this message */
-    Interactions: {
-      /** @description Reactions which should always appear and be distinct */
-      reactions?: string[] | null;
-      /**
-       * @description Whether reactions should be restricted to the given list
-       *
-       * Can only be set to true if reactions list is of at least length 1
-       */
-      restrict_reactions?: boolean;
-    };
-    /** @description Name and / or avatar override information */
-    Masquerade: {
-      /** @description Replace the display name shown on this message */
-      name?: string | null;
-      /** @description Replace the avatar shown on this message (URL to image file) */
-      avatar?: string | null;
-      /**
-       * @description Replace the display role colour shown on this message
-       *
-       * Must have `ManageRole` permission to use
-       */
-      colour?: string | null;
-    };
-    /** @description Representiation of a User on Revolt. */
-    User: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Username */
-      username: string;
-      /** @description Avatar attachment */
-      avatar?: components["schemas"]["File"] | null;
-      /** @description Relationships with other users */
-      relations?: components["schemas"]["Relationship"][] | null;
-      /**
-       * Format: int32
-       * @description Bitfield of user badges
-       */
-      badges?: number | null;
-      /** @description User's current status */
-      status?: components["schemas"]["UserStatus"] | null;
-      /** @description User's profile page */
-      profile?: components["schemas"]["UserProfile"] | null;
-      /**
-       * Format: int32
-       * @description Enum of user flags
-       */
-      flags?: number | null;
-      /** @description Whether this user is privileged */
-      privileged?: boolean;
-      /** @description Bot information */
-      bot?: components["schemas"]["BotInformation"] | null;
-      /** @description Current session user's relationship with this user */
-      relationship?: components["schemas"]["RelationshipStatus"] | null;
-      /** @description Whether this user is currently online */
-      online?: boolean | null;
-    };
-    /** @description Relationship entry indicating current status with other user */
-    Relationship: {
-      _id: string;
-      status: components["schemas"]["RelationshipStatus"];
-    };
-    /**
-     * @description User's relationship with another user (or themselves)
-     * @enum {string}
-     */
-    RelationshipStatus:
-      | "None"
-      | "User"
-      | "Friend"
-      | "Outgoing"
-      | "Incoming"
-      | "Blocked"
-      | "BlockedOther";
-    /** @description User's active status */
-    UserStatus: {
-      /** @description Custom status text */
-      text?: string | null;
-      /** @description Current presence option */
-      presence?: components["schemas"]["Presence"] | null;
-    };
-    /**
-     * @description Presence status
-     * @enum {string}
-     */
-    Presence: "Online" | "Idle" | "Focus" | "Busy" | "Invisible";
-    /** @description User's profile */
-    UserProfile: {
-      /** @description Text content on user's profile */
-      content?: string | null;
-      /** @description Background visible on user's profile */
-      background?: components["schemas"]["File"] | null;
-    };
-    /** @description Bot information for if the user is a bot */
-    BotInformation: {
-      /** @description Id of the owner of this bot */
-      owner: string;
-    };
-    /** @description Representation of a member of a server on Revolt */
-    Member: {
-      /** @description Unique member id */
-      _id: components["schemas"]["MemberCompositeKey"];
-      /** @description Time at which this user joined the server */
-      joined_at: components["schemas"]["ISO8601 Timestamp"];
-      /** @description Member's nickname */
-      nickname?: string | null;
-      /** @description Avatar attachment */
-      avatar?: components["schemas"]["File"] | null;
-      /** @description Member's roles */
-      roles?: string[];
-      /** @description Timestamp this member is timed out until */
-      timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
-    };
-    /** @description Composite primary key consisting of server and user id */
-    MemberCompositeKey: {
-      /** @description Server Id */
-      server: string;
-      /** @description User Id */
-      user: string;
-    };
-    /**
-     * Message Query
-     * @description Filter and sort messages by time
-     */
-    MessageQuery: (
-      | {
-          /**
-           * @description Message id to search around
-           *
-           * Specifying 'nearby' ignores 'before', 'after' and 'sort'. It will also take half of limit rounded as the limits to each side. It also fetches the message ID specified.
-           */
-          nearby: string;
-        }
-      | {
-          /** @description Message id before which messages should be fetched */
-          before?: string | null;
-          /** @description Message id after which messages should be fetched */
-          after?: string | null;
-          /** @description Message sort direction */
-          sort?: components["schemas"]["MessageSort"] | null;
-        }
-    ) & {
-      /**
-       * Format: int64
-       * @description Maximum number of messages to fetch
-       *
-       * For fetching nearby messages, this is \`(limit + 1)\`.
-       */
-      limit?: number | null;
-      /** @description Parent channel ID */
-      channel?: string | null;
-      /** @description Message author ID */
-      author?: string | null;
-      /** @description Search query */
-      query?: string | null;
-    };
-    /**
-     * Message Sort
-     * @description Sort used for retrieving messages
-     * @enum {string}
-     */
-    MessageSort: "Relevance" | "Latest" | "Oldest";
-    Id: string;
-    /** Flag Response */
-    FlagResponse: {
-      /**
-       * Format: int32
-       * @description Flags
-       */
-      flags: number;
-    };
-    /** User Data */
-    DataEditUser: {
-      /** @description Attachment Id for avatar */
-      avatar?: string | null;
-      /** @description New user status */
-      status?: components["schemas"]["UserStatus"] | null;
-      /**
-       * @description New user profile data
-       *
-       * This is applied as a partial.
-       */
-      profile?: components["schemas"]["UserProfileData"] | null;
-      /**
-       * Format: int32
-       * @description Bitfield of user badges
-       */
-      badges?: number | null;
-      /**
-       * Format: int32
-       * @description Enum of user flags
-       */
-      flags?: number | null;
-      /** @description Fields to remove from user object */
-      remove?: components["schemas"]["FieldsUser"][] | null;
-    };
-    /** Profile Data */
-    UserProfileData: {
-      /** @description Text to set as user profile description */
-      content?: string | null;
-      /** @description Attachment Id for background */
-      background?: string | null;
-    };
-    /**
-     * @description Optional fields on user object
-     * @enum {string}
-     */
-    FieldsUser:
-      | "Avatar"
-      | "StatusText"
-      | "StatusPresence"
-      | "ProfileContent"
-      | "ProfileBackground";
-    /** Username Information */
-    DataChangeUsername: {
-      /** @description New username */
-      username: string;
-      /** @description Current account password */
+    BackupCodesChallengeSchema: {
       password: string;
     };
-    /** @description Representation of a channel on Revolt */
-    Channel:
-      | {
-          /** @enum {string} */
-          channel_type: "SavedMessages";
-          /** @description Unique Id */
-          _id: string;
-          /** @description Id of the user this channel belongs to */
-          user: string;
-        }
-      | {
-          /** @enum {string} */
-          channel_type: "DirectMessage";
-          /** @description Unique Id */
-          _id: string;
-          /** @description Whether this direct message channel is currently open on both sides */
-          active: boolean;
-          /** @description 2-tuple of user ids participating in direct message */
-          recipients: string[];
-          /** @description Id of the last message sent in this channel */
-          last_message_id?: string | null;
-        }
-      | {
-          /** @enum {string} */
-          channel_type: "Group";
-          /** @description Unique Id */
-          _id: string;
-          /** @description Display name of the channel */
-          name: string;
-          /** @description User id of the owner of the group */
-          owner: string;
-          /** @description Channel description */
-          description?: string | null;
-          /** @description Array of user ids participating in channel */
-          recipients: string[];
-          /** @description Custom icon attachment */
-          icon?: components["schemas"]["File"] | null;
-          /** @description Id of the last message sent in this channel */
-          last_message_id?: string | null;
-          /**
-           * Format: int64
-           * @description Permissions assigned to members of this group (does not apply to the owner of the group)
-           */
-          permissions?: number | null;
-          /** @description Whether this group is marked as not safe for work */
-          nsfw?: boolean;
-        }
-      | {
-          /** @enum {string} */
-          channel_type: "TextChannel";
-          /** @description Unique Id */
-          _id: string;
-          /** @description Id of the server this channel belongs to */
-          server: string;
-          /** @description Display name of the channel */
-          name: string;
-          /** @description Channel description */
-          description?: string | null;
-          /** @description Custom icon attachment */
-          icon?: components["schemas"]["File"] | null;
-          /** @description Id of the last message sent in this channel */
-          last_message_id?: string | null;
-          /** @description Default permissions assigned to users in this channel */
-          default_permissions?: components["schemas"]["OverrideField"] | null;
-          /** @description Permissions assigned based on role to this channel */
-          role_permissions?: {
-            [key: string]: components["schemas"]["OverrideField"];
-          };
-          /** @description Whether this channel is marked as not safe for work */
-          nsfw?: boolean;
-        }
-      | {
-          /** @enum {string} */
-          channel_type: "VoiceChannel";
-          /** @description Unique Id */
-          _id: string;
-          /** @description Id of the server this channel belongs to */
-          server: string;
-          /** @description Display name of the channel */
-          name: string;
-          /** @description Channel description */
-          description?: string | null;
-          /** @description Custom icon attachment */
-          icon?: components["schemas"]["File"] | null;
-          /** @description Default permissions assigned to users in this channel */
-          default_permissions?: components["schemas"]["OverrideField"] | null;
-          /** @description Permissions assigned based on role to this channel */
-          role_permissions?: {
-            [key: string]: components["schemas"]["OverrideField"];
-          };
-          /** @description Whether this channel is marked as not safe for work */
-          nsfw?: boolean;
-        };
-    /** @description Representation of a single permission override as it appears on models and in the database */
-    OverrideField: {
-      /**
-       * Format: int64
-       * @description Allow bit flags
-       */
-      a: number;
-      /**
-       * Format: int64
-       * @description Disallow bit flags
-       */
-      d: number;
+    BanCreateSchema: {
+      delete_message_seconds?: string;
+      delete_message_days?: string;
+      reason?: string;
     };
-    /** Mutual Friends and Servers Response */
-    MutualResponse: {
-      /** @description Array of mutual user IDs that both users are friends with */
-      users: string[];
-      /** @description Array of mutual server IDs that both users are in */
-      servers: string[];
+    BanModeratorSchema: {
+      id: string;
+      user_id: string;
+      guild_id: string;
+      executor_id: string;
+      reason?: string;
     };
-    /** User Lookup Information */
-    DataSendFriendRequest: {
-      username: string;
+    BanRegistrySchema: {
+      id: string;
+      user_id: string;
+      guild_id: string;
+      executor_id: string;
+      ip?: string;
+      reason?: string;
     };
-    /** @description Representation of a bot on Revolt */
-    Bot: {
-      /**
-       * @description Bot Id
-       *
-       * This equals the associated bot user's id.
-       */
-      _id: string;
-      /** @description User Id of the bot owner */
-      owner: string;
-      /** @description Token used to authenticate requests for this bot */
-      token: string;
-      /** @description Whether the bot is public (may be invited by anyone) */
-      public: boolean;
-      /** @description Whether to enable analytics */
-      analytics?: boolean;
-      /** @description Whether this bot should be publicly discoverable */
-      discoverable?: boolean;
-      /** @description Reserved; URL for handling interactions */
-      interactions_url?: string | null;
-      /** @description URL for terms of service */
-      terms_of_service_url?: string | null;
-      /** @description URL for privacy policy */
-      privacy_policy_url?: string | null;
-      /**
-       * Format: int32
-       * @description Enum of bot flags
-       */
-      flags?: number | null;
+    BotModifySchema: {
+      avatar?: string;
+      username?: string;
     };
-    /** Bot Details */
-    DataCreateBot: {
-      /** @description Bot username */
-      name: string;
+    /** @enum {number} */
+    ChannelPermissionOverwriteType: 0 | 1 | 2;
+    ConnectedAccountTokenData: {
+      access_token: string;
+      token_type?: string;
+      scope?: string;
+      refresh_token?: string;
+      expires_in?: number;
+      expires_at?: number;
+      fetched_at: number;
     };
-    /** Invite Destination */
-    InviteBotDestination:
-      | {
-          /** @description Server Id */
-          server: string;
-        }
-      | {
-          /** @description Group Id */
-          group: string;
-        };
-    /** Public Bot */
-    PublicBot: {
-      /** @description Bot Id */
-      _id: string;
-      /** @description Bot Username */
-      username: string;
-      /** @description Profile Avatar */
-      avatar?: components["schemas"]["File"] | null;
-      /** @description Profile Description */
-      description?: string | null;
-    };
-    /** Bot Response */
-    BotResponse: {
-      /** @description Bot object */
-      bot: components["schemas"]["Bot"];
-      /** @description User object */
-      user: components["schemas"]["User"];
-    };
-    /**
-     * Owned Bots Response
-     * @description Both lists are sorted by their IDs.
-     */
-    OwnedBotsResponse: {
-      /** @description Bot objects */
-      bots: components["schemas"]["Bot"][];
-      /** @description User objects */
-      users: components["schemas"]["User"][];
-    };
-    /** Bot Details */
-    DataEditBot: {
-      /** @description Bot username */
-      name?: string | null;
-      /** @description Whether the bot can be added by anyone */
-      public?: boolean | null;
-      /**
-       * @description Whether analytics should be gathered for this bot
-       *
-       * Must be enabled in order to show up on [Revolt Discover](https://rvlt.gg).
-       */
-      analytics?: boolean | null;
-      /** @description Interactions URL */
-      interactions_url?: string | null;
-      /** @description Fields to remove from bot object */
-      remove?: components["schemas"]["FieldsBot"][] | null;
-    };
-    /**
-     * @description Optional fields on bot object
-     * @enum {string}
-     */
-    FieldsBot: "Token" | "InteractionsURL";
-    /** Channel Details */
-    DataEditChannel: {
-      /** @description Channel name */
-      name?: string | null;
-      /** @description Channel description */
-      description?: string | null;
-      /** @description Group owner */
-      owner?: string | null;
-      /**
-       * @description Icon
-       *
-       * Provide an Autumn attachment Id.
-       */
+    ChannelModifySchema: {
+      name?: string;
+      /** @enum {number} */
+      type?:
+        | 0
+        | 1
+        | 10
+        | 11
+        | 12
+        | 13
+        | 14
+        | 15
+        | 2
+        | 255
+        | 3
+        | 33
+        | 34
+        | 35
+        | 4
+        | 5
+        | 6
+        | 64
+        | 7
+        | 8
+        | 9;
+      topic?: string;
       icon?: string | null;
-      /** @description Whether this channel is age-restricted */
-      nsfw?: boolean | null;
-      /** @description Whether this channel is archived */
-      archived?: boolean | null;
-      remove?: components["schemas"]["FieldsChannel"][] | null;
-    };
-    /**
-     * @description Optional fields on channel object
-     * @enum {string}
-     */
-    FieldsChannel: "Description" | "Icon" | "DefaultPermissions";
-    /** @description Representation of an invite to a channel on Revolt */
-    Invite:
-      | {
-          /** @enum {string} */
-          type: "Server";
-          /** @description Invite code */
-          _id: string;
-          /** @description Id of the server this invite points to */
-          server: string;
-          /** @description Id of user who created this invite */
-          creator: string;
-          /** @description Id of the server channel this invite points to */
-          channel: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "Group";
-          /** @description Invite code */
-          _id: string;
-          /** @description Id of user who created this invite */
-          creator: string;
-          /** @description Id of the group channel this invite points to */
-          channel: string;
-        };
-    DataMessageSend: {
-      /**
-       * @description Unique token to prevent duplicate message sending
-       *
-       * **This is deprecated and replaced by `Idempotency-Key`!**
-       */
-      nonce?: string | null;
-      /** @description Message content to send */
-      content?: string | null;
-      /** @description Attachments to include in message */
-      attachments?: string[] | null;
-      /** @description Messages to reply to */
-      replies?: components["schemas"]["Reply"][] | null;
-      /**
-       * @description Embeds to include in message
-       *
-       * Text embed content contributes to the content length cap
-       */
-      embeds?: components["schemas"]["SendableEmbed"][] | null;
-      /** @description Masquerade to apply to this message */
-      masquerade?: components["schemas"]["Masquerade"] | null;
-      /** @description Information about how this message should be interacted with */
-      interactions?: components["schemas"]["Interactions"] | null;
-    };
-    /**
-     * Reply
-     * @description Representation of a message reply before it is sent.
-     */
-    Reply: {
-      /** @description Message Id */
-      id: string;
-      /** @description Whether this reply should mention the message's author */
-      mention: boolean;
-    };
-    /** @description Representation of a text embed before it is sent. */
-    SendableEmbed: {
-      icon_url?: string | null;
-      url?: string | null;
-      title?: string | null;
-      description?: string | null;
-      media?: string | null;
-      colour?: string | null;
-    };
-    /** Search Parameters */
-    OptionsMessageSearch: {
-      /**
-       * @description Full-text search query
-       *
-       * See [MongoDB documentation](https://docs.mongodb.com/manual/text-search/#-text-operator) for more information.
-       */
-      query: string;
-      /**
-       * Format: int64
-       * @description Maximum number of messages to fetch
-       */
-      limit?: number | null;
-      /** @description Message id before which messages should be fetched */
-      before?: string | null;
-      /** @description Message id after which messages should be fetched */
-      after?: string | null;
-      /**
-       * @description Message sort direction
-       *
-       * By default, it will be sorted by latest.
-       * @default Relevance
-       */
-      sort?: components["schemas"]["MessageSort"];
-      /** @description Whether to include user (and member, if server channel) objects */
-      include_users?: boolean | null;
-    };
-    /** Query Parameters */
-    OptionsQueryStale: {
-      /** @description Array of message IDs */
-      ids: string[];
-    };
-    /** Message Details */
-    DataEditMessage: {
-      /** @description New message content */
-      content?: string | null;
-      /** @description Embeds to include in the message */
-      embeds?: components["schemas"]["SendableEmbed"][] | null;
-    };
-    /** Search Parameters */
-    OptionsBulkDelete: {
-      /** @description Message IDs */
-      ids: string[];
-    };
-    /** Group Data */
-    DataCreateGroup: {
-      /** @description Group name */
-      name: string;
-      /** @description Group description */
-      description?: string | null;
-      /**
-       * @description Array of user IDs to add to the group
-       *
-       * Must be friends with these users.
-       */
-      users: string[];
-      /** @description Whether this group is age-restricted */
-      nsfw?: boolean | null;
-    };
-    /** Voice Server Token Response */
-    CreateVoiceUserResponse: {
-      /** @description Token for authenticating with the voice server */
-      token: string;
-    };
-    /** Permission Value */
-    Data: {
-      /** @description Allow / deny values to set for this role */
-      permissions: components["schemas"]["Override"];
-    };
-    /** @description Representation of a single permission override */
-    Override: {
-      /**
-       * Format: uint64
-       * @description Allow bit flags
-       */
-      allow: number;
-      /**
-       * Format: uint64
-       * @description Disallow bit flags
-       */
-      deny: number;
-    };
-    /** Permission Value */
-    DataDefaultChannelPermissions:
-      | {
-          /**
-           * Format: uint64
-           * @description Permission values to set for members in a `Group`
-           */
-          permissions: number;
-        }
-      | {
-          /** @description Allow / deny values to set for members in this `TextChannel` or `VoiceChannel` */
-          permissions: components["schemas"]["Override"];
-        };
-    /** Create Server Response */
-    CreateServerResponse: {
-      /** @description Server object */
-      server: components["schemas"]["Server"];
-      /** @description Default channels */
-      channels: components["schemas"]["Channel"][];
-    };
-    /** @description Representation of a server on Revolt */
-    Server: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description User id of the owner */
-      owner: string;
-      /** @description Name of the server */
-      name: string;
-      /** @description Description for the server */
-      description?: string | null;
-      /** @description Channels within this server */
-      channels: string[];
-      /** @description Categories for this server */
-      categories?: components["schemas"]["Category"][] | null;
-      /** @description Configuration for sending system event messages */
-      system_messages?: components["schemas"]["SystemMessageChannels"] | null;
-      /** @description Roles for this server */
-      roles?: { [key: string]: components["schemas"]["Role"] };
-      /**
-       * Format: int64
-       * @description Default set of server and channel permissions
-       */
-      default_permissions: number;
-      /** @description Icon attachment */
-      icon?: components["schemas"]["File"] | null;
-      /** @description Banner attachment */
-      banner?: components["schemas"]["File"] | null;
-      /**
-       * Format: int32
-       * @description Bitfield of server flags
-       */
-      flags?: number | null;
-      /** @description Whether this server is flagged as not safe for work */
+      bitrate?: number;
+      user_limit?: number;
+      rate_limit_per_user?: number;
+      position?: number;
+      permission_overwrites?: {
+        id: string;
+        type: components["schemas"]["ChannelPermissionOverwriteType"];
+        allow: string;
+        deny: string;
+      }[];
+      parent_id?: string;
+      id?: string;
       nsfw?: boolean;
-      /** @description Whether to enable analytics */
-      analytics?: boolean;
-      /** @description Whether this server should be publicly discoverable */
-      discoverable?: boolean;
+      rtc_region?: string;
+      default_auto_archive_duration?: number;
+      default_reaction_emoji?: string | null;
+      flags?: number;
+      default_thread_rate_limit_per_user?: number;
+      video_quality_mode?: number;
     };
-    /** @description Channel category */
-    Category: {
-      /** @description Unique ID for this category */
-      id: string;
-      /** @description Title for this category */
-      title: string;
-      /** @description Channels in this category */
-      channels: string[];
+    ActivitySchema: {
+      afk?: boolean;
+      status: components["schemas"]["Status"];
+      activities?: components["schemas"]["Activity"][];
+      since?: number;
     };
-    /** @description System message channel assignments */
-    SystemMessageChannels: {
-      /** @description ID of channel to send user join messages in */
-      user_joined?: string | null;
-      /** @description ID of channel to send user left messages in */
-      user_left?: string | null;
-      /** @description ID of channel to send user kicked messages in */
-      user_kicked?: string | null;
-      /** @description ID of channel to send user banned messages in */
-      user_banned?: string | null;
-    };
-    /** @description Representation of a server role */
-    Role: {
-      /** @description Role name */
+    /** @enum {string} */
+    Status: "dnd" | "idle" | "invisible" | "offline" | "online";
+    Activity: {
       name: string;
-      /** @description Permissions available to this role */
-      permissions: components["schemas"]["OverrideField"];
-      /**
-       * @description Colour used for this role
-       *
-       * This can be any valid CSS colour
-       */
-      colour?: string | null;
-      /** @description Whether this role should be shown separately on the member sidebar */
-      hoist?: boolean;
-      /**
-       * Format: int64
-       * @description Ranking of this role
-       */
-      rank?: number;
+      type: components["schemas"]["ActivityType"];
+      url?: string;
+      created_at?: number;
+      timestamps?: {
+        start: number;
+        end: number;
+      };
+      application_id?: string;
+      details?: string;
+      state?: string;
+      emoji?: {
+        name: string;
+        id?: string;
+        animated: boolean;
+      };
+      party?: {
+        id?: string;
+        size?: number[];
+      };
+      assets?: {
+        large_image?: string;
+        large_text?: string;
+        small_image?: string;
+        small_text?: string;
+      };
+      secrets?: {
+        join?: string;
+        spectate?: string;
+        match?: string;
+      };
+      instance?: boolean;
+      flags: string;
+      id?: string;
+      sync_id?: string;
+      metadata?: {
+        context_uri?: string;
+        album_id: string;
+        artist_ids: string[];
+      };
+      session_id: string;
     };
-    /** Server Data */
-    DataCreateServer: {
-      /** @description Server name */
-      name: string;
-      /** @description Server description */
-      description?: string | null;
-      /** @description Whether this server is age-restricted */
-      nsfw?: boolean | null;
-    };
-    /** Server Data */
-    DataEditServer: {
-      /** @description Server name */
-      name?: string | null;
-      /** @description Server description */
-      description?: string | null;
-      /** @description Attachment Id for icon */
-      icon?: string | null;
-      /** @description Attachment Id for banner */
-      banner?: string | null;
-      /** @description Category structure for server */
-      categories?: components["schemas"]["Category"][] | null;
-      /** @description System message configuration */
-      system_messages?: components["schemas"]["SystemMessageChannels"] | null;
-      /**
-       * Format: int32
-       * @description Bitfield of server flags
-       */
-      flags?: number | null;
-      /** @description Whether this server is public and should show up on [Revolt Discover](https://rvlt.gg) */
-      discoverable?: boolean | null;
-      /**
-       * @description Whether analytics should be collected for this server
-       *
-       * Must be enabled in order to show up on [Revolt Discover](https://rvlt.gg).
-       */
-      analytics?: boolean | null;
-      /** @description Fields to remove from server object */
-      remove?: components["schemas"]["FieldsServer"][] | null;
-    };
-    /**
-     * @description Optional fields on server object
-     * @enum {string}
-     */
-    FieldsServer:
-      | "Description"
-      | "Categories"
-      | "SystemMessages"
-      | "Icon"
-      | "Banner";
-    /** Channel Data */
-    DataCreateChannel: {
-      /**
-       * @description Channel type
-       * @default Text
-       */
-      type?: components["schemas"]["ChannelType"];
-      /** @description Channel name */
-      name: string;
-      /** @description Channel description */
-      description?: string | null;
-      /** @description Whether this channel is age restricted */
-      nsfw?: boolean | null;
-    };
-    /**
-     * Channel Type
-     * @enum {string}
-     */
-    ChannelType: "Text" | "Voice";
-    /**
-     * Member List
-     * @description Both lists are sorted by ID.
-     */
-    AllMemberResponse: {
-      /** @description List of members */
-      members: components["schemas"]["Member"][];
-      /** @description List of users */
-      users: components["schemas"]["User"][];
-    };
-    /** Member Data */
-    DataMemberEdit: {
-      /** @description Member nickname */
-      nickname?: string | null;
-      /** @description Attachment Id to set for avatar */
-      avatar?: string | null;
-      /** @description Array of role ids */
-      roles?: string[] | null;
-      /** @description Timestamp this member is timed out until */
-      timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
-      /** @description Fields to remove from channel object */
-      remove?: components["schemas"]["FieldsMember"][] | null;
-    };
-    /**
-     * @description Optional fields on server member object
-     * @enum {string}
-     */
-    FieldsMember: "Nickname" | "Avatar" | "Roles" | "Timeout";
-    /** @description Representation of a server ban on Revolt */
-    ServerBan: {
-      /** @description Unique member id */
-      _id: components["schemas"]["MemberCompositeKey"];
-      /** @description Reason for ban creation */
-      reason?: string | null;
-    };
-    /** Ban Information */
-    DataBanCreate: {
-      /** @description Ban reason */
-      reason?: string | null;
-    };
-    /** Ban List Result */
-    BanListResult: {
-      /** @description Users objects */
-      users: components["schemas"]["BannedUser"][];
-      /** @description Ban objects */
-      bans: components["schemas"]["ServerBan"][];
-    };
-    /**
-     * Banned User
-     * @description Just enoguh user information to list bans.
-     */
-    BannedUser: {
-      /** @description Id of the banned user */
-      _id: string;
-      /** @description Username of the banned user */
-      username: string;
-      /** @description Avatar of the banned user */
-      avatar?: components["schemas"]["File"] | null;
-    };
-    /** New Role Response */
-    NewRoleResponse: {
-      /** @description Id of the role */
-      id: string;
-      /** @description New role */
-      role: components["schemas"]["Role"];
-    };
-    /** Role Data */
-    DataCreateRole: {
-      /** @description Role name */
-      name: string;
-      /**
-       * Format: int64
-       * @description Ranking position
-       *
-       * Smaller values take priority.
-       */
-      rank?: number | null;
-    };
-    /** Role Data */
-    DataEditRole: {
-      /** @description Role name */
-      name?: string | null;
-      /** @description Role colour */
-      colour?: string | null;
-      /** @description Whether this role should be displayed separately */
-      hoist?: boolean | null;
-      /**
-       * Format: int64
-       * @description Ranking position
-       *
-       * Smaller values take priority.
-       */
-      rank?: number | null;
-      /** @description Fields to remove from role object */
-      remove?: components["schemas"]["FieldsRole"][] | null;
-    };
-    /**
-     * @description Optional fields on server object
-     * @enum {string}
-     */
-    FieldsRole: "Colour";
-    /** Permission Value */
-    DataSetServerRolePermission: {
-      /** @description Allow / deny values for the role in this server. */
-      permissions: components["schemas"]["Override"];
-    };
-    /** Permission Value */
-    DataSetServerDefaultPermission: {
-      /**
-       * Format: uint64
-       * @description Default member permission value
-       */
-      permissions: number;
-    };
-    /** @description Representation of an Emoji on Revolt */
-    Emoji: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description What owns this emoji */
-      parent: components["schemas"]["EmojiParent"];
-      /** @description Uploader user id */
-      creator_id: string;
-      /** @description Emoji name */
-      name: string;
-      /** @description Whether the emoji is animated */
-      animated?: boolean;
-      /** @description Whether the emoji is marked as nsfw */
-      nsfw?: boolean;
-    };
-    /** @description Information about what owns this emoji */
-    EmojiParent:
-      | {
-          /** @enum {string} */
-          type: "Server";
-          id: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "Detached";
-        };
-    /** Invite */
-    InviteResponse:
-      | {
-          /** @enum {string} */
-          type: "Server";
-          /** @description Invite code */
-          code: string;
-          /** @description Id of the server */
-          server_id: string;
-          /** @description Name of the server */
-          server_name: string;
-          /** @description Attachment for server icon */
-          server_icon?: components["schemas"]["File"] | null;
-          /** @description Attachment for server banner */
-          server_banner?: components["schemas"]["File"] | null;
-          /**
-           * Format: int32
-           * @description Enum of server flags
-           */
-          server_flags?: number | null;
-          /** @description Id of server channel */
-          channel_id: string;
-          /** @description Name of server channel */
-          channel_name: string;
-          /** @description Description of server channel */
-          channel_description?: string | null;
-          /** @description Name of user who created the invite */
-          user_name: string;
-          /** @description Avatar of the user who created the invite */
-          user_avatar?: components["schemas"]["File"] | null;
-          /**
-           * Format: int64
-           * @description Number of members in this server
-           */
-          member_count: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "Group";
-          /** @description Invite code */
-          code: string;
-          /** @description Id of group channel */
-          channel_id: string;
-          /** @description Name of group channel */
-          channel_name: string;
-          /** @description Description of group channel */
-          channel_description?: string | null;
-          /** @description Name of user who created the invite */
-          user_name: string;
-          /** @description Avatar of the user who created the invite */
-          user_avatar?: components["schemas"]["File"] | null;
-        };
-    /** Join Response */
-    InviteJoinResponse: {
+    /** @enum {number} */
+    ActivityType: 0 | 1 | 2 | 4 | 5;
+    Embed: {
+      title?: string;
       /** @enum {string} */
-      type: "Server";
-      /** @description Channels in the server */
+      type?: "article" | "gifv" | "image" | "link" | "rich" | "video";
+      description?: string;
+      url?: string;
+      /** Format: date-time */
+      timestamp?: string;
+      color?: number;
+      footer?: {
+        text: string;
+        icon_url?: string;
+        proxy_icon_url?: string;
+      };
+      image?: components["schemas"]["EmbedImage"];
+      thumbnail?: components["schemas"]["EmbedImage"];
+      video?: components["schemas"]["EmbedImage"];
+      provider?: {
+        name?: string;
+        url?: string;
+      };
+      author?: {
+        name?: string;
+        url?: string;
+        icon_url?: string;
+        proxy_icon_url?: string;
+      };
+      fields?: {
+        name: string;
+        value: string;
+        inline?: boolean;
+      }[];
+    };
+    EmbedImage: {
+      url?: string;
+      proxy_url?: string;
+      height?: number;
+      width?: number;
+    };
+    ChannelOverride: {
+      message_notifications: number;
+      mute_config: components["schemas"]["MuteConfig"];
+      muted: boolean;
+      channel_id: string | null;
+    };
+    MuteConfig: {
+      end_time: number;
+      selected_time_window: number;
+    };
+    CustomStatus: {
+      emoji_id?: string;
+      emoji_name?: string;
+      expires_at?: number;
+      text?: string;
+    };
+    FriendSourceFlags: {
+      all: boolean;
+    };
+    GuildFolder: {
+      color: number;
+      guild_ids: string[];
+      id: number;
+      name: string;
+    };
+    GenerateWebAuthnCredentialsSchema: {
+      password: string;
+    };
+    CreateWebAuthnCredentialSchema: {
+      credential: string;
+      name: string;
+      ticket: string;
+    };
+    APIErrorResponse: {
+      code: number;
+      message: string;
+      errors: {
+        [key: string]: {
+          _errors: {
+            message: string;
+            code: string;
+          }[];
+        };
+      };
+    };
+    CaptchaRequiredResponse: {
+      captcha_key: string;
+      captcha_sitekey: string;
+      captcha_service: string;
+    };
+    Guild: {
+      afk_channel_id?: string;
+      afk_channel?: components["schemas"]["Channel"];
+      afk_timeout?: number;
+      bans: components["schemas"]["Ban"][];
+      banner?: string;
+      default_message_notifications?: number;
+      description?: string;
+      discovery_splash?: string;
+      explicit_content_filter?: number;
+      /** @default */
+      features: string[];
+      primary_category_id?: string;
+      icon?: string;
+      large?: boolean;
+      max_members?: number;
+      max_presences?: number;
+      max_video_channel_users?: number;
+      member_count?: number;
+      presence_count?: number;
+      members: components["schemas"]["Member"][];
+      roles: components["schemas"]["Role"][];
       channels: components["schemas"]["Channel"][];
-      /** @description Server we are joining */
-      server: components["schemas"]["Server"];
-    };
-    /** Emoji Data */
-    DataCreateEmoji: {
-      /** @description Server name */
+      template_id?: string;
+      template: components["schemas"]["Template"];
+      emojis: components["schemas"]["Emoji"][];
+      stickers: components["schemas"]["Sticker"][];
+      invites: components["schemas"]["Invite"][];
+      voice_states: components["schemas"]["VoiceState"][];
+      webhooks: components["schemas"]["Webhook"][];
+      mfa_level?: number;
       name: string;
-      /** @description Parent information */
-      parent: components["schemas"]["EmojiParent"];
-      /** @description Whether the emoji is mature */
-      nsfw?: boolean;
+      owner_id?: string;
+      owner?: components["schemas"]["User"];
+      preferred_locale?: string;
+      premium_subscription_count?: number;
+      premium_tier?: number;
+      public_updates_channel_id: string;
+      public_updates_channel?: components["schemas"]["Channel"];
+      rules_channel_id?: string;
+      rules_channel?: string;
+      region?: string;
+      splash?: string;
+      system_channel_id?: string;
+      system_channel?: components["schemas"]["Channel"];
+      system_channel_flags?: number;
+      unavailable: boolean;
+      verification_level?: number;
+      welcome_screen: components["schemas"]["GuildWelcomeScreen"];
+      widget_channel_id?: string;
+      widget_channel?: components["schemas"]["Channel"];
+      /** @default true */
+      widget_enabled: boolean;
+      nsfw_level?: number;
+      nsfw: boolean;
+      parent?: string;
+      permissions?: number;
+      premium_progress_bar_enabled: boolean;
+      id: string;
     };
-    /** @description User-generated platform moderation report. */
-    Report: (
-      | {
-          /** @enum {string} */
-          status: "Created";
-        }
-      | {
-          /** @enum {string} */
-          status: "Rejected";
-          rejection_reason: string;
-        }
-      | {
-          /** @enum {string} */
-          status: "Resolved";
-        }
-    ) & {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Id of the user creating this report */
-      author_id: string;
-      /** @description Reported content */
-      content: components["schemas"]["ReportedContent"];
-      /** @description Additional report context */
-      additional_context: string;
-      /** @description Additional notes included on the report */
-      notes?: string;
+    Channel: {
+      /** Format: date-time */
+      created_at: string;
+      name?: string;
+      icon?: string | null;
+      type: components["schemas"]["ChannelType"];
+      recipients?: components["schemas"]["Recipient"][];
+      last_message_id?: string;
+      guild_id?: string;
+      guild: components["schemas"]["Guild"];
+      parent_id: string;
+      parent?: components["schemas"]["Channel"];
+      owner_id?: string;
+      owner: components["schemas"]["User"];
+      last_pin_timestamp?: number;
+      default_auto_archive_duration?: number;
+      position?: number;
+      permission_overwrites?: components["schemas"]["ChannelPermissionOverwrite"][];
+      video_quality_mode?: number;
+      bitrate?: number;
+      user_limit?: number;
+      nsfw: boolean;
+      rate_limit_per_user?: number;
+      topic?: string;
+      invites?: components["schemas"]["Invite"][];
+      retention_policy_id?: string;
+      messages?: components["schemas"]["Message"][];
+      voice_states?: components["schemas"]["VoiceState"][];
+      read_states?: components["schemas"]["ReadState"][];
+      webhooks?: components["schemas"]["Webhook"][];
+      flags: number;
+      default_thread_rate_limit_per_user: number;
+      id: string;
     };
-    /** @description The content being reported */
-    ReportedContent:
-      | {
-          /** @enum {string} */
-          type: "Message";
-          /** @description ID of the message */
-          id: string;
-          /** @description Reason for reporting message */
-          report_reason: components["schemas"]["ContentReportReason"];
-        }
-      | {
-          /** @enum {string} */
-          type: "Server";
-          /** @description ID of the server */
-          id: string;
-          /** @description Reason for reporting server */
-          report_reason: components["schemas"]["ContentReportReason"];
-        }
-      | {
-          /** @enum {string} */
-          type: "User";
-          /** @description ID of the user */
-          id: string;
-          /** @description Reason for reporting a user */
-          report_reason: components["schemas"]["UserReportReason"];
-        };
-    /**
-     * @description Reason for reporting content (message or server)
-     * @enum {string}
-     */
-    ContentReportReason:
-      | "NoneSpecified"
-      | "Illegal"
-      | "PromotesHarm"
-      | "SpamAbuse"
-      | "Malware"
-      | "Harassment";
-    /**
-     * @description Reason for reporting a user
-     * @enum {string}
-     */
-    UserReportReason:
-      | "NoneSpecified"
-      | "SpamAbuse"
-      | "InappropriateProfile"
-      | "Impersonation"
-      | "BanEvasion"
-      | "Underage";
-    /** Report Data */
-    DataEditReport: {
-      /** @description New report status */
-      status?: components["schemas"]["ReportStatus"] | null;
-      /** @description Report notes */
-      notes?: string | null;
+    /** @enum {number} */
+    ChannelType:
+      | 0
+      | 1
+      | 10
+      | 11
+      | 12
+      | 13
+      | 14
+      | 15
+      | 2
+      | 255
+      | 3
+      | 33
+      | 34
+      | 35
+      | 4
+      | 5
+      | 6
+      | 64
+      | 7
+      | 8
+      | 9;
+    Recipient: {
+      channel_id: string;
+      channel: components["schemas"]["Channel"];
+      user_id: string;
+      user: components["schemas"]["User"];
+      closed: boolean;
+      id: string;
     };
-    /** @description Status of the report */
-    ReportStatus:
-      | {
-          /** @enum {string} */
-          status: "Created";
-        }
-      | {
-          /** @enum {string} */
-          status: "Rejected";
-          rejection_reason: string;
-        }
-      | {
-          /** @enum {string} */
-          status: "Resolved";
-        };
-    /** Report Data */
-    DataReportContent: {
-      /** @description Content being reported */
-      content: components["schemas"]["ReportedContent"];
-      /** @description Additional report description */
-      additional_context?: string;
+    User: {
+      username: string;
+      discriminator: string;
+      avatar?: string;
+      accent_color?: number;
+      banner?: string;
+      theme_colors?: number[];
+      pronouns?: string;
+      phone?: string;
+      desktop: boolean;
+      mobile: boolean;
+      premium: boolean;
+      premium_type: number;
+      bot: boolean;
+      bio: string;
+      system: boolean;
+      /** @default true */
+      nsfw_allowed: boolean;
+      mfa_enabled: boolean;
+      webauthn_enabled: boolean;
+      totp_secret?: string;
+      totp_last_ticket?: string;
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      premium_since: string;
+      verified: boolean;
+      disabled: boolean;
+      deleted: boolean;
+      email?: string;
+      /** @default 0 */
+      flags: string;
+      public_flags: number;
+      purchased_flags: number;
+      premium_usage_flags: number;
+      rights: string;
+      sessions: components["schemas"]["Session"][];
+      relationships: components["schemas"]["Relationship"][];
+      connected_accounts: components["schemas"]["ConnectedAccount"][];
+      data: {
+        /** Format: date-time */
+        valid_tokens_since: string;
+        hash?: string;
+      };
+      /** @default */
+      fingerprints: string[];
+      settings: components["schemas"]["UserSettings"];
+      /** @default {} */
+      extended_settings: string;
+      security_keys: components["schemas"]["SecurityKey"][];
+      id: string;
     };
-    /** @description Snapshot of some content with required data to render */
-    SnapshotWithContext: {
-      /** @description Users involved in snapshot */
-      _users: components["schemas"]["User"][];
-      /** @description Channels involved in snapshot */
-      _channels: components["schemas"]["Channel"][];
-      /** @description Server involved in snapshot */
-      _server?: components["schemas"]["Server"] | null;
-      /** @description Unique Id */
-      _id: string;
-      /** @description Report parent Id */
-      report_id: string;
-      /** @description Snapshot of content */
-      content: components["schemas"]["SnapshotContent"];
+    Session: {
+      user_id: string;
+      user: components["schemas"]["User"];
+      session_id: string;
+      activities: components["schemas"]["Activity"][];
+      client_info: {
+        client: string;
+        os: string;
+        version: number;
+      };
+      status: components["schemas"]["Status"];
+      id: string;
     };
-    /** @description Enum to map into different models that can be saved in a snapshot */
-    SnapshotContent:
-      | {
-          /** @enum {string} */
-          _type: "Message";
-          /**
-           * @description Context before the message
-           * @default
-           */
-          _prior_context?: components["schemas"]["Message"][];
-          /**
-           * @description Context after the message
-           * @default
-           */
-          _leading_context?: components["schemas"]["Message"][];
-          /** @description Unique Id */
-          _id: string;
-          /** @description Unique value generated by client sending this message */
-          nonce?: string | null;
-          /** @description Id of the channel this message was sent in */
-          channel: string;
-          /** @description Id of the user that sent this message */
-          author: string;
-          /** @description Message content */
-          content?: string | null;
-          /** @description System message */
-          system?: components["schemas"]["SystemMessage"] | null;
-          /** @description Array of attachments */
-          attachments?: components["schemas"]["File"][] | null;
-          /** @description Time at which this message was last edited */
-          edited?: components["schemas"]["ISO8601 Timestamp"] | null;
-          /** @description Attached embeds to this message */
-          embeds?: components["schemas"]["Embed"][] | null;
-          /** @description Array of user ids mentioned in this message */
-          mentions?: string[] | null;
-          /** @description Array of message ids this message is replying to */
-          replies?: string[] | null;
-          /** @description Hashmap of emoji IDs to array of user IDs */
-          reactions?: { [key: string]: string[] };
-          /** @description Information about how this message should be interacted with */
-          interactions?: components["schemas"]["Interactions"];
-          /** @description Name and / or avatar overrides for this message */
-          masquerade?: components["schemas"]["Masquerade"] | null;
-        }
-      | {
-          /** @enum {string} */
-          _type: "Server";
-          /** @description Unique Id */
-          _id: string;
-          /** @description User id of the owner */
-          owner: string;
-          /** @description Name of the server */
-          name: string;
-          /** @description Description for the server */
-          description?: string | null;
-          /** @description Channels within this server */
-          channels: string[];
-          /** @description Categories for this server */
-          categories?: components["schemas"]["Category"][] | null;
-          /** @description Configuration for sending system event messages */
-          system_messages?:
-            | components["schemas"]["SystemMessageChannels"]
-            | null;
-          /** @description Roles for this server */
-          roles?: { [key: string]: components["schemas"]["Role"] };
-          /**
-           * Format: int64
-           * @description Default set of server and channel permissions
-           */
-          default_permissions: number;
-          /** @description Icon attachment */
-          icon?: components["schemas"]["File"] | null;
-          /** @description Banner attachment */
-          banner?: components["schemas"]["File"] | null;
-          /**
-           * Format: int32
-           * @description Bitfield of server flags
-           */
-          flags?: number | null;
-          /** @description Whether this server is flagged as not safe for work */
-          nsfw?: boolean;
-          /** @description Whether to enable analytics */
-          analytics?: boolean;
-          /** @description Whether this server should be publicly discoverable */
-          discoverable?: boolean;
-        }
-      | {
-          /** @enum {string} */
-          _type: "User";
-          /** @description Unique Id */
-          _id: string;
-          /** @description Username */
-          username: string;
-          /** @description Avatar attachment */
-          avatar?: components["schemas"]["File"] | null;
-          /** @description Relationships with other users */
-          relations?: components["schemas"]["Relationship"][] | null;
-          /**
-           * Format: int32
-           * @description Bitfield of user badges
-           */
-          badges?: number | null;
-          /** @description User's current status */
-          status?: components["schemas"]["UserStatus"] | null;
-          /** @description User's profile page */
-          profile?: components["schemas"]["UserProfile"] | null;
-          /**
-           * Format: int32
-           * @description Enum of user flags
-           */
-          flags?: number | null;
-          /** @description Whether this user is privileged */
-          privileged?: boolean;
-          /** @description Bot information */
-          bot?: components["schemas"]["BotInformation"] | null;
-          /** @description Current session user's relationship with this user */
-          relationship?: components["schemas"]["RelationshipStatus"] | null;
-          /** @description Whether this user is currently online */
-          online?: boolean | null;
-        };
-    /** Error */
-    "Authifier Error":
-      | {
-          /** @enum {string} */
-          type: "IncorrectData";
-          with: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "DatabaseError";
-          operation: string;
-          with: string;
-        }
-      | {
-          /** @enum {string} */
-          type: "InternalError";
-        }
-      | {
-          /** @enum {string} */
-          type: "OperationFailed";
-        }
-      | {
-          /** @enum {string} */
-          type: "RenderFail";
-        }
-      | {
-          /** @enum {string} */
-          type: "MissingHeaders";
-        }
-      | {
-          /** @enum {string} */
-          type: "CaptchaFailed";
-        }
-      | {
-          /** @enum {string} */
-          type: "BlockedByShield";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidSession";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnverifiedAccount";
-        }
-      | {
-          /** @enum {string} */
-          type: "UnknownUser";
-        }
-      | {
-          /** @enum {string} */
-          type: "EmailFailed";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidToken";
-        }
-      | {
-          /** @enum {string} */
-          type: "MissingInvite";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidInvite";
-        }
-      | {
-          /** @enum {string} */
-          type: "InvalidCredentials";
-        }
-      | {
-          /** @enum {string} */
-          type: "CompromisedPassword";
-        }
-      | {
-          /** @enum {string} */
-          type: "ShortPassword";
-        }
-      | {
-          /** @enum {string} */
-          type: "Blacklisted";
-        }
-      | {
-          /** @enum {string} */
-          type: "LockedOut";
-        }
-      | {
-          /** @enum {string} */
-          type: "TotpAlreadyEnabled";
-        }
-      | {
-          /** @enum {string} */
-          type: "DisallowedMFAMethod";
-        };
-    /** Account Data */
-    DataCreateAccount: {
-      /** @description Valid email address */
-      email: string;
-      /** @description Password */
-      password: string;
-      /** @description Invite code */
-      invite?: string | null;
-      /** @description Captcha verification code */
-      captcha?: string | null;
+    Relationship: {
+      from_id: string;
+      from: components["schemas"]["User"];
+      to_id: string;
+      to: components["schemas"]["User"];
+      nickname?: string;
+      type: components["schemas"]["RelationshipType"];
+      id: string;
     };
-    /** Resend Information */
-    DataResendVerification: {
-      /** @description Email associated with the account */
-      email: string;
-      /** @description Captcha verification code */
-      captcha?: string | null;
-    };
-    /** Account Deletion Token */
-    DataAccountDeletion: {
-      /** @description Deletion token */
-      token: string;
-    };
-    AccountInfo: {
-      _id: string;
-      email: string;
-    };
-    /** Change Data */
-    DataChangePassword: {
-      /** @description New password */
-      password: string;
-      /** @description Current password */
-      current_password: string;
-    };
-    /** Change Data */
-    DataChangeEmail: {
-      /** @description Valid email address */
-      email: string;
-      /** @description Current password */
-      current_password: string;
-    };
-    ResponseVerify:
-      | unknown
-      | {
-          /** @description Authorised MFA ticket, can be used to log in */
-          ticket: components["schemas"]["MFATicket"];
-        };
-    /** @description Multi-factor auth ticket */
-    MFATicket: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Account Id */
-      account_id: string;
-      /** @description Unique Token */
-      token: string;
-      /** @description Whether this ticket has been validated (can be used for account actions) */
-      validated: boolean;
-      /** @description Whether this ticket is authorised (can be used to log a user in) */
-      authorised: boolean;
-      /** @description TOTP code at time of ticket creation */
-      last_totp_code?: string | null;
-    };
-    /** Password Reset */
-    DataPasswordReset: {
-      /** @description Reset token */
-      token: string;
-      /** @description New password */
-      password: string;
-      /** @description Whether to logout all sessions */
-      remove_sessions?: boolean;
-    };
-    /** Reset Information */
-    DataSendPasswordReset: {
-      /** @description Email associated with the account */
-      email: string;
-      /** @description Captcha verification code */
-      captcha?: string | null;
-    };
-    ResponseLogin:
-      | {
-          /** @enum {string} */
-          result: "Success";
-          /** @description Unique Id */
-          _id: string;
-          /** @description User Id */
-          user_id: string;
-          /** @description Session token */
-          token: string;
-          /** @description Display name */
-          name: string;
-          /** @description Web Push subscription */
-          subscription?: components["schemas"]["WebPushSubscription"] | null;
-        }
-      | {
-          /** @enum {string} */
-          result: "MFA";
-          ticket: string;
-          allowed_methods: components["schemas"]["MFAMethod"][];
-        }
-      | {
-          /** @enum {string} */
-          result: "Disabled";
-          user_id: string;
-        };
-    /** @description Web Push subscription */
-    WebPushSubscription: {
-      endpoint: string;
-      p256dh: string;
-      auth: string;
-    };
-    /**
-     * @description MFA method
-     * @enum {string}
-     */
-    MFAMethod: "Password" | "Recovery" | "Totp";
-    /** Login Data */
-    DataLogin:
-      | {
-          /** @description Email */
-          email: string;
-          /** @description Password */
-          password: string;
-          /** @description Friendly name used for the session */
-          friendly_name?: string | null;
-        }
-      | {
-          /**
-           * @description Unvalidated or authorised MFA ticket
-           *
-           * Used to resolve the correct account
-           */
-          mfa_ticket: string;
-          /**
-           * @description Valid MFA response
-           *
-           * This will take precedence over the `password` field where applicable
-           */
-          mfa_response?: components["schemas"]["MFAResponse"] | null;
-          /** @description Friendly name used for the session */
-          friendly_name?: string | null;
-        };
-    /** @description MFA response */
-    MFAResponse:
-      | {
-          password: string;
-        }
-      | {
-          recovery_code: string;
-        }
-      | {
-          totp_code: string;
-        };
-    SessionInfo: {
-      _id: string;
+    /** @enum {number} */
+    RelationshipType: 1 | 2 | 3 | 4;
+    ConnectedAccount: {
+      external_id: string;
+      user_id: string;
+      user: components["schemas"]["User"];
+      friend_sync?: boolean;
       name: string;
+      revoked?: boolean;
+      show_activity?: number;
+      type: string;
+      /** @default true */
+      verified?: boolean;
+      visibility?: number;
+      /** @default */
+      integrations?: string[];
+      metadata_?: unknown;
+      metadata_visibility?: number;
+      two_way_link?: boolean;
+      token_data?: Partial<components["schemas"]["ConnectedAccountTokenData"]> &
+        Partial<unknown>;
+      id: string;
     };
-    /** Edit Data */
-    DataEditSession: {
-      /** @description Session friendly name */
-      friendly_name: string;
+    UserSettings: {
+      index: string;
+      /** @default 3600 */
+      afk_timeout: number;
+      /** @default true */
+      allow_accessibility_detection: boolean;
+      /** @default true */
+      animate_emoji: boolean;
+      animate_stickers: number;
+      contact_sync_enabled: boolean;
+      convert_emoticons: boolean;
+      custom_status: Partial<components["schemas"]["CustomStatus"]> &
+        Partial<unknown>;
+      default_guilds_restricted: boolean;
+      detect_platform_accounts: boolean;
+      /** @default true */
+      developer_mode: boolean;
+      /** @default true */
+      disable_games_tab: boolean;
+      enable_tts_command: boolean;
+      explicit_content_filter: number;
+      friend_source_flags: components["schemas"]["FriendSourceFlags"];
+      gateway_connected: boolean;
+      gif_auto_play: boolean;
+      /** @default */
+      guild_folders: components["schemas"]["GuildFolder"][];
+      /** @default */
+      guild_positions: string[];
+      /** @default true */
+      inline_attachment_media: boolean;
+      /** @default true */
+      inline_embed_media: boolean;
+      /** @default en-US */
+      locale: string;
+      message_display_compact: boolean;
+      /** @default true */
+      native_phone_integration_enabled: boolean;
+      /** @default true */
+      render_embeds: boolean;
+      /** @default true */
+      render_reactions: boolean;
+      /** @default */
+      restricted_guilds: string[];
+      /** @default true */
+      show_current_game: boolean;
+      /**
+       * @default online
+       * @enum {string}
+       */
+      status: "dnd" | "idle" | "invisible" | "offline" | "online";
+      stream_notifications_enabled: boolean;
+      /**
+       * @default dark
+       * @enum {string}
+       */
+      theme: "dark" | "light";
+      timezone_offset: number;
     };
-    MultiFactorStatus: {
-      email_otp: boolean;
-      trusted_handover: boolean;
-      email_mfa: boolean;
-      totp_mfa: boolean;
-      security_key_mfa: boolean;
-      recovery_active: boolean;
+    SecurityKey: {
+      user_id: string;
+      user: components["schemas"]["User"];
+      key_id: string;
+      public_key: string;
+      counter: number;
+      name: string;
+      id: string;
     };
-    /** Totp Secret */
-    ResponseTotpSecret: {
-      secret: string;
+    ChannelPermissionOverwrite: {
+      allow: string;
+      deny: string;
+      id: string;
+      type: components["schemas"]["ChannelPermissionOverwriteType"];
     };
-    /** Onboarding Status */
-    DataHello: {
-      /** @description Whether onboarding is required */
-      onboarding: boolean;
+    Invite: {
+      code: string;
+      temporary: boolean;
+      uses: number;
+      max_uses: number;
+      max_age: number;
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      expires_at: string;
+      guild_id: string;
+      guild: components["schemas"]["Guild"];
+      channel_id: string;
+      channel: components["schemas"]["Channel"];
+      inviter_id?: string;
+      inviter: components["schemas"]["User"];
+      target_user_id: string;
+      target_user?: string;
+      target_user_type?: number;
+      vanity_url?: boolean;
     };
-    /** New User Data */
-    DataOnboard: {
-      /** @description New username which will be used to identify the user on the platform */
+    Message: {
+      channel_id?: string;
+      channel: components["schemas"]["Channel"];
+      guild_id?: string;
+      guild?: components["schemas"]["Guild"];
+      author_id?: string;
+      author?: components["schemas"]["User"];
+      member_id?: string;
+      member?: components["schemas"]["Member"];
+      webhook_id?: string;
+      webhook?: components["schemas"]["Webhook"];
+      application_id?: string;
+      application?: components["schemas"]["Application"];
+      content?: string;
+      /** Format: date-time */
+      timestamp: string;
+      /** Format: date-time */
+      edited_timestamp?: string;
+      tts?: boolean;
+      mention_everyone?: boolean;
+      mentions: components["schemas"]["User"][];
+      mention_roles: components["schemas"]["Role"][];
+      mention_channels: components["schemas"]["Channel"][];
+      sticker_items?: components["schemas"]["Sticker"][];
+      attachments?: components["schemas"]["Attachment_1"][];
+      embeds: components["schemas"]["Embed"][];
+      reactions: components["schemas"]["Reaction"][];
+      nonce?: string;
+      pinned?: boolean;
+      type: components["schemas"]["MessageType"];
+      activity?: {
+        type: number;
+        party_id: string;
+      };
+      flags?: string;
+      message_reference?: {
+        message_id: string;
+        channel_id?: string;
+        guild_id?: string;
+      };
+      referenced_message?: components["schemas"]["Message"];
+      interaction?: {
+        id: string;
+        type: components["schemas"]["InteractionType"];
+        name: string;
+        user_id: string;
+      };
+      components?: components["schemas"]["MessageComponent"][];
+      id: string;
+    };
+    Member: {
+      index: string;
+      id: string;
+      user: components["schemas"]["User"];
+      guild_id: string;
+      guild: components["schemas"]["Guild"];
+      nick?: string;
+      roles: components["schemas"]["Role"][];
+      /** Format: date-time */
+      joined_at: string;
+      premium_since?: number;
+      deaf: boolean;
+      mute: boolean;
+      pending: boolean;
+      settings: components["schemas"]["UserGuildSettings"];
+      last_message_id?: string;
+      joined_by: string;
+      avatar: string;
+      banner: string;
+      bio: string;
+      theme_colors?: number[];
+      pronouns?: string;
+      /** Format: date-time */
+      communication_disabled_until: string;
+    };
+    Role: {
+      guild_id: string;
+      guild: components["schemas"]["Guild"];
+      color: number;
+      hoist: boolean;
+      managed: boolean;
+      mentionable: boolean;
+      name: string;
+      permissions: string;
+      position: number;
+      icon?: string;
+      unicode_emoji?: string;
+      tags?: {
+        bot_id?: string;
+        integration_id?: string;
+        premium_subscriber?: boolean;
+      };
+      id: string;
+    };
+    UserGuildSettings: {
+      channel_overrides: Partial<{
+        [key: string]: components["schemas"]["ChannelOverride"];
+      }> &
+        Partial<unknown>;
+      message_notifications: number;
+      mobile_push: boolean;
+      mute_config: Partial<components["schemas"]["MuteConfig"]> &
+        Partial<unknown>;
+      muted: boolean;
+      suppress_everyone: boolean;
+      suppress_roles: boolean;
+      version: number;
+      guild_id: string | null;
+      flags: number;
+      mute_scheduled_events: boolean;
+      hide_muted_channels: boolean;
+      /** @enum {number} */
+      notify_highlights: 0;
+    };
+    Webhook: {
+      type: components["schemas"]["WebhookType"];
+      name?: string;
+      avatar?: string;
+      token?: string;
+      guild_id: string;
+      guild: components["schemas"]["Guild"];
+      channel_id: string;
+      channel: components["schemas"]["Channel"];
+      application_id: string;
+      application: components["schemas"]["Application"];
+      user_id: string;
+      user: components["schemas"]["User"];
+      source_guild_id: string;
+      source_guild: components["schemas"]["Guild"];
+      id: string;
+    };
+    /** @enum {number} */
+    WebhookType: 1 | 2 | 3;
+    Application: {
+      name: string;
+      icon?: string;
+      description: string;
+      summary: string;
+      type?: { [key: string]: unknown };
+      /** @default true */
+      hook: boolean;
+      /** @default true */
+      bot_public?: boolean;
+      bot_require_code_grant?: boolean;
+      verify_key: string;
+      owner: components["schemas"]["User"];
+      flags: number;
+      /** @default */
+      redirect_uris: string[];
+      rpc_application_state: number;
+      /** @default 1 */
+      store_application_state: number;
+      /** @default 1 */
+      verification_state: number;
+      interactions_endpoint_url?: string;
+      /** @default true */
+      integration_public: boolean;
+      integration_require_code_grant: boolean;
+      /** @default 1 */
+      discoverability_state: number;
+      /** @default 2240 */
+      discovery_eligibility_flags: number;
+      bot?: components["schemas"]["User"];
+      tags?: string[];
+      cover_image?: string;
+      install_params?: {
+        scopes: string[];
+        permissions: string;
+      };
+      terms_of_service_url?: string;
+      privacy_policy_url?: string;
+      team?: components["schemas"]["Team"];
+      id: string;
+    };
+    Team: {
+      icon?: string;
+      members: components["schemas"]["TeamMember"][];
+      name: string;
+      owner_user_id: string;
+      owner_user: components["schemas"]["User"];
+      id: string;
+    };
+    TeamMember: {
+      membership_state: components["schemas"]["TeamMemberState"];
+      permissions: string[];
+      team_id: string;
+      team: components["schemas"]["Team"];
+      user_id: string;
+      user: components["schemas"]["User"];
+      id: string;
+    };
+    /** @enum {number} */
+    TeamMemberState: 1 | 2;
+    Sticker: {
+      name: string;
+      description?: string;
+      available?: boolean;
+      tags?: string;
+      pack_id?: string;
+      pack: components["schemas"]["StickerPack"];
+      guild_id?: string;
+      guild?: components["schemas"]["Guild"];
+      user_id?: string;
+      user?: components["schemas"]["User"];
+      type: components["schemas"]["StickerType"];
+      format_type: components["schemas"]["StickerFormatType"];
+      id: string;
+    };
+    StickerPack: {
+      name: string;
+      description?: string;
+      banner_asset_id?: string;
+      stickers: components["schemas"]["Sticker"][];
+      cover_sticker_id?: string;
+      cover_sticker?: components["schemas"]["Sticker"];
+      id: string;
+    };
+    /** @enum {number} */
+    StickerType: 1 | 2;
+    /** @enum {number} */
+    StickerFormatType: 0 | 1 | 2 | 3;
+    Attachment_1: {
+      filename: string;
+      size: number;
+      url: string;
+      proxy_url: string;
+      height?: number;
+      width?: number;
+      content_type?: string;
+      message_id: string;
+      message: components["schemas"]["Message"];
+      id: string;
+    };
+    Reaction: {
+      count: number;
+      emoji: components["schemas"]["PartialEmoji"];
+      user_ids: string[];
+    };
+    PartialEmoji: {
+      id?: string;
+      name: string;
+      animated?: boolean;
+    };
+    /** @enum {number} */
+    MessageType:
+      | 0
+      | 1
+      | 10
+      | 11
+      | 12
+      | 13
+      | 14
+      | 15
+      | 16
+      | 19
+      | 2
+      | 20
+      | 255
+      | 3
+      | 4
+      | 41
+      | 42
+      | 43
+      | 5
+      | 50
+      | 6
+      | 63
+      | 7
+      | 8
+      | 9;
+    /** @enum {number} */
+    InteractionType: 0 | 1 | 2;
+    MessageComponent: {
+      type: number;
+      style?: number;
+      label?: string;
+      emoji?: components["schemas"]["PartialEmoji"];
+      custom_id?: string;
+      url?: string;
+      disabled?: boolean;
+      components: components["schemas"]["MessageComponent"][];
+    };
+    VoiceState: {
+      guild_id: string;
+      guild?: components["schemas"]["Guild"];
+      channel_id: string;
+      channel: components["schemas"]["Channel"];
+      user_id: string;
+      user: components["schemas"]["User"];
+      member: components["schemas"]["Member"];
+      session_id: string;
+      token: string;
+      deaf: boolean;
+      mute: boolean;
+      self_deaf: boolean;
+      self_mute: boolean;
+      self_stream?: boolean;
+      self_video: boolean;
+      suppress: boolean;
+      /** Format: date-time */
+      request_to_speak_timestamp?: string;
+      id: string;
+    };
+    ReadState: {
+      channel_id: string;
+      channel: components["schemas"]["Channel"];
+      user_id: string;
+      user: components["schemas"]["User"];
+      last_message_id: string;
+      public_ack: string;
+      notifications_cursor: string;
+      /** Format: date-time */
+      last_pin_timestamp?: string;
+      mention_count: number;
+      manual: boolean;
+      id: string;
+    };
+    Ban: {
+      user_id: string;
+      user: components["schemas"]["User"];
+      guild_id: string;
+      guild: components["schemas"]["Guild"];
+      executor_id: string;
+      executor: components["schemas"]["User"];
+      ip: string;
+      reason?: string;
+      id: string;
+    };
+    Template: {
+      code: string;
+      name: string;
+      description?: string;
+      usage_count?: number;
+      creator_id: string;
+      creator: components["schemas"]["User"];
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      updated_at: string;
+      source_guild_id: string;
+      source_guild: components["schemas"]["Guild"];
+      serialized_source_guild: components["schemas"]["Guild"];
+      id: string;
+    };
+    Emoji: {
+      animated: boolean;
+      available: boolean;
+      guild_id: string;
+      guild: components["schemas"]["Guild"];
+      user_id: string;
+      user: components["schemas"]["User"];
+      managed: boolean;
+      name: string;
+      require_colons: boolean;
+      roles: string[];
+      groups: string[];
+      id: string;
+    };
+    GuildWelcomeScreen: {
+      enabled: boolean;
+      description: string;
+      welcome_channels: {
+        description: string;
+        emoji_id?: string;
+        emoji_name?: string;
+        channel_id: string;
+      }[];
+    };
+    GuildMessagesSearchMessage: {
+      id: string;
+      type: components["schemas"]["MessageType"];
+      content?: string;
+      channel_id: string;
+      author: components["schemas"]["PublicUser"];
+      attachments: components["schemas"]["Attachment_1"][];
+      embeds: components["schemas"]["Embed"][];
+      mentions: components["schemas"]["PublicUser"][];
+      mention_roles: components["schemas"]["Role"][];
+      pinned: boolean;
+      mention_everyone?: boolean;
+      tts: boolean;
+      timestamp: string;
+      edited_timestamp: string | null;
+      flags: number;
+      components: unknown[];
+      /** @enum {boolean} */
+      hit: true;
+    };
+    PublicUser: {
+      id: string;
+      /** Format: date-time */
+      premium_since: string;
+      username: string;
+      discriminator: string;
+      public_flags: number;
+      avatar?: string;
+      accent_color?: number;
+      banner?: string;
+      bio: string;
+      bot: boolean;
+      premium_type: number;
+      theme_colors?: number[];
+      pronouns?: string;
+    };
+    GuildVanityUrl: {
+      code: string;
+      uses: number;
+    };
+    GuildVanityUrlNoInvite: {
+      code: unknown;
+    };
+    ClientStatus: {
+      desktop?: string;
+      mobile?: string;
+      web?: string;
+    };
+    /** @description A container for useful snowflake-related methods. */
+    Snowflake: { [key: string]: unknown };
+    TenorGifResponse: {
+      id: string;
+      title: string;
+      url: string;
+      src: string;
+      gif_src: string;
+      width: number;
+      height: number;
+      preview: string;
+    };
+    BackupCode: {
+      user: components["schemas"]["User"];
+      code: string;
+      consumed: boolean;
+      expired: boolean;
+      id: string;
+    };
+    APIGuild: {
+      /** @description Reloads entity data from the database. */
+      reload: { [key: string]: unknown };
+      id: string;
+      roles: components["schemas"]["Role"][];
+      name: string;
+      banner?: string;
+      unavailable: boolean;
+      channels: components["schemas"]["Channel"][];
+      region?: string;
+      icon?: string;
+      system_channel_id?: string;
+      rules_channel_id?: string;
+      afk_timeout?: number;
+      explicit_content_filter?: number;
+      assign: { [key: string]: unknown };
+      toJSON: { [key: string]: unknown };
+      /**
+       * @description Checks if entity has an id.
+       * If entity composite compose ids, it will check them all.
+       */
+      hasId: { [key: string]: unknown };
+      /**
+       * @description Saves current entity in the database.
+       * If entity does not exist in the database then inserts, otherwise updates.
+       */
+      save: { [key: string]: unknown };
+      /** @description Removes current entity from the database. */
+      remove: { [key: string]: unknown };
+      /** @description Records the delete date of current entity. */
+      softRemove: { [key: string]: unknown };
+      /** @description Recovers a given entity in the database. */
+      recover: { [key: string]: unknown };
+      afk_channel_id?: string;
+      bans: components["schemas"]["Ban"][];
+      default_message_notifications?: number;
+      description?: string;
+      discovery_splash?: string;
+      features: string[];
+      primary_category_id?: string;
+      large?: boolean;
+      max_members?: number;
+      max_presences?: number;
+      max_video_channel_users?: number;
+      member_count?: number;
+      presence_count?: number;
+      members: components["schemas"]["Member"][];
+      template_id?: string;
+      emojis: components["schemas"]["Emoji"][];
+      stickers: components["schemas"]["Sticker"][];
+      invites: components["schemas"]["Invite"][];
+      voice_states: components["schemas"]["VoiceState"][];
+      webhooks: components["schemas"]["Webhook"][];
+      mfa_level?: number;
+      owner_id?: string;
+      preferred_locale?: string;
+      premium_subscription_count?: number;
+      premium_tier?: number;
+      public_updates_channel_id: string;
+      splash?: string;
+      system_channel_flags?: number;
+      verification_level?: number;
+      welcome_screen: components["schemas"]["GuildWelcomeScreen"];
+      widget_channel_id?: string;
+      widget_enabled: boolean;
+      nsfw_level?: number;
+      nsfw: boolean;
+      parent?: string;
+      permissions?: number;
+      premium_progress_bar_enabled: boolean;
+      _do_validate: { [key: string]: unknown };
+    };
+    DmChannelDTO: {
+      icon: string | null;
+      id: string;
+      last_message_id: string | null;
+      name: string | null;
+      origin_channel_id: string | null;
+      owner_id?: string;
+      recipients: components["schemas"]["MinimalPublicUserDTO"][];
+      type: number;
+    };
+    MinimalPublicUserDTO: {
+      avatar?: string | null;
+      discriminator: string;
+      id: string;
+      public_flags: number;
       username: string;
     };
-    /** Fetch Options */
-    OptionsFetchSettings: {
-      /** @description Keys to fetch */
-      keys: string[];
+    Categories: {
+      id: number;
+      name: string;
+      localizations: string;
+      is_primary: boolean;
     };
-    /** @description Representation of the state of a channel from the perspective of a user */
-    ChannelUnread: {
-      /** @description Composite key pointing to a user's view of a channel */
-      _id: components["schemas"]["ChannelCompositeKey"];
-      /** @description Id of the last message read in this channel by a user */
-      last_id?: string | null;
-      /** @description Array of message ids that mention the user */
-      mentions?: string[] | null;
+    GuildVoiceRegion: {
+      id: string;
+      name: string;
+      custom: boolean;
+      deprecated: boolean;
+      optimal: boolean;
     };
-    /** @description Composite primary key consisting of channel and user id */
-    ChannelCompositeKey: {
-      /** @description Channel Id */
-      channel: string;
-      /** @description User Id */
-      user: string;
+    UserLimits: {
+      /** @default 1048576 */
+      maxGuilds: number;
+      /** @default 32 */
+      maxUsername: number;
+      /** @default 5000 */
+      maxFriends: number;
+    };
+    GuildLimits: {
+      /** @default 1000 */
+      maxRoles: number;
+      /** @default 2000 */
+      maxEmojis: number;
+      /** @default 25000000 */
+      maxMembers: number;
+      /** @default 65535 */
+      maxChannels: number;
+      /** @default 65535 */
+      maxChannelsInCategory: number;
+    };
+    MessageLimits: {
+      /** @default 1048576 */
+      maxCharacters: number;
+      /** @default 160 */
+      maxTTSCharacters: number;
+      /** @default 2048 */
+      maxReactions: number;
+      /** @default 1073741824 */
+      maxAttachmentSize: number;
+      /** @default 1000 */
+      maxBulkDelete: number;
+      /** @default 5242880 */
+      maxEmbedDownloadSize: number;
+    };
+    ChannelLimits: {
+      /** @default 500 */
+      maxPins: number;
+      /** @default 1024 */
+      maxTopic: number;
+      /** @default 100 */
+      maxWebhooks: number;
+    };
+    RateLimits: {
+      enabled: boolean;
+      ip: components["schemas"]["RateLimitOptions"];
+      global: components["schemas"]["RateLimitOptions"];
+      error: components["schemas"]["RateLimitOptions"];
+      routes: components["schemas"]["RouteRateLimit"];
+    };
+    RateLimitOptions: {
+      bot?: number;
+      count: number;
+      window: number;
+      onyIp?: boolean;
+    };
+    RouteRateLimit: {
+      guild: components["schemas"]["RateLimitOptions"];
+      webhook: components["schemas"]["RateLimitOptions"];
+      channel: components["schemas"]["RateLimitOptions"];
+      auth: unknown;
+    };
+    GlobalRateLimits: {
+      register: components["schemas"]["GlobalRateLimit"];
+      sendMessage: components["schemas"]["GlobalRateLimit"];
+    };
+    GlobalRateLimit: {
+      /** @default 100 */
+      limit: number;
+      /** @default 3600000 */
+      window: number;
+      /** @default true */
+      enabled: boolean;
+    };
+    PublicConnectedAccount: {
+      type: string;
+      name: string;
+      verified?: boolean;
+    };
+    TokenResponse: {
+      token: string;
+      settings: components["schemas"]["UserSettings"];
+    };
+    MFAResponse: {
+      ticket: string;
+      /** @enum {boolean} */
+      mfa: true;
+      /** @enum {boolean} */
+      sms: false;
+      token: unknown;
+    };
+    WebAuthnResponse: {
+      webauthn: string;
+      ticket: string;
+      /** @enum {boolean} */
+      mfa: true;
+      /** @enum {boolean} */
+      sms: false;
+      token: unknown;
+    };
+    ChannelPermissionOverwriteSchema: {
+      allow: string;
+      deny: string;
+      id: string;
+      type: components["schemas"]["ChannelPermissionOverwriteType"];
+    };
+    ChannelReorderSchema: {
+      id: string;
+      position?: number;
+      lock_permissions?: boolean;
+      parent_id?: string;
+    }[];
+    CodesVerificationSchema: {
+      key: string;
+      nonce: string;
+      regenerate?: boolean;
+    };
+    ConnectedAccountSchema: {
+      external_id: string;
+      user_id: string;
+      token_data?: components["schemas"]["ConnectedAccountTokenData"];
+      friend_sync?: boolean;
+      name: string;
+      revoked?: boolean;
+      show_activity?: number;
+      type: string;
+      verified?: boolean;
+      visibility?: number;
+      integrations?: string[];
+      metadata_?: unknown;
+      metadata_visibility?: number;
+      two_way_link?: boolean;
+    };
+    ConnectionCallbackSchema: {
+      code?: string;
+      state: string;
+      insecure: boolean;
+      friend_sync: boolean;
+      openid_params?: unknown;
+    };
+    ConnectionUpdateSchema: {
+      visibility?: boolean;
+      show_activity?: boolean;
+      metadata_visibility?: boolean;
+    };
+    DmChannelCreateSchema: {
+      name?: string;
+      recipients: string[];
+    };
+    EmojiCreateSchema: {
+      name?: string;
+      image: string;
+      require_colons?: boolean | null;
+      roles?: string[];
+    };
+    EmojiModifySchema: {
+      name?: string;
+      roles?: string[];
+    };
+    ForgotPasswordSchema: {
+      login: string;
+      captcha_key?: string;
+    };
+    GuildCreateSchema: {
+      name?: string;
+      region?: string;
+      icon?: string | null;
+      channels?: components["schemas"]["ChannelModifySchema"][];
+      guild_template_code?: string;
+      system_channel_id?: string;
+      rules_channel_id?: string;
+    };
+    GuildTemplateCreateSchema: {
+      name: string;
+      avatar?: string | null;
+    };
+    GuildUpdateSchema: {
+      name?: string;
+      banner?: string | null;
+      splash?: string | null;
+      description?: string;
+      features?: string[];
+      verification_level?: number;
+      default_message_notifications?: number;
+      system_channel_flags?: number;
+      explicit_content_filter?: number;
+      public_updates_channel_id?: string;
+      afk_timeout?: number;
+      afk_channel_id?: string;
+      preferred_locale?: string;
+      premium_progress_bar_enabled?: boolean;
+      discovery_splash?: string;
+      region?: string;
+      icon?: string | null;
+      guild_template_code?: string;
+      system_channel_id?: string;
+      rules_channel_id?: string;
+    };
+    GuildUpdateWelcomeScreenSchema: {
+      welcome_channels?: {
+        channel_id: string;
+        description: string;
+        emoji_id?: string;
+        emoji_name?: string;
+      }[];
+      enabled?: boolean;
+      description?: string;
+    };
+    IdentifySchema: {
+      token: string;
+      properties: {
+        os?: string;
+        os_atch?: string;
+        browser?: string;
+        device?: string;
+        $os?: string;
+        $browser?: string;
+        $device?: string;
+        browser_user_agent?: string;
+        browser_version?: string;
+        os_version?: string;
+        referrer?: string;
+        referring_domain?: string;
+        referrer_current?: string;
+        referring_domain_current?: string;
+        /** @enum {string} */
+        release_channel?: "canary" | "dev" | "ptb" | "stable";
+        client_build_number?: number;
+        client_event_source?: string;
+        client_version?: string;
+        system_locale?: string;
+      };
+      intents?: number;
+      presence?: components["schemas"]["ActivitySchema"];
+      compress?: boolean;
+      large_threshold?: number;
+      largeThreshold?: number;
+      shard?: number[];
+      guild_subscriptions?: boolean;
+      capabilities?: number;
+      client_state?: {
+        guild_hashes?: unknown;
+        highest_last_message_id?: unknown;
+        read_state_version?: number;
+        user_guild_settings_version?: number;
+        user_settings_version?: number;
+        useruser_guild_settings_version?: number;
+        private_channels_version?: number;
+        guild_versions?: unknown;
+        api_code_version?: number;
+      };
+      clientState?: {
+        guildHashes?: unknown;
+        highestLastMessageId?: unknown;
+        readStateVersion?: number;
+        userGuildSettingsVersion?: number;
+        useruserGuildSettingsVersion?: number;
+        guildVersions?: unknown;
+        apiCodeVersion?: number;
+      };
+      v?: number;
+    };
+    InviteCreateSchema: {
+      target_user_id?: string;
+      target_type?: string;
+      validate?: string;
+      max_age?: number;
+      max_uses?: number;
+      temporary?: boolean;
+      unique?: boolean;
+      target_user?: string;
+      target_user_type?: number;
+    };
+    LazyRequestSchema: {
+      guild_id: string;
+      channels?: { [key: string]: number[][] };
+      activities?: boolean;
+      threads?: boolean;
+      /** @enum {boolean} */
+      typing?: true;
+      members?: string[];
+      thread_member_lists?: unknown[];
+    };
+    LoginSchema: {
+      login: string;
+      password: string;
+      undelete?: boolean;
+      captcha_key?: string;
+      login_source?: string;
+      gift_code_sku_id?: string;
+    };
+    MemberChangeProfileSchema: {
+      banner?: string | null;
+      nick?: string;
+      bio?: string;
+      pronouns?: string;
+      theme_colors?: number[];
+    };
+    MemberChangeSchema: {
+      roles?: string[];
+      nick?: string;
+      avatar?: string | null;
+      bio?: string;
+    };
+    MessageAcknowledgeSchema: {
+      manual?: boolean;
+      mention_count?: number;
+    };
+    MessageCreateSchema: {
+      type?: number;
+      content?: string;
+      nonce?: string;
+      channel_id?: string;
+      tts?: boolean;
+      flags?: string;
+      embeds?: components["schemas"]["Embed"][];
+      embed?: components["schemas"]["Embed"];
+      allowed_mentions?: {
+        parse?: string[];
+        roles?: string[];
+        users?: string[];
+        replied_user?: boolean;
+      };
+      message_reference?: {
+        message_id: string;
+        channel_id: string;
+        guild_id?: string;
+        fail_if_not_exists?: boolean;
+      };
+      payload_json?: string;
+      file?: {
+        filename: string;
+      };
+      /**
+       * @description TODO: we should create an interface for attachments
+       * TODO: OpenWAAO<-->attachment-style metadata conversion
+       */
+      attachments?: {
+        id: string;
+        filename: string;
+      }[];
+      sticker_ids?: string[];
+    };
+    MessageEditSchema: {
+      file?: {
+        filename: string;
+      };
+      embed?: components["schemas"]["Embed"];
+      flags?: string;
+      content?: string;
+      nonce?: string;
+      channel_id?: string;
+      tts?: boolean;
+      embeds?: components["schemas"]["Embed"][];
+      allowed_mentions?: {
+        parse?: string[];
+        roles?: string[];
+        users?: string[];
+        replied_user?: boolean;
+      };
+      message_reference?: {
+        message_id: string;
+        channel_id: string;
+        guild_id?: string;
+        fail_if_not_exists?: boolean;
+      };
+      payload_json?: string;
+      /**
+       * @description TODO: we should create an interface for attachments
+       * TODO: OpenWAAO<-->attachment-style metadata conversion
+       */
+      attachments?: {
+        id: string;
+        filename: string;
+      }[];
+      sticker_ids?: string[];
+    };
+    MfaCodesSchema: {
+      password: string;
+      regenerate?: boolean;
+    };
+    ModifyGuildStickerSchema: {
+      name: string;
+      description?: string;
+      tags: string;
+    };
+    PasswordResetSchema: {
+      password: string;
+      token: string;
+    };
+    PurgeSchema: {
+      before: string;
+      after: string;
+    };
+    RegisterSchema: {
+      username: string;
+      password?: string;
+      consent: boolean;
+      /** Format: email */
+      email?: string;
+      fingerprint?: string;
+      invite?: string;
+      date_of_birth?: string;
+      gift_code_sku_id?: string;
+      captcha_key?: string;
+      promotional_email_opt_in?: boolean;
+    };
+    RelationshipPostSchema: {
+      discriminator: string;
+      username: string;
+    };
+    RelationshipPutSchema: {
+      /** @enum {number} */
+      type?: 1 | 2 | 3 | 4;
+    };
+    RoleModifySchema: {
+      name?: string;
+      permissions?: string;
+      color?: number;
+      hoist?: boolean;
+      mentionable?: boolean;
+      position?: number;
+      icon?: string;
+      unicode_emoji?: string;
+    };
+    RolePositionUpdateSchema: {
+      id: string;
+      position: number;
+    }[];
+    SelectProtocolSchema: {
+      /** @enum {string} */
+      protocol: "udp" | "webrtc";
+      data: Partial<{
+        address: string;
+        port: number;
+        mode: string;
+      }> &
+        Partial<string>;
+      sdp?: string;
+      codecs?: {
+        /** @enum {string} */
+        name: "H264" | "VP8" | "VP9" | "opus";
+        /** @enum {string} */
+        type: "audio" | "video";
+        priority: number;
+        payload_type: number;
+        rtx_payload_type?: unknown;
+      }[];
+      rtc_connection_id?: string;
+    };
+    TemplateCreateSchema: {
+      name: string;
+      description?: string;
+    };
+    TemplateModifySchema: {
+      name: string;
+      description?: string;
+    };
+    TotpDisableSchema: {
+      code: string;
+    };
+    TotpEnableSchema: {
+      password: string;
+      code?: string;
+      secret?: string;
+    };
+    TotpSchema: {
+      code: string;
+      ticket: string;
+      gift_code_sku_id?: string | null;
+      login_source?: string | null;
+    };
+    UserDeleteSchema: {
+      user_id: string;
+    };
+    UserGuildSettingsSchema: {
+      channel_overrides?: {
+        [key: string]: components["schemas"]["ChannelOverride"];
+      };
+      version?: number;
+      guild_id?: string | null;
+      flags?: number;
+      message_notifications?: number;
+      mobile_push?: boolean;
+      mute_config?: Partial<components["schemas"]["MuteConfig"]> &
+        Partial<unknown>;
+      muted?: boolean;
+      suppress_everyone?: boolean;
+      suppress_roles?: boolean;
+      mute_scheduled_events?: boolean;
+      hide_muted_channels?: boolean;
+      /** @enum {number} */
+      notify_highlights?: 0;
+    };
+    UserModifySchema: {
+      username?: string;
+      avatar?: string | null;
+      bio?: string;
+      accent_color?: number;
+      banner?: string | null;
+      password?: string;
+      new_password?: string;
+      code?: string;
+      email?: string;
+      discriminator?: string;
+    };
+    UserNoteUpdateSchema: {
+      note: string;
+    };
+    UserProfileModifySchema: {
+      bio?: string;
+      accent_color?: number | null;
+      banner?: string | null;
+      pronouns?: string;
+      theme_colors?: number[];
+    };
+    UserSettingsSchema: {
+      afk_timeout?: number;
+      allow_accessibility_detection?: boolean;
+      animate_emoji?: boolean;
+      animate_stickers?: number;
+      contact_sync_enabled?: boolean;
+      convert_emoticons?: boolean;
+      custom_status?: Partial<components["schemas"]["CustomStatus"]> &
+        Partial<unknown>;
+      default_guilds_restricted?: boolean;
+      detect_platform_accounts?: boolean;
+      developer_mode?: boolean;
+      disable_games_tab?: boolean;
+      enable_tts_command?: boolean;
+      explicit_content_filter?: number;
+      friend_source_flags?: components["schemas"]["FriendSourceFlags"];
+      gateway_connected?: boolean;
+      gif_auto_play?: boolean;
+      guild_folders?: components["schemas"]["GuildFolder"][];
+      guild_positions?: string[];
+      inline_attachment_media?: boolean;
+      inline_embed_media?: boolean;
+      locale?: string;
+      message_display_compact?: boolean;
+      native_phone_integration_enabled?: boolean;
+      render_embeds?: boolean;
+      render_reactions?: boolean;
+      restricted_guilds?: string[];
+      show_current_game?: boolean;
+      /** @enum {string} */
+      status?: "dnd" | "idle" | "invisible" | "offline" | "online";
+      stream_notifications_enabled?: boolean;
+      /** @enum {string} */
+      theme?: "dark" | "light";
+      timezone_offset?: number;
+    };
+    VanityUrlSchema: {
+      code?: string;
+    };
+    VoiceIdentifySchema: {
+      server_id: string;
+      user_id: string;
+      session_id: string;
+      token: string;
+      video?: boolean;
+      streams?: {
+        type: string;
+        rid: string;
+        quality: number;
+      }[];
+    };
+    VoiceStateUpdateSchema: {
+      guild_id?: string;
+      channel_id?: string;
+      self_mute: boolean;
+      self_deaf: boolean;
+      self_video?: boolean;
+      preferred_region?: string;
+      /** Format: date-time */
+      request_to_speak_timestamp?: string;
+      suppress?: boolean;
+    };
+    VoiceVideoSchema: {
+      audio_ssrc: number;
+      video_ssrc: number;
+      rtx_ssrc?: number;
+      user_id?: string;
+      streams?: {
+        /** @enum {string} */
+        type: "audio" | "video";
+        rid: string;
+        ssrc: number;
+        active: boolean;
+        quality: number;
+        rtx_ssrc: number;
+        max_bitrate: number;
+        max_framerate: number;
+        max_resolution: {
+          type: string;
+          width: number;
+          height: number;
+        };
+      }[];
+    };
+    WebAuthnPostSchema: Partial<
+      components["schemas"]["GenerateWebAuthnCredentialsSchema"]
+    > &
+      Partial<components["schemas"]["CreateWebAuthnCredentialSchema"]>;
+    WebAuthnTotpSchema: {
+      code: string;
+      ticket: string;
+    };
+    WebhookCreateSchema: {
+      name: string;
+      avatar?: string;
+    };
+    WidgetModifySchema: {
+      enabled: boolean;
+      channel_id: string;
+    };
+    APIErrorOrCaptchaResponse: Partial<
+      components["schemas"]["APIErrorResponse"]
+    > &
+      Partial<components["schemas"]["CaptchaRequiredResponse"]>;
+    BackupCodesChallengeResponse: {
+      nonce: string;
+      regenerate_nonce: string;
+    };
+    DiscoverableGuildsResponse: {
+      total: number;
+      guilds: components["schemas"]["Guild"][];
+      offset: number;
+      limit: number;
+    };
+    GatewayBotResponse: {
+      url: string;
+      shards: number;
+      session_start_limit: {
+        total: number;
+        remaining: number;
+        reset_after: number;
+        max_concurrency: number;
+      };
+    };
+    GatewayResponse: {
+      url: string;
+    };
+    GenerateRegistrationTokensResponse: {
+      tokens: string[];
+    };
+    GuildBansResponse: {
+      reason: string;
+      user: {
+        username: string;
+        discriminator: string;
+        id: string;
+        avatar: unknown;
+        public_flags: number;
+      };
+    };
+    GuildCreateResponse: {
+      id: string;
+    };
+    GuildDiscoveryRequirementsResponse: {
+      uild_id: string;
+      safe_environment: boolean;
+      healthy: boolean;
+      health_score_pending: boolean;
+      size: boolean;
+      nsfw_properties: unknown;
+      protected: boolean;
+      sufficient: boolean;
+      sufficient_without_grace_period: boolean;
+      valid_rules_channel: boolean;
+      retention_healthy: boolean;
+      engagement_healthy: boolean;
+      age: boolean;
+      minimum_age: number;
+      health_score: {
+        avg_nonnew_participators: number;
+        avg_nonnew_communicators: number;
+        num_intentful_joiners: number;
+        perc_ret_w1_intentful: number;
+      };
+      minimum_size: number;
+    };
+    GuildMessagesSearchResponse: {
+      messages: components["schemas"]["GuildMessagesSearchMessage"][];
+      total_results: number;
+    };
+    GuildPruneResponse: {
+      pruned: number;
+    };
+    GuildPurgeResponse: {
+      purged: number;
+    };
+    GuildRecommendationsResponse: {
+      recommended_guilds: components["schemas"]["Guild"][];
+      load_id: string;
+    };
+    GuildVanityUrlResponse: Partial<components["schemas"]["GuildVanityUrl"]> &
+      Partial<components["schemas"]["GuildVanityUrlNoInvite"]> &
+      Partial<components["schemas"]["GuildVanityUrl"][]>;
+    GuildVanityUrlCreateResponse: {
+      code: string;
+    };
+    GuildWidgetJsonResponse: {
+      id: string;
+      name: string;
+      instant_invite: string;
+      channels: {
+        id: string;
+        name: string;
+        position: number;
+      }[];
+      members: {
+        id: string;
+        username: string;
+        discriminator: string;
+        avatar: unknown;
+        status: components["schemas"]["ClientStatus"];
+        avatar_url: string;
+      }[];
+      presence_count: number;
+    };
+    GuildWidgetSettingsResponse: {
+      enabled: boolean;
+      channel_id: Partial<components["schemas"]["Snowflake"]> &
+        Partial<unknown>;
+    };
+    InstanceDomainsResponse: {
+      cdn: string;
+      gateway: string;
+      defaultApiVersion: string;
+      apiEndpoint: string;
+    };
+    InstancePingResponse: {
+      /** @enum {string} */
+      ping: "pong!";
+      instance: {
+        id: string;
+        name: string;
+        description: unknown;
+        image: unknown;
+        correspondenceEmail: unknown;
+        correspondenceUserID: unknown;
+        frontPage: unknown;
+        tosPage: unknown;
+      };
+    };
+    InstanceStatsResponse: {
+      counts: {
+        user: number;
+        guild: number;
+        message: number;
+        members: number;
+      };
+    };
+    LocationMetadataResponse: {
+      consent_required: boolean;
+      country_code: string;
+      promotional_email_opt_in: {
+        /** @enum {boolean} */
+        required: true;
+        /** @enum {boolean} */
+        pre_checked: false;
+      };
+    };
+    MemberJoinGuildResponse: {
+      guild: components["schemas"]["Guild"];
+      emojis: components["schemas"]["Emoji"][];
+      roles: components["schemas"]["Role"][];
+      stickers: components["schemas"]["Sticker"][];
+    };
+    OAuthAuthorizeResponse: {
+      location: string;
+    };
+    TenorTrendingResponse: {
+      categories: {
+        tags: {
+          searchterm: string;
+          path: string;
+          image: string;
+          name: string;
+        }[];
+      };
+      gifs: components["schemas"]["TenorGifResponse"][];
+    };
+    TenorGifsResponse: components["schemas"]["TenorGifResponse"][];
+    TokenOnlyResponse: {
+      token: string;
+    };
+    TokenWithBackupCodesResponse: {
+      token: string;
+      backup_codes: components["schemas"]["BackupCode"][];
+    };
+    APIPublicUser: components["schemas"]["PublicUser"];
+    APIPrivateUser: {
+      id: string;
+      /** Format: date-time */
+      premium_since: string;
+      verified: boolean;
+      username: string;
+      discriminator: string;
+      public_flags: number;
+      avatar?: string;
+      accent_color?: number;
+      banner?: string;
+      bio: string;
+      bot: boolean;
+      premium_type: number;
+      theme_colors?: number[];
+      pronouns?: string;
+      flags: string;
+      mfa_enabled: boolean;
+      email?: string;
+      phone?: string;
+      nsfw_allowed: boolean;
+      premium: boolean;
+      purchased_flags: number;
+      premium_usage_flags: number;
+      disabled: boolean;
+    };
+    APIGuildArray: components["schemas"]["APIGuild"][];
+    APIDMChannelArray: components["schemas"]["DmChannelDTO"][];
+    APIBackupCodeArray: components["schemas"]["BackupCode"][];
+    UserUpdateResponse: {
+      newToken?: string;
+      id: string;
+      /** Format: date-time */
+      premium_since: string;
+      verified: boolean;
+      username: string;
+      discriminator: string;
+      public_flags: number;
+      avatar?: string;
+      accent_color?: number;
+      banner?: string;
+      bio: string;
+      bot: boolean;
+      premium_type: number;
+      theme_colors?: number[];
+      pronouns?: string;
+      flags: string;
+      mfa_enabled: boolean;
+      email?: string;
+      phone?: string;
+      nsfw_allowed: boolean;
+      premium: boolean;
+      purchased_flags: number;
+      premium_usage_flags: number;
+      disabled: boolean;
+    };
+    ApplicationDetectableResponse: unknown[];
+    ApplicationEntitlementsResponse: unknown[];
+    ApplicationSkusResponse: unknown[];
+    APIApplicationArray: components["schemas"]["Application"][];
+    APIInviteArray: components["schemas"]["Invite"][];
+    APIMessageArray: components["schemas"]["Message"][];
+    APIWebhookArray: components["schemas"]["Webhook"][];
+    APIDiscoveryCategoryArray: components["schemas"]["Categories"][];
+    APIGeneralConfiguration: {
+      /** @default Spacebar Instance */
+      instanceName: string;
+      /** @default This is a Spacebar instance made in the pre-release days */
+      instanceDescription: string | null;
+      frontPage: string | null;
+      tosPage: string | null;
+      correspondenceEmail: string | null;
+      correspondenceUserID: string | null;
+      image: string | null;
+      instanceId: string;
+    };
+    APIChannelArray: components["schemas"]["Channel"][];
+    APIEmojiArray: components["schemas"]["Emoji"][];
+    APIMemberArray: components["schemas"]["Member"][];
+    APIGuildWithJoinedAt: {
+      joined_at: string;
+      afk_channel_id?: string;
+      afk_channel?: components["schemas"]["Channel"];
+      afk_timeout?: number;
+      bans: components["schemas"]["Ban"][];
+      banner?: string;
+      default_message_notifications?: number;
+      description?: string;
+      discovery_splash?: string;
+      explicit_content_filter?: number;
+      /** @default */
+      features: string[];
+      primary_category_id?: string;
+      icon?: string;
+      large?: boolean;
+      max_members?: number;
+      max_presences?: number;
+      max_video_channel_users?: number;
+      member_count?: number;
+      presence_count?: number;
+      members: components["schemas"]["Member"][];
+      roles: components["schemas"]["Role"][];
+      channels: components["schemas"]["Channel"][];
+      template_id?: string;
+      template: components["schemas"]["Template"];
+      emojis: components["schemas"]["Emoji"][];
+      stickers: components["schemas"]["Sticker"][];
+      invites: components["schemas"]["Invite"][];
+      voice_states: components["schemas"]["VoiceState"][];
+      webhooks: components["schemas"]["Webhook"][];
+      mfa_level?: number;
+      name: string;
+      owner_id?: string;
+      owner?: components["schemas"]["User"];
+      preferred_locale?: string;
+      premium_subscription_count?: number;
+      premium_tier?: number;
+      public_updates_channel_id: string;
+      public_updates_channel?: components["schemas"]["Channel"];
+      rules_channel_id?: string;
+      rules_channel?: string;
+      region?: string;
+      splash?: string;
+      system_channel_id?: string;
+      system_channel?: components["schemas"]["Channel"];
+      system_channel_flags?: number;
+      unavailable: boolean;
+      verification_level?: number;
+      welcome_screen: components["schemas"]["GuildWelcomeScreen"];
+      widget_channel_id?: string;
+      widget_channel?: components["schemas"]["Channel"];
+      /** @default true */
+      widget_enabled: boolean;
+      nsfw_level?: number;
+      nsfw: boolean;
+      parent?: string;
+      permissions?: number;
+      premium_progress_bar_enabled: boolean;
+      id: string;
+    };
+    APIRoleArray: components["schemas"]["Role"][];
+    APIStickerArray: components["schemas"]["Sticker"][];
+    APITemplateArray: components["schemas"]["Template"][];
+    APIGuildVoiceRegion: components["schemas"]["GuildVoiceRegion"][];
+    APILimitsConfiguration: {
+      user: components["schemas"]["UserLimits"];
+      guild: components["schemas"]["GuildLimits"];
+      message: components["schemas"]["MessageLimits"];
+      channel: components["schemas"]["ChannelLimits"];
+      rate: components["schemas"]["RateLimits"];
+      absoluteRate: components["schemas"]["GlobalRateLimits"];
+    };
+    APIStickerPackArray: components["schemas"]["StickerPack"][];
+    UpdatesResponse: {
+      name: string;
+      pub_date: string;
+      url: string;
+      notes: string | null;
+    };
+    UserNoteResponse: {
+      note: string;
+      note_user_id: string;
+      user_id: string;
+    };
+    UserProfileResponse: {
+      user: components["schemas"]["PublicUser"];
+      connected_accounts: components["schemas"]["PublicConnectedAccount"];
+      /** Format: date-time */
+      premium_guild_since?: string;
+      /** Format: date-time */
+      premium_since?: string;
+    };
+    UserRelationshipsResponse: {
+      id: string;
+      type: components["schemas"]["RelationshipType"];
+      nickname: unknown;
+      user: components["schemas"]["PublicUser"];
+    };
+    UserRelationsResponse: {
+      object: {
+        id?: string;
+        username?: string;
+        avatar?: string;
+        discriminator?: string;
+        public_flags?: number;
+      };
+    };
+    WebAuthnCreateResponse: {
+      name: string;
+      id: string;
+    };
+    WebhookCreateResponse: {
+      user: components["schemas"]["User"];
+      hook: components["schemas"]["Webhook"];
+    };
+    BulkDeleteSchema: {
+      messages: string[];
+    };
+    LoginResponse: Partial<components["schemas"]["TokenResponse"]> &
+      Partial<components["schemas"]["MFAResponse"]> &
+      Partial<components["schemas"]["WebAuthnResponse"]>;
+    MemberNickChangeSchema: {
+      nick: string;
+    };
+    PruneSchema: {
+      days: number;
+    };
+    VerifyEmailSchema: {
+      captcha_key?: string | null;
+      token: string;
     };
   };
 }
 
-export interface operations {
-  /** Fetch the server configuration for this Revolt instance. */
-  root_root: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["RevoltConfig"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch various technical statistics. */
-  stats_stats: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Stats"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** This is a privileged route to globally fetch messages. */
-  message_query_message_query: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["BulkMessageResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MessageQuery"];
-      };
-    };
-  };
-  /** Retrieve your user information. */
-  fetch_self_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Retrieve a user's information. */
-  fetch_user_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit currently authenticated user. */
-  edit_user_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditUser"];
-      };
-    };
-  };
-  /** Retrieve a user's flags. */
-  fetch_user_flags_fetch_user_flags: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["FlagResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Change your username. */
-  change_username_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataChangeUsername"];
-      };
-    };
-  };
-  /** This returns a default avatar based on the given id. */
-  get_default_avatar_req: {
-    parameters: {
-      path: {
-        target: string;
-      };
-    };
-    responses: {
-      /** Default Avatar Picture */
-      200: {
-        content: {
-          "image/png": string;
-        };
-      };
-    };
-  };
-  /**
-   * Retrieve a user's profile data.
-   *
-   * Will fail if you do not have permission to access the other user's profile.
-   */
-  fetch_profile_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserProfile"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** This fetches your direct messages, including any DM and group DM conversations. */
-  fetch_dms_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Channel"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /**
-   * Open a DM with another user.
-   *
-   * If the target is oneself, a saved messages channel is returned.
-   */
-  open_dm_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Channel"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Retrieve a list of mutual friends and servers with another user. */
-  find_mutual_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["MutualResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Accept another user's friend request. */
-  add_friend_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Denies another user's friend request or removes an existing friend. */
-  remove_friend_req: {
-    parameters: {
-      path: {
-        target: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Block another user by their id. */
-  block_user_req: {
-    parameters: {
-      path: {
-        target: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Unblock another user by their id. */
-  unblock_user_req: {
-    parameters: {
-      path: {
-        target: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Send a friend request to another user. */
-  send_friend_request_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataSendFriendRequest"];
-      };
-    };
-  };
-  /** Create a new Revolt bot. */
-  create_create_bot: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Bot"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateBot"];
-      };
-    };
-  };
-  /** Fetch details of a public (or owned) bot by its id. */
-  fetch_public_fetch_public_bot: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["PublicBot"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Invite a bot to a server or group by its id.` */
-  invite_invite_bot: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["InviteBotDestination"];
-      };
-    };
-  };
-  /** Fetch details of a bot you own by its id. */
-  fetch_fetch_bot: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["BotResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Delete a bot by its id. */
-  delete_delete_bot: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit bot details by its id. */
-  edit_edit_bot: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Bot"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditBot"];
-      };
-    };
-  };
-  /** Fetch all of the bots that you have control over. */
-  fetch_owned_fetch_owned_bots: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["OwnedBotsResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Lets the server and all other clients know that we've seen this message id in this channel. */
-  channel_ack_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        message: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch channel by its id. */
-  channel_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Channel"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Deletes a server channel, leaves a group or closes a group. */
-  channel_delete_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-      query: {
-        /** Whether to not send a leave message */
-        leave_silently?: boolean | null;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit a channel object by its id. */
-  channel_edit_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Channel"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditChannel"];
-      };
-    };
-  };
-  /** Retrieves all users who are part of this group. */
-  members_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /**
-   * Creates an invite to this channel.
-   *
-   * Channel must be a `TextChannel`.
-   */
-  invite_create_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Invite"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch multiple messages. */
-  message_query_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-      query: {
-        /**
-         * Maximum number of messages to fetch
-         *
-         * For fetching nearby messages, this is \`(limit + 1)\`.
-         */
-        limit?: number | null;
-        /** Message id before which messages should be fetched */
-        before?: string | null;
-        /** Message id after which messages should be fetched */
-        after?: string | null;
-        /** Message sort direction */
-        sort?: components["schemas"]["MessageSort"] | null;
-        /**
-         * Message id to search around
-         *
-         * Specifying 'nearby' ignores 'before', 'after' and 'sort'. It will also take half of limit rounded as the limits to each side. It also fetches the message ID specified.
-         */
-        nearby?: string | null;
-        /** Whether to include user (and member, if server channel) objects */
-        include_users?: boolean | null;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["BulkMessageResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Sends a message to the given channel. */
-  message_send_message_send: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-      header: {
-        /** Unique key to prevent duplicate requests */
-        "Idempotency-Key"?: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Message"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataMessageSend"];
-      };
-    };
-  };
-  /** This route searches for messages within the given parameters. */
-  message_search_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["BulkMessageResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OptionsMessageSearch"];
-      };
-    };
-  };
-  /**
-   * This route returns any changed message objects and tells you if any have been deleted.
-   *
-   * Don't actually poll this route, instead use this to update your local database.
-   *
-   * **DEPRECATED**
-   */
-  message_query_stale_req: {
-    parameters: {
-      path: {
-        _target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: unknown;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OptionsQueryStale"];
-      };
-    };
-  };
-  /** Retrieves a message by its id. */
-  message_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        msg: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Message"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Delete a message you've sent or one you have permission to delete. */
-  message_delete_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        msg: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edits a message that you've previously sent. */
-  message_edit_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        msg: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Message"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditMessage"];
-      };
-    };
-  };
-  /**
-   * Delete multiple messages you've sent or one you have permission to delete.
-   *
-   * This will always require `ManageMessages` permission regardless of whether you own the message or not.
-   *
-   * Messages must have been sent within the past 1 week.
-   */
-  message_bulk_delete_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OptionsBulkDelete"];
-      };
-    };
-  };
-  /** Create a new group channel. */
-  group_create_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Channel"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateGroup"];
-      };
-    };
-  };
-  /** Adds another user to the group. */
-  group_add_member_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        member: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Removes a user from the group. */
-  group_remove_member_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        member: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Asks the voice server for a token to join the call. */
-  voice_join_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateVoiceUserResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Sets permissions for the specified role in the server. */
-  permissions_set_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        role_id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Server"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataSetServerRolePermission"];
-      };
-    };
-  };
-  /** Sets permissions for the default role in this server. */
-  permissions_set_default_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Server"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataSetServerDefaultPermission"];
-      };
-    };
-  };
-  /** React to a given message. */
-  message_react_react_message: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        msg: components["schemas"]["Id"];
-        emoji: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /**
-   * Remove your own, someone else's or all of a given reaction.
-   *
-   * Requires `ManageMessages` if changing others' reactions.
-   */
-  message_unreact_unreact_message: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        msg: components["schemas"]["Id"];
-        emoji: components["schemas"]["Id"];
-      };
-      query: {
-        /** Remove a specific user's reaction */
-        user_id?: string | null;
-        /** Remove all reactions */
-        remove_all?: boolean | null;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /**
-   * Remove your own, someone else's or all of a given reaction.
-   *
-   * Requires `ManageMessages` permission.
-   */
-  message_clear_reactions_clear_reactions: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        msg: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Create a new server. */
-  server_create_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateServerResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateServer"];
-      };
-    };
-  };
-  /** Fetch a server by its id. */
-  server_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Server"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Deletes a server if owner otherwise leaves. */
-  server_delete_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-      query: {
-        /** Whether to not send a leave message */
-        leave_silently?: boolean | null;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit a server by its id. */
-  server_edit_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Server"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditServer"];
-      };
-    };
-  };
-  /** Mark all channels in a server as read. */
-  server_ack_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Create a new Text or Voice channel. */
-  channel_create_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Channel"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateChannel"];
-      };
-    };
-  };
-  /** Fetch all server members. */
-  member_fetch_all_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-      query: {
-        /** Whether to exclude offline users */
-        exclude_offline?: boolean | null;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["AllMemberResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Retrieve a member. */
-  member_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        member: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Member"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Removes a member from the server. */
-  member_remove_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        member: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit a member by their id. */
-  member_edit_req: {
-    parameters: {
-      path: {
-        server: components["schemas"]["Id"];
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Member"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataMemberEdit"];
-      };
-    };
-  };
-  /** Ban a user by their id. */
-  ban_create_req: {
-    parameters: {
-      path: {
-        server: components["schemas"]["Id"];
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ServerBan"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataBanCreate"];
-      };
-    };
-  };
-  /** Remove a user's ban. */
-  ban_remove_req: {
-    parameters: {
-      path: {
-        server: components["schemas"]["Id"];
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch all bans on a server. */
-  ban_list_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["BanListResult"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch all server invites. */
-  invites_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Invite"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Creates a new server role. */
-  roles_create_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["NewRoleResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateRole"];
-      };
-    };
-  };
-  /** Delete a server role by its id. */
-  roles_delete_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        role_id: string;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit a role by its id. */
-  roles_edit_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-        role_id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Role"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditRole"];
-      };
-    };
-  };
-  /** Fetch all emoji on a server. */
-  emoji_list_list_emoji: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Emoji"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch an invite by its id. */
-  invite_fetch_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["InviteResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Join an invite by its ID. */
-  invite_join_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["InviteJoinResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Delete an invite by its id. */
-  invite_delete_req: {
-    parameters: {
-      path: {
-        target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch an emoji by its id. */
-  emoji_fetch_fetch_emoji: {
-    parameters: {
-      path: {
-        id: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Emoji"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Create an emoji by its Autumn upload id. */
-  emoji_create_create_emoji: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Emoji"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateEmoji"];
-      };
-    };
-  };
-  /** Delete an emoji by its id. */
-  emoji_delete_delete_emoji: {
-    parameters: {
-      path: {
-        id: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit a report. */
-  edit_report_edit_report: {
-    parameters: {
-      path: {
-        report: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Report"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditReport"];
-      };
-    };
-  };
-  /** Fetch a report by its ID */
-  fetch_report_fetch_report: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Report"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch all available reports */
-  fetch_reports_fetch_reports: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Report"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Report a piece of content to the moderation team. */
-  report_content_report_content: {
-    responses: {
-      200: unknown;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataReportContent"];
-      };
-    };
-  };
-  /** Fetch a snapshot for a given report */
-  fetch_snapshot_fetch_snapshot: {
-    parameters: {
-      path: {
-        report_id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["SnapshotWithContext"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Create a new account. */
-  create_account_create_account: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataCreateAccount"];
-      };
-    };
-  };
-  /** Resend account creation verification email. */
-  resend_verification_resend_verification: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataResendVerification"];
-      };
-    };
-  };
-  /** Schedule an account for deletion by confirming the received token. */
-  confirm_deletion_confirm_deletion: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataAccountDeletion"];
-      };
-    };
-  };
-  /** Request to have an account deleted. */
-  delete_account_delete_account: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch account information from the current session. */
-  fetch_account_fetch_account: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["AccountInfo"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Disable an account. */
-  disable_account_disable_account: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Change the current account password. */
-  change_password_change_password: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataChangePassword"];
-      };
-    };
-  };
-  /** Change the associated account email. */
-  change_email_change_email: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataChangeEmail"];
-      };
-    };
-  };
-  /** Verify an email address. */
-  verify_email_verify_email: {
-    parameters: {
-      path: {
-        code: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ResponseVerify"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Send an email to reset account password. */
-  send_password_reset_send_password_reset: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataSendPasswordReset"];
-      };
-    };
-  };
-  /** Confirm password reset and change the password. */
-  password_reset_password_reset: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataPasswordReset"];
-      };
-    };
-  };
-  /** Login to an account. */
-  login_login: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ResponseLogin"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataLogin"];
-      };
-    };
-  };
-  /** Delete current session. */
-  logout_logout: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch all sessions associated with this account. */
-  fetch_all_fetch_all: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["SessionInfo"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Delete all active sessions, optionally including current one. */
-  revoke_all_revoke_all: {
-    parameters: {
-      query: {
-        revoke_self?: boolean | null;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Delete a specific active session. */
-  revoke_revoke: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edit current session information. */
-  edit_edit: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["SessionInfo"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditSession"];
-      };
-    };
-  };
-  /** Create a new MFA ticket or validate an existing one. */
-  create_ticket_create_ticket: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["MFATicket"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MFAResponse"];
-      };
-    };
-  };
-  /** Fetch MFA status of an account. */
-  fetch_status_fetch_status: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["MultiFactorStatus"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch recovery codes for an account. */
-  fetch_recovery_fetch_recovery: {
-    responses: {
-      200: {
-        content: {
-          "application/json": string[];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Re-generate recovery codes for an account. */
-  generate_recovery_generate_recovery: {
-    responses: {
-      200: {
-        content: {
-          "application/json": string[];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch available MFA methods. */
-  get_mfa_methods_get_mfa_methods: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["MFAMethod"][];
-        };
-      };
-    };
-  };
-  /** Generate a new secret for TOTP. */
-  totp_enable_totp_enable: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MFAResponse"];
-      };
-    };
-  };
-  /** Generate a new secret for TOTP. */
-  totp_generate_secret_totp_generate_secret: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ResponseTotpSecret"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Disable TOTP 2FA for an account. */
-  totp_disable_totp_disable: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** This will tell you whether the current account requires onboarding or whether you can continue to send requests as usual. You may skip calling this if you're restoring an existing session. */
-  hello_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["DataHello"];
-        };
-      };
-    };
-  };
-  /** This sets a new username, completes onboarding and allows a user to start using Revolt. */
-  complete_req: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataOnboard"];
-      };
-    };
-  };
-  /**
-   * Create a new Web Push subscription.
-   *
-   * If an existing subscription exists on this session, it will be removed.
-   */
-  subscribe_req: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["WebPushSubscription"];
-      };
-    };
-  };
-  /** Remove the Web Push subscription associated with the current session. */
-  unsubscribe_req: {
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /**
-   * Fetch settings from server filtered by keys.
-   *
-   * This will return an object with the requested keys, each value is a tuple of `(timestamp, value)`, the value is the previously uploaded data.
-   */
-  get_settings_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": { [key: string]: [number, string] };
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OptionsFetchSettings"];
-      };
-    };
-  };
-  /** Upload data to save to settings. */
-  set_settings_req: {
-    parameters: {
-      query: {
-        /**
-         * Timestamp of settings change.
-         *
-         * Used to avoid feedback loops.
-         */
-        timestamp?: number | null;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": { [key: string]: string };
-      };
-    };
-  };
-  /** Fetch information about unread state on channels. */
-  get_unreads_req: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ChannelUnread"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-}
+export interface operations {}
 
 export interface external {}

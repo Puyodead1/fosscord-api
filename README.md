@@ -1,38 +1,37 @@
-# Revolt API
+# Spacebar API Types
 
-![revolt-api](https://img.shields.io/npm/v/revolt-api)
-
-This package contains typings for objects in the [Revolt API](https://developers.revolt.chat/api/) and a fully typed API request builder.
+This package contains typings for objects in the Spacebar API and a fully typed API request builder.
 
 ### Example Usage
 
 If you just need access to types:
 
 ```typescript
-import type { User } from 'revolt-api';
+import type { User } from "spacebar-types";
 ```
 
 If you want to send requests:
 
 ```typescript
-import { API } from 'revolt-api';
+import { API } from "spacebar-types";
 
 // Initialise a new API client:
 const client = new API();
 
 // or with authentication:
-const client = new API({ authentication: { revolt: 'bot-token' } });
+const client = new API({ authentication: { bearer: "token" } });
 
 // Make requests with ease:
-client.get('/users/@me')
+client
+    .get("/users/@me")
     // Fully typed responses!
-    .then(user => user.username);
+    .then((user) => user.username);
 
 // No need to worry about the details:
 let channel_id = "some channel id";
 client.post(`/channels/${channel_id}/messages`, {
     // Parameters given are fully typed as well!
-    content: "some content"
+    content: "some content",
 });
 ```
 
