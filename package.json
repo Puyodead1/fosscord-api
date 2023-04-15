@@ -1,6 +1,6 @@
 {
     "name": "@spacebarchat/spacebar-types",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Spacebar API Library",
     "main": "dist/index.js",
     "module": "esm/index.js",
@@ -9,13 +9,16 @@
     "author": "Paul Makles <insrt.uk>",
     "license": "MIT",
     "scripts": {
-        "build": "oapilib && tsc && tsc -p tsconfig.esm.json",
+        "build": "run-script-os",
+        "build:win32": "set REWRITE_ANYOF=1 && oapilib && tsc && tsc -p tsconfig.esm.json",
+        "build:default": "REWRITE_ANYOF=1 oapilib && tsc && tsc -p tsconfig.esm.json",
         "prepublish": "in-publish && pnpm build || echo Skipping build."
     },
     "devDependencies": {
         "@types/lodash.defaultsdeep": "^4.6.6",
         "in-publish": "^2.0.1",
         "openapi-typescript": "^5.2.0",
+        "run-script-os": "^1.1.6",
         "typescript": "^4.6.2"
     },
     "dependencies": {

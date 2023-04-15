@@ -4576,8 +4576,7 @@ export interface components {
       metadata_?: unknown;
       metadata_visibility?: number;
       two_way_link?: boolean;
-      token_data?: Partial<components["schemas"]["ConnectedAccountTokenData"]> &
-        Partial<unknown>;
+      token_data?: components["schemas"]["ConnectedAccountTokenData"] | unknown;
       id: string;
     };
     UserSettings: {
@@ -4591,8 +4590,7 @@ export interface components {
       animate_stickers: number;
       contact_sync_enabled: boolean;
       convert_emoticons: boolean;
-      custom_status: Partial<components["schemas"]["CustomStatus"]> &
-        Partial<unknown>;
+      custom_status: components["schemas"]["CustomStatus"] | unknown;
       default_guilds_restricted: boolean;
       detect_platform_accounts: boolean;
       /** @default true */
@@ -4769,14 +4767,12 @@ export interface components {
       id: string;
     };
     UserGuildSettings: {
-      channel_overrides: Partial<{
-        [key: string]: components["schemas"]["ChannelOverride"];
-      }> &
-        Partial<unknown>;
+      channel_overrides:
+        | { [key: string]: components["schemas"]["ChannelOverride"] }
+        | unknown;
       message_notifications: number;
       mobile_push: boolean;
-      mute_config: Partial<components["schemas"]["MuteConfig"]> &
-        Partial<unknown>;
+      mute_config: components["schemas"]["MuteConfig"] | unknown;
       muted: boolean;
       suppress_everyone: boolean;
       suppress_roles: boolean;
@@ -5642,12 +5638,13 @@ export interface components {
     SelectProtocolSchema: {
       /** @enum {string} */
       protocol: "udp" | "webrtc";
-      data: Partial<{
-        address: string;
-        port: number;
-        mode: string;
-      }> &
-        Partial<string>;
+      data:
+        | {
+            address: string;
+            port: number;
+            mode: string;
+          }
+        | string;
       sdp?: string;
       codecs?: {
         /** @enum {string} */
@@ -5694,8 +5691,7 @@ export interface components {
       flags?: number;
       message_notifications?: number;
       mobile_push?: boolean;
-      mute_config?: Partial<components["schemas"]["MuteConfig"]> &
-        Partial<unknown>;
+      mute_config?: components["schemas"]["MuteConfig"] | unknown;
       muted?: boolean;
       suppress_everyone?: boolean;
       suppress_roles?: boolean;
@@ -5733,8 +5729,7 @@ export interface components {
       animate_stickers?: number;
       contact_sync_enabled?: boolean;
       convert_emoticons?: boolean;
-      custom_status?: Partial<components["schemas"]["CustomStatus"]> &
-        Partial<unknown>;
+      custom_status?: components["schemas"]["CustomStatus"] | unknown;
       default_guilds_restricted?: boolean;
       detect_platform_accounts?: boolean;
       developer_mode?: boolean;
@@ -5810,10 +5805,9 @@ export interface components {
         };
       }[];
     };
-    WebAuthnPostSchema: Partial<
-      components["schemas"]["GenerateWebAuthnCredentialsSchema"]
-    > &
-      Partial<components["schemas"]["CreateWebAuthnCredentialSchema"]>;
+    WebAuthnPostSchema:
+      | components["schemas"]["GenerateWebAuthnCredentialsSchema"]
+      | components["schemas"]["CreateWebAuthnCredentialSchema"];
     WebAuthnTotpSchema: {
       code: string;
       ticket: string;
@@ -5826,10 +5820,9 @@ export interface components {
       enabled: boolean;
       channel_id: string;
     };
-    APIErrorOrCaptchaResponse: Partial<
-      components["schemas"]["APIErrorResponse"]
-    > &
-      Partial<components["schemas"]["CaptchaRequiredResponse"]>;
+    APIErrorOrCaptchaResponse:
+      | components["schemas"]["APIErrorResponse"]
+      | components["schemas"]["CaptchaRequiredResponse"];
     BackupCodesChallengeResponse: {
       nonce: string;
       regenerate_nonce: string;
@@ -5906,9 +5899,10 @@ export interface components {
       recommended_guilds: components["schemas"]["Guild"][];
       load_id: string;
     };
-    GuildVanityUrlResponse: Partial<components["schemas"]["GuildVanityUrl"]> &
-      Partial<components["schemas"]["GuildVanityUrlNoInvite"]> &
-      Partial<components["schemas"]["GuildVanityUrl"][]>;
+    GuildVanityUrlResponse:
+      | components["schemas"]["GuildVanityUrl"]
+      | components["schemas"]["GuildVanityUrlNoInvite"]
+      | components["schemas"]["GuildVanityUrl"][];
     GuildVanityUrlCreateResponse: {
       code: string;
     };
@@ -5933,8 +5927,7 @@ export interface components {
     };
     GuildWidgetSettingsResponse: {
       enabled: boolean;
-      channel_id: Partial<components["schemas"]["Snowflake"]> &
-        Partial<unknown>;
+      channel_id: components["schemas"]["Snowflake"] | unknown;
     };
     InstanceDomainsResponse: {
       cdn: string;
@@ -6201,9 +6194,10 @@ export interface components {
     BulkDeleteSchema: {
       messages: string[];
     };
-    LoginResponse: Partial<components["schemas"]["TokenResponse"]> &
-      Partial<components["schemas"]["MFAResponse"]> &
-      Partial<components["schemas"]["WebAuthnResponse"]>;
+    LoginResponse:
+      | components["schemas"]["TokenResponse"]
+      | components["schemas"]["MFAResponse"]
+      | components["schemas"]["WebAuthnResponse"];
     MemberNickChangeSchema: {
       nick: string;
     };
