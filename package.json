@@ -1,6 +1,6 @@
 {
     "name": "@spacebarchat/spacebar-types",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Spacebar API Library",
     "main": "dist/index.js",
     "module": "esm/index.js",

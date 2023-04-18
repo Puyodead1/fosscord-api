@@ -3215,6 +3215,68 @@ export interface paths {
       };
     };
   };
+  "/channels/{channel_id}/messages/": {
+    get: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+        query: {
+          around?: string;
+          before?: string;
+          after?: string;
+          /** max number of messages to return (1-100). defaults to 50 */
+          limit?: number;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["APIMessageArray"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        path: {
+          /** channel_id */
+          channel_id: string;
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["Message"];
+          };
+        };
+        400: {
+          content: {
+            "application/json": components["schemas"]["APIErrorResponse"];
+          };
+        };
+        /** No description available */
+        403: unknown;
+        /** No description available */
+        404: unknown;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["MessageCreateSchema"];
+        };
+      };
+    };
+  };
   "/channels/{channel_id}/messages/bulk-delete/": {
     post: {
       parameters: {
@@ -5502,7 +5564,7 @@ export interface components {
       nick?: string;
       bio?: string;
       pronouns?: string;
-      theme_colors?: number[];
+      theme_colors?: [number, number];
     };
     MemberChangeSchema: {
       roles?: string[];
@@ -5720,7 +5782,7 @@ export interface components {
       accent_color?: number | null;
       banner?: string | null;
       pronouns?: string;
-      theme_colors?: number[];
+      theme_colors?: [number, number];
     };
     UserSettingsSchema: {
       afk_timeout?: number;
