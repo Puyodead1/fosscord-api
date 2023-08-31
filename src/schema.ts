@@ -2192,7 +2192,7 @@ export interface paths {
       responses: {
         200: {
           content: {
-            "application/json": components["schemas"]["Member"];
+            "application/json": components["schemas"]["APIPublicMember"];
           };
         };
         403: {
@@ -4575,8 +4575,7 @@ export interface components {
       disabled: boolean;
       deleted: boolean;
       email?: string;
-      /** @default 0 */
-      flags: string;
+      flags: number;
       public_flags: number;
       purchased_flags: number;
       premium_usage_flags: number;
@@ -4722,7 +4721,7 @@ export interface components {
       /** Format: date-time */
       created_at: string;
       /** Format: date-time */
-      expires_at: string;
+      expires_at?: string;
       guild_id: string;
       guild: components["schemas"]["Guild"];
       channel_id: string;
@@ -4733,6 +4732,7 @@ export interface components {
       target_user?: string;
       target_user_type?: number;
       vanity_url?: boolean;
+      flags: number;
     };
     Message: {
       channel_id?: string;
@@ -4768,7 +4768,7 @@ export interface components {
         type: number;
         party_id: string;
       };
-      flags?: string;
+      flags?: number;
       message_reference?: {
         message_id: string;
         channel_id?: string;
@@ -4826,6 +4826,7 @@ export interface components {
         integration_id?: string;
         premium_subscriber?: boolean;
       };
+      flags: number;
       id: string;
     };
     UserGuildSettings: {
@@ -5168,22 +5169,20 @@ export interface components {
       id: string;
     };
     APIGuild: {
+      name: string;
       /** @description Reloads entity data from the database. */
       reload: { [key: string]: unknown };
       id: string;
-      roles: components["schemas"]["Role"][];
-      name: string;
-      banner?: string;
-      unavailable: boolean;
-      channels: components["schemas"]["Channel"][];
-      region?: string;
       icon?: string;
-      system_channel_id?: string;
-      rules_channel_id?: string;
-      afk_timeout?: number;
-      explicit_content_filter?: number;
-      assign: { [key: string]: unknown };
+      parent?: string;
+      owner_id?: string;
+      nsfw: boolean;
+      invites: components["schemas"]["Invite"][];
+      voice_states: components["schemas"]["VoiceState"][];
+      webhooks: components["schemas"]["Webhook"][];
       toJSON: { [key: string]: unknown };
+      _do_validate: { [key: string]: unknown };
+      assign: { [key: string]: unknown };
       /**
        * @description Checks if entity has an id.
        * If entity composite compose ids, it will check them all.
@@ -5200,6 +5199,15 @@ export interface components {
       softRemove: { [key: string]: unknown };
       /** @description Recovers a given entity in the database. */
       recover: { [key: string]: unknown };
+      roles: components["schemas"]["Role"][];
+      banner?: string;
+      unavailable: boolean;
+      channels: components["schemas"]["Channel"][];
+      region?: string;
+      system_channel_id?: string;
+      rules_channel_id?: string;
+      afk_timeout?: number;
+      explicit_content_filter?: number;
       afk_channel_id?: string;
       bans: components["schemas"]["Ban"][];
       default_message_notifications?: number;
@@ -5217,11 +5225,7 @@ export interface components {
       template_id?: string;
       emojis: components["schemas"]["Emoji"][];
       stickers: components["schemas"]["Sticker"][];
-      invites: components["schemas"]["Invite"][];
-      voice_states: components["schemas"]["VoiceState"][];
-      webhooks: components["schemas"]["Webhook"][];
       mfa_level?: number;
-      owner_id?: string;
       preferred_locale?: string;
       premium_subscription_count?: number;
       premium_tier?: number;
@@ -5233,11 +5237,8 @@ export interface components {
       widget_channel_id?: string;
       widget_enabled: boolean;
       nsfw_level?: number;
-      nsfw: boolean;
-      parent?: string;
       permissions?: number;
       premium_progress_bar_enabled: boolean;
-      _do_validate: { [key: string]: unknown };
     };
     DmChannelDTO: {
       icon: string | null;
@@ -5343,9 +5344,16 @@ export interface components {
       enabled: boolean;
     };
     PublicConnectedAccount: {
-      type: string;
       name: string;
+      type: string;
       verified?: boolean;
+    };
+    UserProfile: {
+      accent_color?: number;
+      banner?: string;
+      bio: string;
+      theme_colors?: number[];
+      pronouns?: string;
     };
     TokenResponse: {
       token: string;
@@ -5460,8 +5468,8 @@ export interface components {
       preferred_locale?: string;
       premium_progress_bar_enabled?: boolean;
       discovery_splash?: string;
-      region?: string;
       icon?: string | null;
+      region?: string;
       guild_template_code?: string;
       system_channel_id?: string;
       rules_channel_id?: string;
@@ -5518,6 +5526,7 @@ export interface components {
         private_channels_version?: number;
         guild_versions?: unknown;
         api_code_version?: number;
+        initial_guild_id?: string;
       };
       clientState?: {
         guildHashes?: unknown;
@@ -5527,6 +5536,7 @@ export interface components {
         useruserGuildSettingsVersion?: number;
         guildVersions?: unknown;
         apiCodeVersion?: number;
+        initialGuildId?: string;
       };
       v?: number;
     };
@@ -5540,6 +5550,7 @@ export interface components {
       unique?: boolean;
       target_user?: string;
       target_user_type?: number;
+      flags?: number;
     };
     LazyRequestSchema: {
       guild_id: string;
@@ -5582,7 +5593,7 @@ export interface components {
       nonce?: string;
       channel_id?: string;
       tts?: boolean;
-      flags?: string;
+      flags?: number;
       embeds?: components["schemas"]["Embed"][];
       embed?: components["schemas"]["Embed"];
       allowed_mentions?: {
@@ -5616,7 +5627,7 @@ export interface components {
         filename: string;
       };
       embed?: components["schemas"]["Embed"];
-      flags?: string;
+      flags?: number;
       content?: string;
       nonce?: string;
       channel_id?: string;
@@ -5674,6 +5685,8 @@ export interface components {
       gift_code_sku_id?: string;
       captcha_key?: string;
       promotional_email_opt_in?: boolean;
+      unique_username_registration?: boolean;
+      global_name?: string;
     };
     RelationshipPostSchema: {
       discriminator: string;
@@ -5749,14 +5762,14 @@ export interface components {
         [key: string]: components["schemas"]["ChannelOverride"];
       };
       version?: number;
-      guild_id?: string | null;
-      flags?: number;
       message_notifications?: number;
       mobile_push?: boolean;
       mute_config?: components["schemas"]["MuteConfig"] | unknown;
       muted?: boolean;
       suppress_everyone?: boolean;
       suppress_roles?: boolean;
+      guild_id?: string | null;
+      flags?: number;
       mute_scheduled_events?: boolean;
       hide_muted_channels?: boolean;
       /** @enum {number} */
@@ -5844,6 +5857,7 @@ export interface components {
       /** Format: date-time */
       request_to_speak_timestamp?: string;
       suppress?: boolean;
+      flags?: number;
     };
     VoiceVideoSchema: {
       audio_ssrc: number;
@@ -6060,6 +6074,7 @@ export interface components {
     APIPublicUser: components["schemas"]["PublicUser"];
     APIPrivateUser: {
       id: string;
+      flags: number;
       /** Format: date-time */
       premium_since: string;
       verified: boolean;
@@ -6074,7 +6089,6 @@ export interface components {
       premium_type: number;
       theme_colors?: number[];
       pronouns?: string;
-      flags: string;
       mfa_enabled: boolean;
       email?: string;
       phone?: string;
@@ -6090,6 +6104,7 @@ export interface components {
     UserUpdateResponse: {
       newToken?: string;
       id: string;
+      flags: number;
       /** Format: date-time */
       premium_since: string;
       verified: boolean;
@@ -6104,7 +6119,6 @@ export interface components {
       premium_type: number;
       theme_colors?: number[];
       pronouns?: string;
-      flags: string;
       mfa_enabled: boolean;
       email?: string;
       phone?: string;
@@ -6133,10 +6147,24 @@ export interface components {
       correspondenceUserID: string | null;
       image: string | null;
       instanceId: string;
+      autoCreateBotUsers: boolean;
     };
     APIChannelArray: components["schemas"]["Channel"][];
     APIEmojiArray: components["schemas"]["Emoji"][];
     APIMemberArray: components["schemas"]["Member"][];
+    APIPublicMember: {
+      id: string;
+      guild_id: string;
+      nick?: string;
+      /** Format: date-time */
+      joined_at: string;
+      pending: boolean;
+      deaf: boolean;
+      mute: boolean;
+      premium_since?: number;
+      user: components["schemas"]["PublicUser"];
+      roles: string[];
+    };
     APIGuildWithJoinedAt: {
       joined_at: string;
       afk_channel_id?: string;
@@ -6229,6 +6257,32 @@ export interface components {
       premium_guild_since?: string;
       /** Format: date-time */
       premium_since?: string;
+      mutual_guilds: {
+        id: string;
+        nick?: string;
+      }[];
+      premium_type: number;
+      profile_themes_experiment_bucket: number;
+      user_profile: components["schemas"]["UserProfile"];
+      guild_member?: {
+        id: string;
+        guild_id: string;
+        nick?: string;
+        /** Format: date-time */
+        joined_at: string;
+        pending: boolean;
+        deaf: boolean;
+        mute: boolean;
+        premium_since?: number;
+        user: components["schemas"]["PublicUser"];
+        roles: string[];
+      };
+      guild_member_profile?: {
+        guild_id: string;
+        banner: string;
+        bio: string;
+        accent_color: unknown;
+      };
     };
     UserRelationshipsResponse: {
       id: string;
@@ -6237,14 +6291,12 @@ export interface components {
       user: components["schemas"]["PublicUser"];
     };
     UserRelationsResponse: {
-      object: {
-        id?: string;
-        username?: string;
-        avatar?: string;
-        discriminator?: string;
-        public_flags?: number;
-      };
-    };
+      id: string;
+      username: string;
+      discriminator: string;
+      avatar?: string;
+      public_flags: number;
+    }[];
     WebAuthnCreateResponse: {
       name: string;
       id: string;
